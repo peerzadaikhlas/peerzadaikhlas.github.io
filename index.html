@@ -24,183 +24,114 @@
     .flip-back { transform: rotateY(180deg); }
   </style>
 </head>
-<body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white transition-all duration-300">
+<body class="bg-gray-900 text-white relative overflow-x-hidden">
 
-<!-- NAVBAR -->
-<header class="fixed top-0 w-full bg-white dark:bg-gray-800 shadow z-50">
-  <nav class="max-w-6xl mx-auto flex items-center justify-between p-4">
-    <div class="font-bold text-lg">Peerzada Ikhlas</div>
+  <!-- Particles Container -->
+  <div id="particles-js" class="absolute inset-0 -z-10"></div>
 
-    <div class="hidden md:flex gap-6 text-sm font-semibold">
-      <a href="#hero" class="hover:text-indigo-600">Home</a>
-      <a href="#projects" class="hover:text-indigo-600">Projects</a>
-      <a href="#about" class="hover:text-indigo-600">About</a>
-      <a href="#experience" class="hover:text-indigo-600">Experience</a>
-      <a href="#contact" class="hover:text-indigo-600">Contact</a>
+  <!-- Header -->
+  <header class="p-6 bg-black/40 backdrop-blur-md fixed top-0 left-0 right-0 z-20 shadow-lg">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-bold tracking-wide">Peerzada Ikhlas</h1>
+
+      <!-- Mobile Menu Button -->
+      <button id="menuBtn" class="lg:hidden text-white text-3xl">☰</button>
+
+      <nav id="menu" class="hidden lg:flex gap-8 text-lg">
+        <a href="#home" class="hover:text-blue-400">Home</a>
+        <a href="#about" class="hover:text-blue-400">About</a>
+        <a href="#projects" class="hover:text-blue-400">Projects</a>
+        <a href="#experience" class="hover:text-blue-400">Experience</a>
+        <a href="#contact" class="hover:text-blue-400">Contact</a>
+      </nav>
     </div>
+  </header>
 
-    <div class="flex items-center gap-4">
-      <button id="themeToggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-xl"><i class='bx bx-moon'></i></button>
-      <button id="menuBtn" class="md:hidden text-3xl"><i class='bx bx-menu'></i></button>
-    </div>
-  </nav>
-
-  <!-- Mobile menu -->
-  <div id="mobileMenu" class="hidden md:hidden bg-white dark:bg-gray-800 p-4 space-y-3">
-    <a href="#hero" class="block">Home</a>
-    <a href="#projects" class="block">Projects</a>
-    <a href="#about" class="block">About</a>
-    <a href="#experience" class="block">Experience</a>
-    <a href="#contact" class="block">Contact</a>
+  <!-- Mobile Menu Dropdown -->
+  <div id="mobileMenu" class="fixed top-0 left-0 w-64 h-full bg-black/80 backdrop-blur-md p-6 hidden z-30">
+    <button id="closeMenu" class="text-3xl mb-6">✕</button>
+    <nav class="flex flex-col gap-6 text-xl">
+      <a href="#home" class="hover:text-blue-400">Home</a>
+      <a href="#about" class="hover:text-blue-400">About</a>
+      <a href="#projects" class="hover:text-blue-400">Projects</a>
+      <a href="#experience" class="hover:text-blue-400">Experience</a>
+      <a href="#contact" class="hover:text-blue-400">Contact</a>
+    </nav>
   </div>
-</header>
 
-<!-- HERO -->
-<section id="hero" class="relative min-h-screen flex items-center justify-center text-center px-4">
-  <div id="particles" class="absolute inset-0 -z-10"></div>
+  <!-- Hero Section -->
+  <section id="home" class="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-32">
+    <img src="https://i.postimg.cc/DZ1Zrw5T/profile.jpg" class="w-40 h-40 rounded-full shadow-xl border-4 border-blue-400 animate-pulse" />
+    <h1 class="text-4xl md:text-6xl font-bold mt-6 animate__animated animate__fadeInDown">Hi, I'm <span class="text-blue-400">Peerzada Ikhlas</span></h1>
+    <p class="mt-4 text-gray-300 text-lg max-w-2xl animate__animated animate__fadeInUp">Frontend Developer passionate about creating clean, modern and user-friendly websites with animations and interactivity.</p>
+  </section>
 
-  <div>
-    <h1 class="text-4xl md:text-6xl font-extrabold">Frontend Developer</h1>
-    <p class="mt-4 max-w-xl mx-auto text-gray-600 dark:text-gray-300">
-      Crafting animated, interactive, and modern web experiences.
-    </p>
+  <!-- About Section -->
+  <section id="about" class="py-20 max-w-5xl mx-auto px-6">
+    <h2 class="text-4xl font-semibold mb-8 text-blue-400">About Me</h2>
+    <p class="text-gray-300 text-lg leading-relaxed">I am a dedicated frontend developer with skills in HTML, CSS, JavaScript, Tailwind CSS, React, UI/UX design and modern animations. I enjoy creating visually appealing and fully responsive websites.</p>
+  </section>
 
-    <div class="mt-6 flex justify-center gap-4">
-      <a href="#projects" class="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow">View Projects</a>
-      <a href="#contact" class="px-6 py-3 border rounded-lg">Contact</a>
-    </div>
-  </div>
-</section>
-
-<!-- FLIP CARD -->
-<section class="max-w-5xl mx-auto mt-20 px-4 grid place-items-center">
-  <div class="flip-card w-72 h-96 relative">
-    <div class="flip-inner w-full h-full">
-      <div class="flip-front rounded-xl overflow-hidden shadow-xl">
-        <img src="https://images.unsplash.com/photo-1542744095-291d1f67b221" class="w-full h-full object-cover" />
+  <!-- Projects -->
+  <section id="projects" class="py-20 max-w-6xl mx-auto px-6">
+    <h2 class="text-4xl font-semibold mb-8 text-blue-400">Projects</h2>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="bg-black/40 p-6 rounded-xl shadow-xl hover:scale-105 transition">
+        <h3 class="text-xl font-bold">Project 1</h3>
+        <p class="text-gray-400 mt-2">A modern responsive portfolio website.</p>
       </div>
-      <div class="flip-back bg-indigo-600 text-white rounded-xl p-6 flex flex-col justify-between">
-        <div>
-          <h2 class="text-2xl font-bold">Peerzada Ikhlas</h2>
-          <p class="mt-2 text-sm opacity-90">Frontend Developer | UI/UX Enthusiast</p>
-        </div>
-        <div>
-          <button class="bg-white text-indigo-600 px-4 py-2 rounded-lg">Follow</button>
-        </div>
+      <div class="bg-black/40 p-6 rounded-xl shadow-xl hover:scale-105 transition">
+        <h3 class="text-xl font-bold">Project 2</h3>
+        <p class="text-gray-400 mt-2">Interactive dashboard UI with animations.</p>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- PROJECTS -->
-<section id="projects" class="max-w-6xl mx-auto px-4 py-20">
-  <h2 class="text-3xl font-bold">Projects</h2>
-  <p class="text-gray-500 dark:text-gray-400">A selection of my best work.</p>
-
-  <div class="grid md:grid-cols-3 gap-6 mt-10">
-    <div class="bg-white dark:bg-gray-800 shadow rounded-xl overflow-hidden">
-      <img src="https://images.unsplash.com/photo-1526378722620" class="h-40 w-full object-cover" />
-      <div class="p-4">
-        <h3 class="font-semibold">Chat App</h3>
-        <p class="text-sm mt-2">Real‑time chat with rooms and mobile UI.</p>
+      <div class="bg-black/40 p-6 rounded-xl shadow-xl hover:scale-105 transition">
+        <h3 class="text-xl font-bold">Project 3</h3>
+        <p class="text-gray-400 mt-2">Advanced mobile-first web app.</p>
       </div>
     </div>
+  </section>
 
-    <div class="bg-white dark:bg-gray-800 shadow rounded-xl overflow-hidden">
-      <img src="https://images.unsplash.com/photo-1519337265831" class="h-40 w-full object-cover" />
-      <div class="p-4">
-        <h3 class="font-semibold">E‑commerce UI</h3>
-        <p class="text-sm mt-2">Responsive shop with filters and cart.</p>
-      </div>
-    </div>
+  <!-- Experience -->
+  <section id="experience" class="py-20 max-w-5xl mx-auto px-6">
+    <h2 class="text-4xl font-semibold mb-8 text-blue-400">Experience</h2>
+    <ul class="border-l-4 border-blue-500 pl-6 space-y-8">
+      <li>
+        <h3 class="text-xl font-bold">Frontend Developer</h3>
+        <p class="text-gray-400 text-sm">2022 - Present</p>
+      </li>
+      <li>
+        <h3 class="text-xl font-bold">UI/UX Designer</h3>
+        <p class="text-gray-400 text-sm">2021 - 2022</p>
+      </li>
+    </ul>
+  </section>
 
-    <div class="bg-white dark:bg-gray-800 shadow rounded-xl overflow-hidden">
-      <img src="https://images.unsplash.com/photo-1518779578993" class="h-40 w-full object-cover" />
-      <div class="p-4">
-        <h3 class="font-semibold">Open‑Source Library</h3>
-        <p class="text-sm mt-2">Lightweight forms + validation toolkit.</p>
-      </div>
-    </div>
-  </div>
-</section>
+  <!-- Contact -->
+  <section id="contact" class="py-20 max-w-4xl mx-auto px-6">
+    <h2 class="text-4xl font-semibold mb-8 text-blue-400">Contact Me</h2>
+    <form class="grid gap-4">
+      <input type="text" placeholder="Your Name" class="p-3 rounded bg-black/40" />
+      <input type="email" placeholder="Your Email" class="p-3 rounded bg-black/40" />
+      <textarea placeholder="Your Message" class="p-3 rounded bg-black/40 h-32"></textarea>
+      <button class="bg-blue-500 py-3 rounded text-white hover:bg-blue-600">Send Message</button>
+    </form>
+  </section>
 
-<!-- ABOUT -->
-<section id="about" class="max-w-6xl mx-auto px-4 py-20">
-  <h2 class="text-3xl font-bold">About Me</h2>
-  <p class="mt-4 max-w-3xl text-gray-600 dark:text-gray-300">
-    Passionate frontend developer who loves animations, UI effects,
-    interactions, and building smooth user experiences.
-  </p>
+  <!-- Footer -->
+  <footer class="py-6 text-center text-gray-500 bg-black/40">© 2025 Peerzada Ikhlas</footer>
 
-  <h3 class="text-xl font-semibold mt-8">Skills</h3>
-  <div class="mt-4 flex flex-wrap gap-3">
-    <span class="px-4 py-1 border rounded-full">HTML</span>
-    <span class="px-4 py-1 border rounded-full">CSS</span>
-    <span class="px-4 py-1 border rounded-full">JavaScript</span>
-    <span class="px-4 py-1 border rounded-full">Tailwind</span>
-    <span class="px-4 py-1 border rounded-full">React</span>
-  </div>
-</section>
+  <!-- ParticlesJS Script -->
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS.load('particles-js', 'particles.json');
 
-<!-- EXPERIENCE -->
-<section id="experience" class="max-w-6xl mx-auto px-4 py-20">
-  <h2 class="text-3xl font-bold">Experience</h2>
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const closeMenu = document.getElementById('closeMenu');
+    const menu = document.getElementById('menu');
 
-  <div class="mt-10 space-y-6">
-    <div class="p-4 bg-white dark:bg-gray-800 rounded-xl shadow">
-      <h3 class="font-semibold">Frontend Developer — Freelance</h3>
-      <p class="text-sm text-gray-500 dark:text-gray-400">2023 - Present</p>
-    </div>
-
-    <div class="p-4 bg-white dark:bg-gray-800 rounded-xl shadow">
-      <h3 class="font-semibold">Web Intern — Startup X</h3>
-      <p class="text-sm text-gray-500 dark:text-gray-400">2022 - 2023</p>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact" class="max-w-6xl mx-auto px-4 py-20">
-  <h2 class="text-3xl font-bold">Contact</h2>
-  <p class="text-gray-600 dark:text-gray-300 mt-2">I'd love to hear from you.</p>
-
-  <form class="mt-8 grid md:grid-cols-2 gap-4">
-    <input class="p-3 rounded border bg-white dark:bg-gray-800" placeholder="Name" />
-    <input class="p-3 rounded border bg-white dark:bg-gray-800" placeholder="Email" />
-    <textarea class="p-3 rounded border bg-white dark:bg-gray-800 md:col-span-2" rows="5" placeholder="Message"></textarea>
-    <button class="md:col-span-2 bg-indigo-600 text-white py-3 rounded-lg">Send</button>
-  </form>
-</section>
-
-<!-- FOOTER -->
-<footer class="py-6 text-center bg-white dark:bg-gray-800 mt-10">
-  <p class="text-sm">© 2025 Peerzada Ikhlas</p>
-</footer>
-
-<!-- JS -->
-<script>
-// Mobile menu
-const menuBtn = document.getElementById('menuBtn');
-const mobileMenu = document.getElementById('mobileMenu');
-menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-
-// Theme toggle
-const themeToggle = document.getElementById('themeToggle');
-themeToggle.addEventListener('click', () => document.body.classList.toggle('dark'));
-
-// Particles
-(async () => {
-  await tsParticles.load("particles", {
-    background: { color: "transparent" },
-    particles: {
-      number: { value: 50 },
-      size: { value: 3 },
-      move: { enable: true, speed: 1 },
-      links: { enable: true, opacity: 0.3 }
-    }
-  });
-})();
-</script>
-
+    menuBtn.onclick = () => mobileMenu.classList.remove('hidden');
+    closeMenu.onclick = () => mobileMenu.classList.add('hidden');
+  </script>
 </body>
 </html>
