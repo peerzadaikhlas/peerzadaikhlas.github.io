@@ -1,314 +1,206 @@
-/*
-  GitHub-Portfolio.jsx
-  Single-file React component (default export) ready to drop into a React app.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Peerzada Ikhlas • Portfolio</title>
 
-  Instructions:
-  1. Install dependencies (example using npm):
-     npm install react react-dom framer-motion react-tsparticles tsparticles lucide-react
-  2. Make sure Tailwind CSS is configured in your project.
-  3. Replace placeholder images, texts and projects with your own content.
-  4. This component uses Tailwind's dark mode class strategy ("class"), so make sure
-     your tailwind.config.js has: darkMode: 'class'
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Icons -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <!-- Particles -->
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles-engine"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles"></script>
 
-  Files/Deps used (you can change or remove as you like):
-  - framer-motion (animations)
-  - react-tsparticles (background particles)
-  - lucide-react (icons)
-
-  Notes:
-  - All images use placeholder Unsplash URLs. Replace with your own images or local assets.
-  - Projects and experience are arrays near the top of the file for quick editing.
-*/
-
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import Particles from 'react-tsparticles';
-import { loadFull } from 'tsparticles';
-import { Sun, Moon, Menu, X, GitHub, Linkedin, Mail } from 'lucide-react';
-
-export default function GitHubPortfolio() {
-  // ====== Editable content arrays ======
-  const projects = [
-    {
-      title: 'Awesome Chat App',
-      desc: 'Real-time chat app with rooms, mobile-first responsive UI, and PWA support.',
-      img: 'https://images.unsplash.com/photo-1526378722620-5d5b4b0b0c12?auto=format&fit=crop&w=1200&q=60',
-      tags: ['React', 'Socket.io', 'PWA']
-    },
-    {
-      title: 'Portfolio E-commerce',
-      desc: 'Small store with shopping cart, Stripe test integration, and product filters.',
-      img: 'https://images.unsplash.com/photo-1519337265831-281ec6cc8514?auto=format&fit=crop&w=1200&q=60',
-      tags: ['Next.js', 'Stripe', 'Tailwind']
-    },
-    {
-      title: 'OpenSource Library',
-      desc: 'A npm library that simplifies forms and validation with built-in accessibility.',
-      img: 'https://images.unsplash.com/photo-1518779578993-ec3579fee39f?auto=format&fit=crop&w=1200&q=60',
-      tags: ['TypeScript', 'Library']
+  <style>
+    .flip-card { perspective: 1000px; }
+    .flip-inner { transition: transform 0.8s; transform-style: preserve-3d; }
+    .flip-card:hover .flip-inner { transform: rotateY(180deg); }
+    .flip-front, .flip-back {
+      backface-visibility: hidden;
+      position: absolute; inset: 0;
     }
-  ];
+    .flip-back { transform: rotateY(180deg); }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white transition-all duration-300">
 
-  const experience = [
-    { role: 'Frontend Developer', company: 'Freelance', period: '2023 - Present', details: 'Built responsive UIs and marketing sites.' },
-    { role: 'Intern — Web', company: 'Startup X', period: '2022 - 2023', details: 'Worked on performance improvements and UI components.' }
-  ];
+<!-- NAVBAR -->
+<header class="fixed top-0 w-full bg-white dark:bg-gray-800 shadow z-50">
+  <nav class="max-w-6xl mx-auto flex items-center justify-between p-4">
+    <div class="font-bold text-lg">Peerzada Ikhlas</div>
 
-  const hobbies = ['Gaming', 'Photography', 'Chess', 'Open-source', 'Football'];
-
-  // ====== Theme toggling ======
-  const [dark, setDark] = useState(true);
-  useEffect(() => {
-    const root = window.document.documentElement;
-    if (dark) root.classList.add('dark'); else root.classList.remove('dark');
-  }, [dark]);
-
-  // ====== Particles setup ======
-  const particlesInit = async (engine) => {
-    await loadFull(engine);
-  };
-
-  // Mobile nav
-  const [open, setOpen] = useState(false);
-
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-slate-50 dark:from-gray-900 dark:to-gray-800 text-slate-900 dark:text-slate-100">
-      {/* Particles */}
-      <Particles
-        id="tsparticles"
-        init={particlesInit}
-        options={{
-          fullScreen: { enable: false },
-          fpsLimit: 60,
-          interactivity: { events: { onHover: { enable: true, mode: 'repulse' }, onClick: { enable: true, mode: 'push' } }, modes: { push: { quantity: 4 }, repulse: { distance: 100 } } },
-          particles: { color: { value: dark ? '#9ca3af' : '#1f2937' }, links: { color: dark ? '#6b7280' : '#111827', distance: 130, enable: true, opacity: 0.2, width: 1 }, move: { enable: true, speed: 0.6 }, number: { value: 35 }, opacity: { value: 0.6 }, size: { value: { min: 1, max: 3 } } }
-        }}
-        style={{ position: 'absolute', inset: 0, zIndex: 0 }}
-      />
-
-      <header className="relative z-20">
-        <nav className="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center shadow-lg">
-              <span className="font-bold text-white">PI</span>
-            </div>
-            <div>
-              <h1 className="font-semibold text-lg">Peerzada Ikhlas</h1>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Frontend Developer • Open Source</p>
-            </div>
-          </div>
-
-          {/* Desktop menu */}
-          <div className="hidden md:flex items-center gap-6">
-            <a href="#projects" className="hover:underline">Projects</a>
-            <a href="#experience" className="hover:underline">Experience</a>
-            <a href="#about" className="hover:underline">About</a>
-            <a href="#contact" className="hover:underline">Contact</a>
-            <button className="p-2 rounded-md" onClick={() => setDark(d => !d)} aria-label="Toggle theme">
-              {dark ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
-            <a href="#" className="flex items-center gap-2 px-3 py-2 border rounded-lg hover:shadow"> <GitHub size={16} /> GitHub </a>
-          </div>
-
-          {/* Mobile menu button */}
-          <div className="md:hidden flex items-center gap-3">
-            <button className="p-2" onClick={() => setDark(d => !d)} aria-label="Toggle theme">{dark ? <Sun size={18} /> : <Moon size={18} />}</button>
-            <button className="p-2" onClick={() => setOpen(o => !o)} aria-label="Open menu">{open ? <X size={20} /> : <Menu size={20} />}</button>
-          </div>
-        </nav>
-
-        {/* Mobile sliding menu */}
-        <motion.div
-          initial={{ height: 0, opacity: 0 }}
-          animate={{ height: open ? 'auto' : 0, opacity: open ? 1 : 0 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-          className="md:hidden overflow-hidden px-6"
-        >
-          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-b-xl p-4 shadow-inner">
-            <a href="#projects" className="block py-2" onClick={() => setOpen(false)}>Projects</a>
-            <a href="#experience" className="block py-2" onClick={() => setOpen(false)}>Experience</a>
-            <a href="#about" className="block py-2" onClick={() => setOpen(false)}>About</a>
-            <a href="#contact" className="block py-2" onClick={() => setOpen(false)}>Contact</a>
-          </div>
-        </motion.div>
-      </header>
-
-      <main className="relative z-10">
-        <section className="max-w-6xl mx-auto px-6 py-10 md:py-24 flex flex-col md:flex-row items-center gap-8">
-          <div className="w-full md:w-1/2">
-            <motion.h2 className="text-4xl sm:text-5xl font-extrabold leading-tight" initial={{ x: -30, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.1 }}>
-              Crafting delightful interfaces with <span className="text-indigo-600 dark:text-indigo-400">polish</span> and performance.
-            </motion.h2>
-            <motion.p className="mt-4 text-slate-600 dark:text-slate-300" initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.2 }}>
-              I'm a frontend developer focused on building fast, accessible and beautiful web experiences. I love animations, game-like micro-interactions and clean code.
-            </motion.p>
-
-            <div className="mt-6 flex flex-wrap gap-3">
-              <a href="#projects" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 text-white shadow hover:scale-[1.02]">See projects</a>
-              <a href="#contact" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border hover:bg-slate-100 dark:hover:bg-gray-700">Get in touch</a>
-            </div>
-
-            <div className="mt-8 grid grid-cols-2 gap-4">
-              <div className="p-4 rounded-xl bg-white/60 dark:bg-gray-800/60 backdrop-blur shadow">
-                <h4 className="text-xs uppercase font-semibold">Location</h4>
-                <p className="mt-2 text-sm">India</p>
-              </div>
-              <div className="p-4 rounded-xl bg-white/60 dark:bg-gray-800/60 backdrop-blur shadow">
-                <h4 className="text-xs uppercase font-semibold">Currently</h4>
-                <p className="mt-2 text-sm">Open for freelance</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="w-full md:w-1/2">
-            {/* Flipping card with image and details */}
-            <div className="perspective mx-auto max-w-md">
-              <motion.div className="relative w-full h-64 md:h-80" whileHover={{ rotateY: 180 }} transition={{ duration: 0.8 }}>
-                <div className="absolute inset-0 rounded-2xl shadow-2xl backface-hidden overflow-hidden">
-                  <img src="https://images.unsplash.com/photo-1542744095-291d1f67b221?auto=format&fit=crop&w=1200&q=60" alt="profile" className="w-full h-full object-cover" />
-                </div>
-
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-indigo-600 to-pink-500 text-white p-6 transform rotateY-180 backface-hidden flex flex-col justify-between" style={{ transformStyle: 'preserve-3d' }}>
-                  <div>
-                    <h3 className="text-xl font-bold">Peerzada Ikhlas</h3>
-                    <p className="mt-2 text-sm opacity-90">Frontend Developer — animations, UX & PWAs</p>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <a className="inline-flex items-center gap-2 bg-white text-indigo-600 px-3 py-2 rounded-lg" href="#">Follow</a>
-                    <a className="inline-flex items-center gap-2 border px-3 py-2 rounded-lg" href="#">Resume</a>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* Projects */}
-        <section id="projects" className="max-w-6xl mx-auto px-6 py-12">
-          <h3 className="text-2xl font-bold">Featured Projects</h3>
-          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Hand-picked projects with short descriptions and tags.</p>
-
-          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((p, idx) => (
-              <motion.article key={idx} whileHover={{ y: -6 }} className="rounded-2xl overflow-hidden bg-white/60 dark:bg-gray-800/60 shadow">
-                <img src={p.img} alt={p.title} className="w-full h-40 object-cover" />
-                <div className="p-4">
-                  <h4 className="font-semibold">{p.title}</h4>
-                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{p.desc}</p>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {p.tags.map((t, i) => <span key={i} className="text-xs px-2 py-1 rounded-full border">{t}</span>)}
-                  </div>
-                  <div className="mt-4 flex items-center justify-between">
-                    <a className="text-sm hover:underline" href="#">View repo</a>
-                    <div className="text-xs text-slate-500">⭐ 120</div>
-                  </div>
-                </div>
-              </motion.article>
-            ))}
-          </div>
-        </section>
-
-        {/* Experience */}
-        <section id="experience" className="max-w-6xl mx-auto px-6 py-12">
-          <h3 className="text-2xl font-bold">Experience & Timeline</h3>
-          <div className="mt-8 space-y-6">
-            {experience.map((e, i) => (
-              <motion.div key={i} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="bg-white/60 dark:bg-gray-800/60 p-4 rounded-xl shadow">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-semibold">{e.role}</h4>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">{e.company}</p>
-                  </div>
-                  <div className="text-xs text-slate-500">{e.period}</div>
-                </div>
-                <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">{e.details}</p>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        {/* About + Hobbies */}
-        <section id="about" className="max-w-6xl mx-auto px-6 py-12 grid md:grid-cols-3 gap-6">
-          <div className="md:col-span-2 bg-white/60 dark:bg-gray-800/60 p-6 rounded-xl shadow">
-            <h3 className="text-xl font-bold">About Me</h3>
-            <p className="mt-3 text-slate-600 dark:text-slate-300">I'm a passionate frontend developer with a love for motion, performance and beautiful accessible design. I enjoy building tiny interactions, component libraries and contributing to open-source when I can. My stack often includes React, TypeScript, Tailwind and modern web APIs.</p>
-
-            <h4 className="mt-6 font-semibold">Skills</h4>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {['React', 'TypeScript', 'Tailwind', 'Framer Motion', 'Accessibility', 'Vite', 'Next.js'].map((s, i) => (
-                <span key={i} className="px-3 py-1 rounded-full border text-sm">{s}</span>
-              ))}
-            </div>
-          </div>
-
-          <aside className="bg-white/60 dark:bg-gray-800/60 p-6 rounded-xl shadow">
-            <h4 className="font-semibold">Hobbies & Interests</h4>
-            <ul className="mt-3 space-y-2 text-sm">
-              {hobbies.map((h, i) => <li key={i} className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-indigo-600" />{h}</li>)}
-            </ul>
-
-            <div className="mt-6">
-              <h4 className="font-semibold">Education</h4>
-              <p className="text-sm mt-2">B.Sc. Computer Science (or insert your degree) — University Name</p>
-            </div>
-          </aside>
-        </section>
-
-        {/* Contact */}
-        <section id="contact" className="max-w-6xl mx-auto px-6 py-12">
-          <div className="bg-gradient-to-br from-white to-slate-50 dark:from-gray-900 dark:to-gray-800 p-6 rounded-xl shadow-md">
-            <h3 className="text-2xl font-bold">Get in touch</h3>
-            <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">I'd love to hear about your project — whether it's a small bugfix or a long-term collaboration.</p>
-
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-4 rounded-lg bg-white/60 dark:bg-gray-800/60">
-                <h5 className="font-semibold">Email</h5>
-                <p className="mt-2 text-sm">youremail@example.com</p>
-              </div>
-              <div className="p-4 rounded-lg bg-white/60 dark:bg-gray-800/60">
-                <h5 className="font-semibold">LinkedIn</h5>
-                <p className="mt-2 text-sm">linkedin.com/in/yourprofile</p>
-              </div>
-              <div className="p-4 rounded-lg bg-white/60 dark:bg-gray-800/60">
-                <h5 className="font-semibold">Location</h5>
-                <p className="mt-2 text-sm">India</p>
-              </div>
-            </div>
-
-            <form className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input className="p-3 rounded-lg border" placeholder="Name" />
-              <input className="p-3 rounded-lg border" placeholder="Email" />
-              <textarea className="p-3 rounded-lg border md:col-span-2" placeholder="Message" rows={5} />
-              <button type="button" className="md:col-span-2 inline-flex items-center gap-2 px-4 py-3 rounded-lg bg-indigo-600 text-white">Send message</button>
-            </form>
-          </div>
-        </section>
-
-        <footer className="max-w-6xl mx-auto px-6 py-8 text-sm flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-indigo-600 flex items-center justify-center text-white">PI</div>
-            <div>
-              <div className="text-sm font-semibold">Peerzada Ikhlas</div>
-              <div className="text-xs text-slate-500">© {new Date().getFullYear()}</div>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <a href="#" aria-label="GitHub" className="p-2 rounded hover:bg-slate-100 dark:hover:bg-gray-700"><GitHub size={18} /></a>
-            <a href="#" aria-label="LinkedIn" className="p-2 rounded hover:bg-slate-100 dark:hover:bg-gray-700"><Linkedin size={18} /></a>
-            <a href="#" aria-label="Email" className="p-2 rounded hover:bg-slate-100 dark:hover:bg-gray-700"><Mail size={18} /></a>
-          </div>
-        </footer>
-      </main>
-
-      {/* Extra CSS for flipping card */}
-      <style>{`
-        .perspective { perspective: 1200px; }
-        .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-        .transform.rotateY-180 { transform: rotateY(180deg); }
-        /* make sure motion div flips nicely */
-        .perspective > div > div { transition: transform 0.9s; transform-style: preserve-3d; }
-      `}</style>
+    <div class="hidden md:flex gap-6 text-sm font-semibold">
+      <a href="#hero" class="hover:text-indigo-600">Home</a>
+      <a href="#projects" class="hover:text-indigo-600">Projects</a>
+      <a href="#about" class="hover:text-indigo-600">About</a>
+      <a href="#experience" class="hover:text-indigo-600">Experience</a>
+      <a href="#contact" class="hover:text-indigo-600">Contact</a>
     </div>
-  );
-}
+
+    <div class="flex items-center gap-4">
+      <button id="themeToggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-xl"><i class='bx bx-moon'></i></button>
+      <button id="menuBtn" class="md:hidden text-3xl"><i class='bx bx-menu'></i></button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div id="mobileMenu" class="hidden md:hidden bg-white dark:bg-gray-800 p-4 space-y-3">
+    <a href="#hero" class="block">Home</a>
+    <a href="#projects" class="block">Projects</a>
+    <a href="#about" class="block">About</a>
+    <a href="#experience" class="block">Experience</a>
+    <a href="#contact" class="block">Contact</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="hero" class="relative min-h-screen flex items-center justify-center text-center px-4">
+  <div id="particles" class="absolute inset-0 -z-10"></div>
+
+  <div>
+    <h1 class="text-4xl md:text-6xl font-extrabold">Frontend Developer</h1>
+    <p class="mt-4 max-w-xl mx-auto text-gray-600 dark:text-gray-300">
+      Crafting animated, interactive, and modern web experiences.
+    </p>
+
+    <div class="mt-6 flex justify-center gap-4">
+      <a href="#projects" class="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow">View Projects</a>
+      <a href="#contact" class="px-6 py-3 border rounded-lg">Contact</a>
+    </div>
+  </div>
+</section>
+
+<!-- FLIP CARD -->
+<section class="max-w-5xl mx-auto mt-20 px-4 grid place-items-center">
+  <div class="flip-card w-72 h-96 relative">
+    <div class="flip-inner w-full h-full">
+      <div class="flip-front rounded-xl overflow-hidden shadow-xl">
+        <img src="https://images.unsplash.com/photo-1542744095-291d1f67b221" class="w-full h-full object-cover" />
+      </div>
+      <div class="flip-back bg-indigo-600 text-white rounded-xl p-6 flex flex-col justify-between">
+        <div>
+          <h2 class="text-2xl font-bold">Peerzada Ikhlas</h2>
+          <p class="mt-2 text-sm opacity-90">Frontend Developer | UI/UX Enthusiast</p>
+        </div>
+        <div>
+          <button class="bg-white text-indigo-600 px-4 py-2 rounded-lg">Follow</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="max-w-6xl mx-auto px-4 py-20">
+  <h2 class="text-3xl font-bold">Projects</h2>
+  <p class="text-gray-500 dark:text-gray-400">A selection of my best work.</p>
+
+  <div class="grid md:grid-cols-3 gap-6 mt-10">
+    <div class="bg-white dark:bg-gray-800 shadow rounded-xl overflow-hidden">
+      <img src="https://images.unsplash.com/photo-1526378722620" class="h-40 w-full object-cover" />
+      <div class="p-4">
+        <h3 class="font-semibold">Chat App</h3>
+        <p class="text-sm mt-2">Real‑time chat with rooms and mobile UI.</p>
+      </div>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 shadow rounded-xl overflow-hidden">
+      <img src="https://images.unsplash.com/photo-1519337265831" class="h-40 w-full object-cover" />
+      <div class="p-4">
+        <h3 class="font-semibold">E‑commerce UI</h3>
+        <p class="text-sm mt-2">Responsive shop with filters and cart.</p>
+      </div>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 shadow rounded-xl overflow-hidden">
+      <img src="https://images.unsplash.com/photo-1518779578993" class="h-40 w-full object-cover" />
+      <div class="p-4">
+        <h3 class="font-semibold">Open‑Source Library</h3>
+        <p class="text-sm mt-2">Lightweight forms + validation toolkit.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="max-w-6xl mx-auto px-4 py-20">
+  <h2 class="text-3xl font-bold">About Me</h2>
+  <p class="mt-4 max-w-3xl text-gray-600 dark:text-gray-300">
+    Passionate frontend developer who loves animations, UI effects,
+    interactions, and building smooth user experiences.
+  </p>
+
+  <h3 class="text-xl font-semibold mt-8">Skills</h3>
+  <div class="mt-4 flex flex-wrap gap-3">
+    <span class="px-4 py-1 border rounded-full">HTML</span>
+    <span class="px-4 py-1 border rounded-full">CSS</span>
+    <span class="px-4 py-1 border rounded-full">JavaScript</span>
+    <span class="px-4 py-1 border rounded-full">Tailwind</span>
+    <span class="px-4 py-1 border rounded-full">React</span>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" class="max-w-6xl mx-auto px-4 py-20">
+  <h2 class="text-3xl font-bold">Experience</h2>
+
+  <div class="mt-10 space-y-6">
+    <div class="p-4 bg-white dark:bg-gray-800 rounded-xl shadow">
+      <h3 class="font-semibold">Frontend Developer — Freelance</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400">2023 - Present</p>
+    </div>
+
+    <div class="p-4 bg-white dark:bg-gray-800 rounded-xl shadow">
+      <h3 class="font-semibold">Web Intern — Startup X</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400">2022 - 2023</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="max-w-6xl mx-auto px-4 py-20">
+  <h2 class="text-3xl font-bold">Contact</h2>
+  <p class="text-gray-600 dark:text-gray-300 mt-2">I'd love to hear from you.</p>
+
+  <form class="mt-8 grid md:grid-cols-2 gap-4">
+    <input class="p-3 rounded border bg-white dark:bg-gray-800" placeholder="Name" />
+    <input class="p-3 rounded border bg-white dark:bg-gray-800" placeholder="Email" />
+    <textarea class="p-3 rounded border bg-white dark:bg-gray-800 md:col-span-2" rows="5" placeholder="Message"></textarea>
+    <button class="md:col-span-2 bg-indigo-600 text-white py-3 rounded-lg">Send</button>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer class="py-6 text-center bg-white dark:bg-gray-800 mt-10">
+  <p class="text-sm">© 2025 Peerzada Ikhlas</p>
+</footer>
+
+<!-- JS -->
+<script>
+// Mobile menu
+const menuBtn = document.getElementById('menuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+
+// Theme toggle
+const themeToggle = document.getElementById('themeToggle');
+themeToggle.addEventListener('click', () => document.body.classList.toggle('dark'));
+
+// Particles
+(async () => {
+  await tsParticles.load("particles", {
+    background: { color: "transparent" },
+    particles: {
+      number: { value: 50 },
+      size: { value: 3 },
+      move: { enable: true, speed: 1 },
+      links: { enable: true, opacity: 0.3 }
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
