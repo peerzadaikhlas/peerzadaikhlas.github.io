@@ -107,6 +107,52 @@
     <button class="px-3 py-2 rounded-full text-sm magnetic  bg-[var(--accent-1)] text-black font-semibold">View Work</button>
   </div>
 
+
+  <!-- Add this in your HTML where you want the chart -->
+<canvas id="myPieChart" width="400" height="400"></canvas>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const ctx = document.getElementById('myPieChart').getContext('2d');
+const myPieChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: ['Happy Customers', 'Project Completion Speed', 'Repeat Clients'],
+        datasets: [{
+            label: 'Portfolio Stats',
+            data: [85, 70, 50], // example percentages
+            backgroundColor: [
+                'rgba(96, 165, 250, 0.8)',
+                'rgba(167, 139, 250, 0.8)',
+                'rgba(52, 211, 153, 0.8)'
+            ],
+            borderColor: [
+                'rgba(96, 165, 250, 1)',
+                'rgba(167, 139, 250, 1)',
+                'rgba(52, 211, 153, 1)'
+            ],
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    color: '#f1f5f9',
+                    font: { size: 14 }
+                }
+            }
+        }
+    }
+});
+</script>
+
+
+  
   <!-- Stats -->
   <div class="mt-12 flex gap-6 justify-center">
     <div class="text-center">
