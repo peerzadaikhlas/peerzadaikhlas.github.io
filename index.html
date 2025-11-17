@@ -5,7 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Peerzada Ikhlas — Portfolio</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js">/* MENU JS */
+const menu=document.getElementById("menuBtn");
+const links=document.getElementById("navLinks");
+menu.onclick=()=>{links.classList.toggle("showMenu");};
+
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <style>
 * {margin:0; padding:0; box-sizing:border-box;}
@@ -63,6 +68,18 @@ nav a:hover {color:#00eaff;}
 .social a {color:#00eaff; font-size:22px; margin:0 8px; transition:0.3s;} 
 social a:hover {color:white;}
 
+/* Mobile menu */
+.menu-icon {display:none; font-size:26px; color:white; cursor:pointer;}
+.nav-links {display:flex; align-items:center; gap:20px;}
+
+@media(max-width:800px){
+    .menu-icon {display:block;}
+    .nav-links {position:fixed; top:0; right:-250px; width:250px; height:100%; background:#000000e8; flex-direction:column; padding-top:80px; transition:0.4s;}
+    .nav-links a, #themeToggle, #colorPicker {margin:15px 0;}
+}
+
+.showMenu {right:0 !important;}
+
 </style>
 </head>
 <body>
@@ -71,10 +88,12 @@ social a:hover {color:white;}
 
 <nav>
     <h2 style="color:#00eaff;">Ikhlas</h2>
-    <div>
+    <div class="menu-icon" id="menuBtn"><i class="fa-solid fa-bars"></i></div>
+    <div class="nav-links" id="navLinks">
         <a href="#home">Home</a>
         <a href="#projects">Projects</a>
         <a href="#contact">Contact</a>
+        <a href="#about">About</a>
         <i id="themeToggle" class="fa-solid fa-circle-half-stroke"></i>
         <input type="color" id="colorPicker" value="#00eaff">
     </div>
@@ -145,3 +164,4 @@ gsap.from(".project-card",{opacity:0,y:50,stagger:0.2,duration:1,scrollTrigger:"
 </script>
 </body>
 </html>
+
