@@ -5,6 +5,36 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Peer's-Portfolio</title>
+<style>
+  /* Glowing border effect for all cards */
+  .glow-card {
+    position: relative;
+    border: 2px solid transparent; /* base border */
+    border-radius: 1rem; /* matches your rounded-xl */
+    transition: all 0.3s ease;
+  }
+
+  .glow-card::before {
+    content: '';
+    position: absolute;
+    inset: -2px; /* covers the border */
+    border-radius: inherit;
+    background: linear-gradient(45deg, #60a5fa, #a78bfa, #34d399, #60a5fa);
+    z-index: -1;
+    filter: blur(8px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .glow-card:hover::before {
+    opacity: 1;
+  }
+
+  .glow-card > * {
+    position: relative;
+    z-index: 10; /* make sure content is above glow */
+  }
+</style>
 
 <!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -296,6 +326,7 @@
   </form>
 </section>
 
+  
 <script>
   // Typed.js
   new Typed('#typedName',{strings:["Peerzada Ikhlas","Frontend Dev.","UI/UX Enthusiast"],typeSpeed:60,backSpeed:40,loop:true});
