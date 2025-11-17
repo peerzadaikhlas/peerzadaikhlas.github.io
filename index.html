@@ -5,16 +5,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Peer's-Portfolio</title>
-<style>
-  .glass-card {
-    @apply rounded-xl border border-white/20 shadow-lg bg-white/5 backdrop-blur-md transition-transform duration-300;
-  }
-
-  .glass-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
-  }
-</style>
 
 <!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -43,6 +33,14 @@
   #backTop{position:fixed;right:18px;bottom:18px;z-index:70;display:none;}
   .tilt{transform-style:preserve-3d;will-change:transform;}
   .flip-inner{backface-visibility:hidden;}
+  .glass-card {
+    @apply rounded-xl border border-white/20 shadow-lg bg-white/5 backdrop-blur-md transition-transform duration-300;
+  }
+
+  .glass-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
 </style>
 </head>
 <body class="antialiased">
