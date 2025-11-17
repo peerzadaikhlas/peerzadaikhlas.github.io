@@ -4,7 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Peer's-Portfolio</title>
-
+<script>
+  tailwind.config = {
+    darkMode: 'class', // Enable class-based dark mode
+  }
+</script>
 <!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
@@ -123,8 +127,16 @@
   </div>
 </main>
 
+<button id="themeToggle" class="p-2 rounded-full">
+  <i class="bx bx-moon"></i>
+</button>
+
+
+
+
+  
 <!-- Projects -->
-  <section id="projects" class="py-10 max-w-6xl mx-auto px-6">
+  <section projects="py-20 max-w-6xl mx-auto px-6 bg-white dark:bg-slate-900 text-black dark:text-slate-200">
   <h2 class="text-3xl font-bold mb-6">Featured Projects</h2>
   <div class="grid md:grid-cols-3 gap-6">
     <article class="bg-slate-800 rounded-xl overflow-hidden shadow-lg tilt hover:scale-105 transition-transform duration-500">
@@ -414,6 +426,30 @@ gsap.utils.toArray('.skill-bar').forEach(bar => {
     }
   });
 });
+
+
+
+<script>
+  const themeToggle = document.getElementById('themeToggle');
+
+  themeToggle.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark'); // toggle dark mode on <html>
+
+    // Swap icon for moon/sun
+    const icon = themeToggle.querySelector('i');
+    if (document.documentElement.classList.contains('dark')) {
+      icon.classList.remove('bx-moon');
+      icon.classList.add('bx-sun');
+    } else {
+      icon.classList.remove('bx-sun');
+      icon.classList.add('bx-moon');
+    }
+  });
+</script>
+
+
+
+  
 </script>
 </body>
 </html>
