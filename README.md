@@ -1,16 +1,17 @@
-## Hi there 👋
 
-<!--
-**peerzadaikhlas/peerzadaikhlas** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+# Peerzada Ikhlas — Portfolio (Ready to Deploy)
 
-Here are some ideas to get you started:
+Files:
+- index.html
+- style.css
+- script.js
+- particles.json
+- resume.pdf
+- assets/profile.jpg
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+Notes:
+- Resume is a placeholder PDF. Replace `resume.pdf` with your real resume if you want.
+- The contact form is configured with Netlify forms (works when deployed on Netlify).
+- tsParticles reads `particles.json` for the interactive particle configuration.
+- To deploy: push this folder to GitHub and enable GitHub Pages, or deploy to Netlify/Vercel.
+
