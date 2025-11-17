@@ -33,19 +33,40 @@
   #backTop{position:fixed;right:18px;bottom:18px;z-index:70;display:none;}
   .tilt{transform-style:preserve-3d;will-change:transform;}
   .flip-inner{backface-visibility:hidden;}
+:root {
+  --accent-1: #60a5fa;
+  --accent-2: #a78bfa;
+  --accent-3: #34d399;
+
+  /* Light mode glass colors */
+  --glass-bg-light: rgba(255, 255, 255, 0.15);
+  --glass-border-light: rgba(255, 255, 255, 0.3);
+
+  /* Dark mode glass colors */
+  --glass-bg-dark: rgba(15, 23, 42, 0.4);
+  --glass-border-dark: rgba(255, 255, 255, 0.1);
+}
+
+/* Card Glass Effect */
 .card-glass {
-  border-radius: 1rem; /* rounded corners */
-  background: rgba(255, 255, 255, 0.05); /* subtle translucency */
-  border: 1px solid rgba(255, 255, 255, 0.2); /* light border */
-  backdrop-filter: blur(10px); /* glassy blur */
-  -webkit-backdrop-filter: blur(10px); /* Safari support */
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3); /* soft shadow for depth */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 1rem;
+  background: var(--glass-bg-dark); /* default dark mode */
+  border: 1px solid var(--glass-border-dark);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, border 0.3s ease;
 }
 
 .card-glass:hover {
   transform: scale(1.03);
-  box-shadow: 0 8px 40px rgba(99, 102, 241, 0.6), 0 0 25px rgba(99, 102, 241, 0.4); /* subtle glow on hover */
+  box-shadow: 0 8px 40px var(--accent-1, #60a5fa), 0 0 25px var(--accent-2, #a78bfa);
+}
+
+/* Light mode override */
+body.light-mode .card-glass {
+  background: var(--glass-bg-light);
+  border: 1px solid var(--glass-border-light);
 }
 
 </style>
