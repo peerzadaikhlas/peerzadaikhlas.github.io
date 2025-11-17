@@ -46,28 +46,35 @@
 <div id="float1" class="hidden md:block absolute -left-10 -top-10 w-48 h-48 rounded-full bg-gradient-to-br from-[var(--accent-2)] to-[var(--accent-1)] opacity-30 blur-3xl floating"></div>
 <div id="float2" class="hidden md:block absolute right-6 top-40 w-36 h-36 rounded-full bg-gradient-to-br from-[var(--accent-3)] to-[var(--accent-2)] opacity-25 blur-2xl floating"></div>
 
-<!-- Header -->
 <header class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[94%] md:w-[80%] bg-black/50 backdrop-blur rounded-xl shadow-lg p-3 flex items-center justify-between">
-  <div class="flex items-center gap-4">
+  <div class="flex items-center gap-3">
+    <!-- Logo -->
     <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-[var(--accent-1)] to-[var(--accent-2)] flex items-center justify-center font-bold">PI</div>
-      <div class="text-sm font-semibold">Peerzada Ikhlas</div>
-      <div class="text-xs text-slate-400">Frontend Developer</div>
+
+    <!-- Name & Title (always visible) -->
+    <div class="flex flex-col">
+      <span class="text-sm font-semibold">Peerzada Ikhlas</span>
+      <span class="text-xs text-slate-400">Frontend Developer</span>
     </div>
   </div>
-  <nav class="hidden lg:flex gap-5 text-sm font-medium">
+
+  <!-- Desktop nav -->
+  <nav class="hidden lg:flex gap-6 text-sm font-medium">
     <a href="#home" class="hover:text-[var(--accent-1)]">Home</a>
     <a href="#projects" class="hover:text-[var(--accent-1)]">Projects</a>
     <a href="#skills" class="hover:text-[var(--accent-1)]">Skills</a>
-    <a href="#hobbies" class="hover:text-[var(--accent-1)]">Hobbies</a>
-    <a href="#testimonials" class="hover:text-[var(--accent-1)]">Testimonials</a>
+    <a href="#certs" class="hover:text-[var(--accent-1)]">Certificates</a>
     <a href="#contact" class="hover:text-[var(--accent-1)]">Contact</a>
   </nav>
+
+  <!-- Action buttons -->
   <div class="flex items-center gap-3">
-    <button class="px-3 py-2 rounded-full text-sm magnetic resumeBtn bg-[var(--accent-1)] text-black font-semibold">Resume</button>
-    <button id="themeToggle" class="p-2 rounded-full bg-white/10 magnetic"><i class='bx bx-moon'></i></button>
+    <button class="px-3 py-2 rounded-full text-sm magnetic bg-[var(--accent-1)] text-black font-semibold resumeBtn">Download Resume</button>
+    <button id="themeToggle" class="p-2 rounded-full bg-white/10 magnetic" aria-label="Toggle theme"><i class='bx bx-moon'></i></button>
     <button id="mobileOpen" class="lg:hidden p-2 magnetic"><i class='bx bx-menu text-2xl'></i></button>
   </div>
 </header>
+
 
 <!-- Mobile Menu -->
 <div id="mobileMenu" class="fixed inset-0 bg-black/70 z-50 hidden">
