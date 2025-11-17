@@ -109,11 +109,12 @@
 
 
   <!-- Add this in your HTML where you want the chart -->
-<canvas id="myPieChart" width="400" height="400"></canvas>
+  
+<canvas id="myPieChart" width="650" height="50"></canvas>
 
 <!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<section id="myPieChart" class="py-20 max-w-6xl mx-auto px-6">
 <script>
 const ctx = document.getElementById('myPieChart').getContext('2d');
 const myPieChart = new Chart(ctx, {
@@ -150,7 +151,7 @@ const myPieChart = new Chart(ctx, {
     }
 });
 </script>
-
+</section>
 
   
   <!-- Stats -->
