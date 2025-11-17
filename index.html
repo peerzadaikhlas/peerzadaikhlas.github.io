@@ -296,5 +296,55 @@ gsap.from(".project-card",{opacity:0,y:50,stagger:0.2,duration:1,scrollTrigger:"
 
     document.querySelectorAll('.fade-in, .slide-left, .scale-in').forEach(el => observer.observe(el));
   </script>
+  <!-- Education Section -->
+  <section id="education" class="fade-in section">
+    <h2>Education</h2>
+    <div class="edu-card">
+      <h3>Bachelor of Computer Applications</h3>
+      <p>Sample University — 2021–2024</p>
+      <p>Studied programming, databases, networking, AI fundamentals and web development.</p>
+    </div>
+    <div class="edu-card">
+      <h3>Higher Secondary (PCM)</h3>
+      <p>Example Senior Secondary School — 2019–2021</p>
+    </div>
+  </section>
+
+  <!-- Interests Section -->
+  <section id="interests" class="slide-left section">
+    <h2>Interests</h2>
+    <ul class="interest-list">
+      <li>Web Development</li>
+      <li>Artificial Intelligence</li>
+      <li>Cyber Security</li>
+      <li>Photography & Editing</li>
+      <li>Gaming</li>
+    </ul>
+  </section>
+
+  <!-- Games Section -->
+  <section id="games" class="scale-in section">
+    <h2>Favorite Games</h2>
+    <div class="game-grid">
+      <div class="game-card">PUBG Mobile</div>
+      <div class="game-card">Call of Duty Mobile</div>
+      <div class="game-card">GTA V</div>
+      <div class="game-card">Need for Speed</div>
+    </div>
+  </section>
+
+<script>
+// Mobile menu fix
+const menuBtn = document.getElementById('menu-btn');
+const mobileMenu = document.getElementById('mobile-menu');
+if(menuBtn && mobileMenu){
+  menuBtn.onclick = () => mobileMenu.classList.toggle('open');
+  window.onclick = (e) => {
+    if (!menuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+      mobileMenu.classList.remove('open');
+    }
+  };
+}
+</script>
 </body>
 </html>
