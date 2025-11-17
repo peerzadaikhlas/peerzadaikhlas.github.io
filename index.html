@@ -22,17 +22,15 @@
 <script src="https://cdn.jsdelivr.net/npm/tsparticles-slim"></script>
 
 <style>
-  :root{
-    --accent-1:#60a5fa; --accent-2:#a78bfa; --accent-3:#34d399; --bg:#0f172a;
-  }
-  body { background: var(--bg); color:#f1f5f9; font-family:sans-serif;}
-  #tsparticles, #tsparticles canvas { position: fixed; inset:0; z-index:-30; pointer-events:none; }
-  .magnetic{ transform: translate3d(0,0,0); transition: transform .2s ease-out; cursor:pointer; }
-  .floating{ will-change: transform; }
+  :root{--accent-1:#60a5fa;--accent-2:#a78bfa;--accent-3:#34d399;--bg:#0f172a;}
+  body{background:var(--bg);color:#f1f5f9;font-family:sans-serif;}
+  #tsparticles,#tsparticles canvas{position:fixed;inset:0;z-index:-30;pointer-events:none;}
+  .magnetic{transform:translate3d(0,0,0);transition:transform .2s ease-out;cursor:pointer;}
+  .floating{will-change:transform;}
   #scrollProgress{position:fixed;left:50%;top:6px;transform:translateX(-50%);height:4px;width:60%;background:rgba(255,255,255,0.06);border-radius:999px;z-index:60;}
-  #scrollProgress > i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--accent-1),var(--accent-2));border-radius:999px;}
+  #scrollProgress>i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--accent-1),var(--accent-2));border-radius:999px;}
   #backTop{position:fixed;right:18px;bottom:18px;z-index:70;display:none;}
-  .tilt{transform-style:preserve-3d; will-change:transform;}
+  .tilt{transform-style:preserve-3d;will-change:transform;}
   .flip-inner{backface-visibility:hidden;}
 </style>
 </head>
@@ -54,7 +52,7 @@
     <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-[var(--accent-1)] to-[var(--accent-2)] flex items-center justify-center font-bold">PI</div>
     <div class="hidden md:block">
       <div class="text-sm font-semibold">Peerzada Ikhlas</div>
-      <div class="text-xs text-slate-400">Frontend Dev.</div>
+      <div class="text-xs text-slate-400">Frontend Developer</div>
     </div>
   </div>
   <nav class="hidden lg:flex gap-6 text-sm font-medium">
@@ -62,11 +60,13 @@
     <a href="#projects" class="hover:text-[var(--accent-1)]">Projects</a>
     <a href="#skills" class="hover:text-[var(--accent-1)]">Skills</a>
     <a href="#hobbies" class="hover:text-[var(--accent-1)]">Hobbies</a>
+    <a href="#education" class="hover:text-[var(--accent-1)]">Education</a>
     <a href="#testimonials" class="hover:text-[var(--accent-1)]">Testimonials</a>
+    <a href="#social" class="hover:text-[var(--accent-1)]">Social</a>
     <a href="#contact" class="hover:text-[var(--accent-1)]">Contact</a>
   </nav>
   <div class="flex items-center gap-3">
-    <button class="px-3 py-2 rounded-full text-sm magnetic resumeBtn bg-[var(--accent-1)] text-black font-semibold">Download Resume</button>
+    <button class="px-3 py-2 rounded-full text-sm magnetic resumeBtn bg-[var(--accent-1)] text-black font-semibold">Resume</button>
     <button id="themeToggle" class="p-2 rounded-full bg-white/10 magnetic"><i class='bx bx-moon'></i></button>
     <button id="mobileOpen" class="lg:hidden p-2 magnetic"><i class='bx bx-menu text-2xl'></i></button>
   </div>
@@ -81,7 +81,9 @@
       <a href="#projects">Projects</a>
       <a href="#skills">Skills</a>
       <a href="#hobbies">Hobbies</a>
+      <a href="#education">Education</a>
       <a href="#testimonials">Testimonials</a>
+      <a href="#social">Social</a>
       <a href="#contact">Contact</a>
     </nav>
   </div>
@@ -96,7 +98,7 @@
     <div id="flipBack" class="absolute inset-0 hidden rounded-full bg-gradient-to-br from-[var(--accent-1)] to-[var(--accent-2)] text-black flex items-center justify-center font-bold">Hi 👋</div>
   </div>
   <h1 class="mt-6 text-4xl md:text-6xl font-extrabold leading-tight"><span id="typedName" class="text-[var(--accent-1)]"></span></h1>
-  <p class="mt-4 max-w-2xl text-slate-300">Greetings I’m Peerzada Ikhlas, passionate learner creating clean, meaningful digital experiences.</p>
+  <p class="mt-4 max-w-2xl text-slate-300">Greetings! I’m Peerzada Ikhlas, a frontend developer and UI/UX enthusiast crafting interactive digital experiences with animation and modern design.</p>
   <div class="mt-8 flex gap-4">
     <button class="px-3 py-2 rounded-full text-sm magnetic resumeBtn bg-[var(--accent-1)] text-black font-semibold">Hire Me</button>
     <button class="px-3 py-2 rounded-full text-sm magnetic resumeBtn bg-[var(--accent-1)] text-black font-semibold">View Work</button>
@@ -105,15 +107,15 @@
   <!-- Stats -->
   <div class="mt-12 flex gap-6 justify-center">
     <div class="text-center">
-      <div class="text-3xl font-bold" data-target="10" id="projectsCount">0</div>
+      <div class="text-3xl font-bold" data-target="12" id="projectsCount">0</div>
       <div class="text-sm text-slate-400">Projects</div>
     </div>
     <div class="text-center">
-      <div class="text-3xl font-bold" data-target="5" id="clientsCount">0</div>
+      <div class="text-3xl font-bold" data-target="8" id="clientsCount">0</div>
       <div class="text-sm text-slate-400">Clients</div>
     </div>
     <div class="text-center">
-      <div class="text-3xl font-bold" data-target="2" id="yearsCount">0</div>
+      <div class="text-3xl font-bold" data-target="3" id="yearsCount">0</div>
       <div class="text-sm text-slate-400">Years Exp</div>
     </div>
   </div>
@@ -123,25 +125,25 @@
 <section id="projects" class="py-20 max-w-6xl mx-auto px-6">
   <h2 class="text-3xl font-bold mb-6">Featured Projects</h2>
   <div class="grid md:grid-cols-3 gap-6">
-    <article class="bg-slate-800 rounded-xl overflow-hidden shadow-lg tilt">
+    <article class="bg-slate-800 rounded-xl overflow-hidden shadow-lg tilt hover:scale-105 transition-transform duration-500">
       <img src="https://kashmiriwikimedians.org/wp-content/uploads/2025/08/Picsart_25-10-02_10-07-13-347.png" class="w-full h-40 object-cover" loading="lazy">
       <div class="p-4">
-        <h3 class="font-semibold">Website for Kashmiriwikimedians</h3>
-        <p class="text-slate-400 text-sm mt-2">Smooth, user-friendly website developed with modern UI.</p>
+        <h3 class="font-semibold text-lg">Kashmiriwikimedians Site</h3>
+        <p class="text-slate-400 text-sm mt-2">Responsive website with modern UI, smooth animations, and optimized performance.</p>
       </div>
     </article>
-    <article class="bg-slate-800 rounded-xl overflow-hidden shadow-lg tilt">
+    <article class="bg-slate-800 rounded-xl overflow-hidden shadow-lg tilt hover:scale-105 transition-transform duration-500">
       <img src="https://placekitten.com/400/300" class="w-full h-40 object-cover" loading="lazy">
       <div class="p-4">
-        <h3 class="font-semibold">Personal Portfolio</h3>
-        <p class="text-slate-400 text-sm mt-2">Modern, animated portfolio website with interactive features.</p>
+        <h3 class="font-semibold text-lg">Portfolio Website</h3>
+        <p class="text-slate-400 text-sm mt-2">Interactive portfolio with 3D hover effects and light/dark theme toggle.</p>
       </div>
     </article>
-    <article class="bg-slate-800 rounded-xl overflow-hidden shadow-lg tilt">
+    <article class="bg-slate-800 rounded-xl overflow-hidden shadow-lg tilt hover:scale-105 transition-transform duration-500">
       <img src="https://placekitten.com/401/300" class="w-full h-40 object-cover" loading="lazy">
       <div class="p-4">
-        <h3 class="font-semibold">E-commerce Mockup</h3>
-        <p class="text-slate-400 text-sm mt-2">Responsive e-commerce layout design with hover animations.</p>
+        <h3 class="font-semibold text-lg">E-commerce Mockup</h3>
+        <p class="text-slate-400 text-sm mt-2">Clean responsive design with hover interactions and animations.</p>
       </div>
     </article>
   </div>
@@ -170,22 +172,55 @@
   </div>
 </section>
 
+<!-- Education -->
+<section id="education" class="py-20 max-w-6xl mx-auto px-6">
+  <h2 class="text-3xl font-bold mb-6">Education</h2>
+  <div class="grid md:grid-cols-3 gap-6">
+    <div class="bg-slate-800 p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-500">
+      <h3 class="font-semibold text-lg">BSc Computer Science</h3>
+      <p class="text-sm text-slate-400 mt-1">University of Kashmir (2020 - 2023)</p>
+      <p class="mt-2 text-slate-300 text-sm">Focus on web development, UI/UX design, and frontend technologies.</p>
+    </div>
+    <div class="bg-slate-800 p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-500">
+      <h3 class="font-semibold text-lg">Diploma in Web Design</h3>
+      <p class="text-sm text-slate-400 mt-1">XYZ Institute (2019 - 2020)</p>
+      <p class="mt-2 text-slate-300 text-sm">Specialized in HTML, CSS, JS, responsive layouts, and animations.</p>
+    </div>
+    <div class="bg-slate-800 p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-500">
+      <h3 class="font-semibold text-lg">High School</h3>
+      <p class="text-sm text-slate-400 mt-1">ABC School (2017 - 2019)</p>
+      <p class="mt-2 text-slate-300 text-sm">Completed science stream with distinction.</p>
+    </div>
+  </div>
+</section>
+
 <!-- Testimonials -->
-<section id="testimonials" class="py-20 max-w-4xl mx-auto px-6">
+<section id="testimonials" class="py-20 max-w-6xl mx-auto px-6">
   <h2 class="text-3xl font-bold mb-6 text-center">Testimonials</h2>
-  <div class="relative">
-    <div class="test-item text-center opacity-0">
-      <p class="text-slate-300 italic">"Peerzada is an amazing developer, extremely reliable and creative."</p>
+  <div class="relative flex gap-6 overflow-x-auto snap-x snap-mandatory">
+    <div class="bg-slate-800 p-6 rounded-xl shadow-lg min-w-[300px] flex-shrink-0 snap-start">
+      <p class="text-slate-300 italic">"Peerzada is an exceptional developer, creative and reliable. The project quality was outstanding!"</p>
       <p class="mt-2 font-semibold">– Ali Khan</p>
     </div>
-    <div class="test-item text-center opacity-0">
-      <p class="text-slate-300 italic">"His work on our website exceeded expectations. Highly recommended!"</p>
+    <div class="bg-slate-800 p-6 rounded-xl shadow-lg min-w-[300px] flex-shrink-0 snap-start">
+      <p class="text-slate-300 italic">"Professional and detail-oriented. Delivered work ahead of schedule with animations and design perfection."</p>
       <p class="mt-2 font-semibold">– Sara B.</p>
     </div>
-    <div class="test-item text-center opacity-0">
-      <p class="text-slate-300 italic">"Professional, detail-oriented, and always meets deadlines."</p>
+    <div class="bg-slate-800 p-6 rounded-xl shadow-lg min-w-[300px] flex-shrink-0 snap-start">
+      <p class="text-slate-300 italic">"Creative solutions and beautiful interfaces. Highly recommended for modern frontend projects."</p>
       <p class="mt-2 font-semibold">– Omar F.</p>
     </div>
+  </div>
+</section>
+
+<!-- Social Media -->
+<section id="social" class="py-20 max-w-4xl mx-auto px-6 text-center">
+  <h2 class="text-3xl font-bold mb-6">Connect with Me</h2>
+  <div class="flex justify-center gap-6 text-3xl">
+    <a href="#" class="hover:text-[var(--accent-1)] transition-colors duration-300"><i class='bx bxl-github'></i></a>
+    <a href="#" class="hover:text-[var(--accent-2)] transition-colors duration-300"><i class='bx bxl-linkedin'></i></a>
+    <a href="#" class="hover:text-[var(--accent-3)] transition-colors duration-300"><i class='bx bxl-instagram'></i></a>
+    <a href="#" class="hover:text-[var(--accent-1)] transition-colors duration-300"><i class='bx bxl-twitter'></i></a>
   </div>
 </section>
 
@@ -194,56 +229,61 @@
   <h2 class="text-3xl font-bold mb-6">Skills</h2>
   <div class="space-y-4">
     <div>
-      <p>HTML & CSS</p>
-      <div class="w-full bg-slate-700 h-4 rounded-full">
-        <div class="bg-[var(--accent-1)] h-4 rounded-full w-3/4 transition-all duration-1000"></div>
+      <p class="text-sm">HTML / CSS</p>
+      <div class="bg-slate-700 h-2 rounded-full overflow-hidden">
+        <div class="bg-[var(--accent-1)] h-full w-0"></div>
       </div>
     </div>
     <div>
-      <p>JavaScript</p>
-      <div class="w-full bg-slate-700 h-4 rounded-full">
-        <div class="bg-[var(--accent-2)] h-4 rounded-full w-2/3 transition-all duration-1000"></div>
+      <p class="text-sm">JavaScript</p>
+      <div class="bg-slate-700 h-2 rounded-full overflow-hidden">
+        <div class="bg-[var(--accent-2)] h-full w-0"></div>
       </div>
     </div>
     <div>
-      <p>React & Tailwind</p>
-      <div class="w-full bg-slate-700 h-4 rounded-full">
-        <div class="bg-[var(--accent-3)] h-4 rounded-full w-3/4 transition-all duration-1000"></div>
+      <p class="text-sm">React / Next.js</p>
+      <div class="bg-slate-700 h-2 rounded-full overflow-hidden">
+        <div class="bg-[var(--accent-3)] h-full w-0"></div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- Contact -->
-<section id="contact" class="py-20 max-w-4xl mx-auto px-6 text-center">
+<section id="contact" class="py-20 max-w-3xl mx-auto px-6 text-center">
   <h2 class="text-3xl font-bold mb-6">Contact Me</h2>
-  <p class="mb-6 text-slate-300">Feel free to reach out for collaborations or just a friendly hello!</p>
   <form class="flex flex-col gap-4">
-    <input type="text" placeholder="Your Name" class="p-3 rounded-lg bg-slate-800 border border-slate-700 focus:outline-none" required>
-    <input type="email" placeholder="Your Email" class="p-3 rounded-lg bg-slate-800 border border-slate-700 focus:outline-none" required>
-    <textarea placeholder="Message" rows="4" class="p-3 rounded-lg bg-slate-800 border border-slate-700 focus:outline-none" required></textarea>
-    <button type="submit" class="px-6 py-3 rounded-full bg-[var(--accent-1)] text-black font-semibold magnetic">Send Message</button>
+    <input type="text" placeholder="Your Name" class="p-3 rounded-lg bg-slate-800 border border-slate-700">
+    <input type="email" placeholder="Email" class="p-3 rounded-lg bg-slate-800 border border-slate-700">
+    <textarea placeholder="Message" class="p-3 rounded-lg bg-slate-800 border border-slate-700"></textarea>
+    <button type="submit" class="bg-[var(--accent-1)] text-black py-2 rounded-full magnetic">Send Message</button>
   </form>
 </section>
 
-<footer class="py-8 text-center text-slate-500">© 2025 Peerzada Ikhlas</footer>
-
 <!-- Back to top -->
-<button id="backTop" class="bg-[var(--accent-1)] p-3 rounded-full shadow-lg"><i class='bx bx-up-arrow-alt'></i></button>
+<button id="backTop" class="bg-[var(--accent-1)] p-3 rounded-full magnetic"><i class='bx bx-up-arrow-alt'></i></button>
 
 <script>
-  // ----------------- tsParticles -----------------
-  (async () => {
-    await tsParticles.load("tsparticles", {
-      fullScreen: { enable: true, zIndex:-30 },
-      fpsLimit: 60,
-      interactivity: { events:{ onHover:{ enable:true, mode:"repulse" }, onClick:{ enable:true, mode:"push" } }, modes:{ push:{quantity:4}, repulse:{distance:150} } },
-      particles:{ number:{value:80,density:{enable:true,area:900}}, color:{value:["#60a5fa","#a78bfa","#34d399"]}, links:{enable:true,color:"#94a3b8",distance:140,opacity:0.25}, move:{enable:true,speed:1.5,outModes:"bounce"}, size:{value:{min:1.2,max:4.2}}, opacity:{value:{min:0.6,max:0.95}} }, detectRetina:true
-    });
-  })();
-
   // Typed.js
-  new Typed('#typedName', { strings: ["Peerzada Ikhlas","Frontend Developer","UI/UX Enthusiast"], typeSpeed:80, backSpeed:40, loop:true });
+  new Typed('#typedName',{strings:["Peerzada Ikhlas","Frontend Developer","UI/UX Enthusiast"],typeSpeed:60,backSpeed:40,loop:true});
+
+  // tsParticles
+  tsParticles.load("tsparticles", {
+    fpsLimit: 60,
+    particles: {
+      number: { value: 80 },
+      color: { value: ["#60a5fa","#a78bfa","#34d399"] },
+      shape: { type: ["circle","square","triangle"] },
+      opacity: { value: 0.5 },
+      size: { value: { min: 1, max: 4 } },
+      links: { enable: true, distance: 150, color: "#fff", opacity: 0.2, width: 1 },
+      move: { enable: true, speed: 1, direction: "none", outMode: "bounce" }
+    },
+    interactivity: {
+      events: { onHover: { enable: true, mode: "repulse" }, onClick: { enable: true, mode: "push" } }
+    },
+    detectRetina: true
+  });
 
   // Magnetic buttons
   document.querySelectorAll('.magnetic').forEach(btn=>{
@@ -256,17 +296,12 @@
     btn.addEventListener('mouseleave', ()=> btn.style.transform='translate(0,0)');
   });
 
-  // Resume download
+  // Resume
   document.querySelectorAll('.resumeBtn').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const a = document.createElement('a'); a.href='resume.pdf'; a.download='Peerzada-Ikhlas-Resume.pdf'; document.body.appendChild(a); a.click(); a.remove();
     });
   });
-
-  // Back to top
-  const backTop = document.getElementById('backTop');
-  window.addEventListener('scroll', ()=> backTop.style.display = window.scrollY>400 ? 'block':'none');
-  backTop.addEventListener('click', ()=> gsap.to(window,{scrollTo:0,duration:0.8,ease:'power2.out'}));
 
   // Scroll progress
   const progress = document.querySelector('#scrollProgress > i');
@@ -274,6 +309,11 @@
     const pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) *100;
     progress.style.width = pct + '%';
   });
+
+  // Back to top
+  const backTop = document.getElementById('backTop');
+  window.addEventListener('scroll', ()=> backTop.style.display = window.scrollY>400 ? 'block':'none');
+  backTop.addEventListener('click', ()=> gsap.to(window,{scrollTo:0,duration:0.8,ease:'power2.out'}));
 
   // Stats counter
   const counters = ['projectsCount','clientsCount','yearsCount'].map(id=>document.getElementById(id));
@@ -309,18 +349,14 @@
     document.body.style.color = isLight ? '#0f172a':'';
   });
 
-  // Testimonials fade
-  const items = Array.from(document.querySelectorAll('#testimonials .test-item')||[]);
-  let idx=0;
-  function show(i){ items.forEach((el,j)=> gsap.to(el,{autoAlpha:j===i?1:0,duration:0.6})); }
-  if(items.length){ show(0); setInterval(()=>{ idx=(idx+1)%items.length; show(idx); },4500); }
+  // Skills bars
+  const skillBars = document.querySelectorAll('#skills div > div > div');
+  ScrollTrigger.create({trigger:'#skills', start:'top 80%', onEnter:()=>{
+    skillBars.forEach((bar,i)=>{
+      gsap.to(bar,{width:["0%","100%"][i%3],duration:1.5,ease:'power2.out'});
+    });
+  }});
 
-  // Floating blobs parallax
-  document.addEventListener('mousemove', e=>{
-    gsap.to('#float1',{x:e.clientX*0.02,y:e.clientY*0.02,duration:0.6});
-    gsap.to('#float2',{x:e.clientX*0.015,y:e.clientY*0.015,duration:0.6});
-  });
 </script>
-
 </body>
 </html>
