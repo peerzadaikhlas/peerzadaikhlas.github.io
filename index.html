@@ -38,10 +38,8 @@
 
 <!-- Particles -->
 <div id="tsparticles"></div>
-
 <!-- Scroll Progress -->
 <div id="scrollProgress"><i></i></div>
-
 <!-- Floating blobs -->
 <div id="float1" class="hidden md:block absolute -left-10 -top-10 w-48 h-48 rounded-full bg-gradient-to-br from-[var(--accent-2)] to-[var(--accent-1)] opacity-30 blur-3xl floating"></div>
 <div id="float2" class="hidden md:block absolute right-6 top-40 w-36 h-36 rounded-full bg-gradient-to-br from-[var(--accent-3)] to-[var(--accent-2)] opacity-25 blur-2xl floating"></div>
@@ -54,7 +52,7 @@
     <!-- Name & Title (always visible) -->
     <div class="flex flex-col">
       <span class="text-sm font-semibold">PeerIkhlas</span>
-      <span class="text-xs text-slate-400">Web Dev.</span>
+      <span class="text-xs text-slate-400">Website Dev.</span>
     </div>
   </div>
 
@@ -104,8 +102,8 @@
   <h1 class="mt-6 text-4xl md:text-6xl font-extrabold leading-tight"><span id="typedName" class="text-[var(--accent-1)]"></span></h1>
   <p class="mt-4 max-w-2xl text-slate-300">Greetings! I’m Peerzada Ikhlas, a frontend developer and UI/UX enthusiast crafting interactive digital experiences with animation and modern design.</p>
   <div class="mt-8 flex gap-4">
-    <button class="px-3 py-2 rounded-full text-sm magnetic resumeBtn bg-[var(--accent-1)] text-black font-semibold">Hire Me</button>
-    <button class="px-3 py-2 rounded-full text-sm magnetic resumeBtn bg-[var(--accent-1)] text-black font-semibold">View Work</button>
+    <button class="px-3 py-2 rounded-full text-sm magnetic  bg-[var(--accent-1)] text-black font-semibold">Hire Me</button>
+    <button class="px-3 py-2 rounded-full text-sm magnetic  bg-[var(--accent-1)] text-black font-semibold">View Work</button>
   </div>
 
   <!-- Stats -->
@@ -348,6 +346,29 @@
 
 
   // Stats counter
+  <script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll('.counter').forEach(counter => {
+    const target = +counter.dataset.target;
+    gsap.fromTo(counter, 
+      { innerText: 0 }, 
+      { 
+        innerText: target, 
+        duration: 2, 
+        ease: 'power1.out', 
+        snap: { innerText: 1 }, 
+        scrollTrigger: {
+          trigger: counter,
+          start: 'top 80%', // start when element is 80% from top
+          once: true // only animate once
+        },
+        onUpdate: () => counter.innerText = Math.floor(counter.innerText)
+      }
+    );
+  });
+</script>
+
   // Skills bars animation
 document.querySelectorAll('.skill-bar').forEach(bar => {
   bar.style.width = '0%'; // start from 0%
