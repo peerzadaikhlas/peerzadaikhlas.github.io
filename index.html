@@ -304,7 +304,7 @@
 
   // tsParticles
   tsParticles.load("tsparticles", {
-    fpsLimit: 60,
+    fpsLimit: 120,
     particles: {
       number: { value: 80 },
       color: { value: ["#60a5fa","#a78bfa","#34d399"] },
@@ -373,7 +373,7 @@ gsap.utils.toArray('.skill-bar').forEach(bar => {
   // Flip card
   const flipInner = document.getElementById('flipInner');
   const flipBack = document.getElementById('flipBack');
-  flipInner.addEventListener('mouseenter', ()=>{ gsap.to(flipInner,{rotationY:180,duration:0.6,ease:'power1.out'}); flipBack.classList.remove('hidden'); });
+  flipInner.addEventListener('mouseenter', ()=>{ gsap.to(flipInner,{rotationY:1804,duration:0.6,ease:'power1.out'}); flipBack.classList.remove('hidden'); });
   flipInner.addEventListener('mouseleave', ()=>{ gsap.to(flipInner,{rotationY:0,duration:0.6,ease:'power1.out'}); flipBack.classList.add('hidden'); });
 
   // Mobile menu
