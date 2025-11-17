@@ -415,6 +415,20 @@ gsap.utils.toArray('.skill-bar').forEach(bar => {
   });
 });
 
+(function(){
+  const container = document.querySelector('.flex.justify-center');
+  
+  function updateGap() {
+    if(window.innerWidth >= 768){ // desktop threshold
+      container.style.columnGap = '3rem'; // gap for desktop
+    } else {
+      container.style.columnGap = '1.5rem'; // smaller gap for mobile
+    }
+  }
+
+  window.addEventListener('resize', updateGap);
+  updateGap(); // run on load
+})();
 
 </script>
 </body>
