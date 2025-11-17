@@ -194,35 +194,52 @@
   </div>
 </section>
 
-<!-- Testimonials -->
-<section id="testimonials" class="py-20 max-w-6xl mx-auto px-6">
-  <h2 class="text-3xl font-bold mb-6 text-center">Testimonials</h2>
-  <div class="relative flex gap-6 overflow-x-auto snap-x snap-mandatory">
-    <div class="bg-slate-800 p-6 rounded-xl shadow-lg min-w-[300px] flex-shrink-0 snap-start">
-      <p class="text-slate-300 italic">"Peerzada is an exceptional developer, creative and reliable. The project quality was outstanding!"</p>
-      <p class="mt-2 font-semibold">– Ali Khan</p>
-    </div>
-    <div class="bg-slate-800 p-6 rounded-xl shadow-lg min-w-[300px] flex-shrink-0 snap-start">
-      <p class="text-slate-300 italic">"Professional and detail-oriented. Delivered work ahead of schedule with animations and design perfection."</p>
-      <p class="mt-2 font-semibold">– Sara B.</p>
-    </div>
-    <div class="bg-slate-800 p-6 rounded-xl shadow-lg min-w-[300px] flex-shrink-0 snap-start">
-      <p class="text-slate-300 italic">"Creative solutions and beautiful interfaces. Highly recommended for modern frontend projects."</p>
-      <p class="mt-2 font-semibold">– Omar F.</p>
+<!-- Testimonials Section -->
+<section id="testimonials" class="py-20 max-w-4xl mx-auto px-6 relative">
+  <h2 class="text-3xl font-bold mb-12 text-center">Testimonials</h2>
+  
+  <div id="testimonialCarousel" class="relative w-full overflow-hidden rounded-2xl shadow-xl">
+    <div class="flex transition-transform duration-700 ease-in-out">
+      <div class="testimonialCard min-w-full bg-slate-800 p-12 rounded-2xl text-center text-slate-200">
+        <p class="text-xl italic">"Peerzada is an exceptional developer, creative and reliable. The project quality was outstanding!"</p>
+        <p class="mt-6 font-bold text-lg">– Ali Khan</p>
+      </div>
+      <div class="testimonialCard min-w-full bg-slate-800 p-12 rounded-2xl text-center text-slate-200">
+        <p class="text-xl italic">"Professional and detail-oriented. Delivered work ahead of schedule with animations and design perfection."</p>
+        <p class="mt-6 font-bold text-lg">– Sara B.</p>
+      </div>
+      <div class="testimonialCard min-w-full bg-slate-800 p-12 rounded-2xl text-center text-slate-200">
+        <p class="text-xl italic">"Creative solutions and beautiful interfaces. Highly recommended for modern frontend projects."</p>
+        <p class="mt-6 font-bold text-lg">– Omar F.</p>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- Social Media -->
-<section id="social" class="py-20 max-w-4xl mx-auto px-6 text-center">
-  <h2 class="text-3xl font-bold mb-6">Connect with Me</h2>
-  <div class="flex justify-center gap-6 text-3xl">
-    <a href="#" class="hover:text-[var(--accent-1)] transition-colors duration-300"><i class='bx bxl-github'></i></a>
-    <a href="#" class="hover:text-[var(--accent-2)] transition-colors duration-300"><i class='bx bxl-linkedin'></i></a>
-    <a href="#" class="hover:text-[var(--accent-3)] transition-colors duration-300"><i class='bx bxl-instagram'></i></a>
-    <a href="#" class="hover:text-[var(--accent-1)] transition-colors duration-300"><i class='bx bxl-twitter'></i></a>
-  </div>
-</section>
+<!-- Social Media Bar (Fixed at Bottom) -->
+<div id="socialBottom" class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-slate-900/80 backdrop-blur-lg rounded-full px-6 py-3 flex gap-6 shadow-xl z-50">
+  <a href="#" class="text-2xl hover:text-[var(--accent-1)] transition-colors duration-300"><i class='bx bxl-github'></i></a>
+  <a href="#" class="text-2xl hover:text-[var(--accent-2)] transition-colors duration-300"><i class='bx bxl-linkedin'></i></a>
+  <a href="#" class="text-2xl hover:text-[var(--accent-3)] transition-colors duration-300"><i class='bx bxl-instagram'></i></a>
+  <a href="#" class="text-2xl hover:text-[var(--accent-1)] transition-colors duration-300"><i class='bx bxl-twitter'></i></a>
+</div>
+
+<script>
+  // Auto-swipe testimonials
+  const carousel = document.querySelector('#testimonialCarousel > div');
+  const cards = document.querySelectorAll('.testimonialCard');
+  let index = 0;
+  const total = cards.length;
+
+  function showNextTestimonial() {
+    index = (index + 1) % total;
+    const offset = -index * 100;
+    carousel.style.transform = `translateX(${offset}%)`;
+  }
+
+  setInterval(showNextTestimonial, 5000); // swipe every 5 seconds
+</script>
+
 
 <!-- Skills -->
 <section id="skills" class="py-20 max-w-6xl mx-auto px-6">
