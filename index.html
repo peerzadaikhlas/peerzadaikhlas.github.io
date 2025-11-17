@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
-
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Peerzada Ikhlas Portfolio</title>
@@ -109,15 +107,15 @@
   <!-- Stats -->
   <div class="mt-12 flex gap-6 justify-center">
     <div class="text-center">
-      <div class="text-3xl font-bold" data-target="12" id="projectsCount">0</div>
+      <div class="text-3xl font-bold" data-target="12" id="projectsCount">3</div>
       <div class="text-sm text-slate-400">Projects</div>
     </div>
     <div class="text-center">
-      <div class="text-3xl font-bold" data-target="8" id="clientsCount">0</div>
+      <div class="text-3xl font-bold" data-target="8" id="clientsCount">4</div>
       <div class="text-sm text-slate-400">Clients</div>
     </div>
     <div class="text-center">
-      <div class="text-3xl font-bold" data-target="3" id="yearsCount">0</div>
+      <div class="text-3xl font-bold" data-target="3" id="yearsCount">3</div>
       <div class="text-sm text-slate-400">Years Exp</div>
     </div>
   </div>
@@ -296,16 +294,6 @@
     <button type="submit" class="bg-[var(--accent-1)] text-black py-2 rounded-full magnetic">Send Message</button>
   </form>
 </section>
-
-<!-- Back to top -->
-const backTop = document.getElementById('backTop');
-window.addEventListener('scroll', () => {
-  backTop.style.display = window.scrollY > 400 ? 'block' : 'none';
-});
-backTop.addEventListener('click', () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-
 
 <script>
   // Typed.js
