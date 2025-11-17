@@ -31,14 +31,36 @@
     }
     .magnetic{transform: translate3d(0,0,0); transition: transform .2s ease-out}
     .floating{ will-change: transform; }
-    .lightbox-bg{background:rgba(0,0,0,.75);}
+    .lightbox-bg{background:rgba(0,0,0,.75);}    
     .backface-hidden{backface-visibility:hidden}
+
+    /* ensure particles canvas is always visible behind content */
+    #tsparticles, #tsparticles canvas{position:fixed; inset:0; z-index:-30; pointer-events:none}
+
+    /* subtle scroll progress bar */
+    #scrollProgress{position:fixed; left:50%; transform:translateX(-50%); top:6px; height:4px; width:60%; background:rgba(255,255,255,0.06); border-radius:999px; z-index:60}
+    #scrollProgress > i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); border-radius:999px}
+
+    /* back-to-top */
+    #backTop{position:fixed; right:18px; bottom:18px; z-index:70; display:none}
+
+    /* testimonials */
+    .testimonial{min-height:120px}
+
+    /* projects tilt */
+    .tilt{transform-style:preserve-3d; will-change:transform}
+
+    /* small accessibility tweak for focus outlines */
+    :focus{outline:2px solid rgba(96,165,250,0.18); outline-offset:2px}
   </style>
 </head>
-<body class="bg-slate-900 text-slate-100 antialiased">
+<body class="bg-slate-900 text-slate-100 antialiased"> 
 
   <!-- Particles container -->
   <div id="tsparticles" class="fixed inset-0 -z-10"></div>
+
+  <!-- Scroll progress bar -->
+  <div id="scrollProgress"><i></i></div>
 
   <!-- Floating decorative layers (parallax) -->
   <div id="float1" class="hidden md:block absolute -left-10 -top-10 w-48 h-48 rounded-full bg-gradient-to-br from-[var(--accent-2)] to-[var(--accent-1)] opacity-30 blur-3xl floating"></div>
@@ -57,6 +79,7 @@
     <nav class="hidden lg:flex gap-6 text-sm font-medium">
       <a href="#home" class="hover:text-[var(--accent-1)]">Home</a>
       <a href="#projects" class="hover:text-[var(--accent-1)]">Projects</a>
+      <a href="#skills" class="hover:text-[var(--accent-1)]">Skills</a>
       <a href="#certs" class="hover:text-[var(--accent-1)]">Certificates</a>
       <a href="#contact" class="hover:text-[var(--accent-1)]">Contact</a>
     </nav>
@@ -82,6 +105,7 @@
       <nav class="flex flex-col gap-4">
         <a href="#home">Home</a>
         <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
         <a href="#certs">Certificates</a>
         <a href="#contact">Contact</a>
       </nav>
@@ -93,7 +117,7 @@
     <!-- Profile flip card -->
     <div class="relative w-44 h-44 md:w-56 md:h-56 perspective">
       <div id="flipInner" class="flip-inner w-full h-full rounded-full shadow-2xl backface-hidden transition-transform duration-700">
-        <img src="https://i.postimg.cc/DZ1Zrw5T/profile.jpg" alt="profile" class="w-full h-full object-cover rounded-full" />
+        <img src="https://i.postimg.cc/DZ1Zrw5T/profile.jpg" alt="profile" class="w-full h-full object-cover rounded-full" loading="lazy" />
       </div>
       <!-- back side (for 3D rotate) -->
       <div id="flipBack" class="absolute inset-0 hidden rounded-full bg-gradient-to-br from-[var(--accent-1)] to-[var(--accent-2)] text-black flex items-center justify-center font-bold">Hi 👋</div>
@@ -132,8 +156,10 @@
     <h2 class="text-3xl font-bold mb-6">Featured Projects</h2>
     <div class="grid md:grid-cols-3 gap-6">
       <!-- Project Card Template -->
-      <article class="bg-slate-800 rounded-xl overflow-hidden shadow-lg" data-modal-target="proj1">
-        <img src="https://images.unsplash.com/photo-1526378722620" class="w-full h-40 object-cover" />
+      <article class="bg-slate-800 rounded-xl overflow-hidden shadow-lg tilt" data-modal-target="proj1">
+        <div class="relative w-full h-40 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1526378722620" class="w-full h-full object-cover" loading="lazy" />
+        </div>
         <div class="p-4">
           <h3 class="font-semibold">Chat App</h3>
           <p class="text-slate-400 text-sm mt-2">Real-time chat with rooms and notifications.</p>
@@ -144,8 +170,10 @@
         </div>
       </article>
 
-      <article class="bg-slate-800 rounded-xl overflow-hidden shadow-lg" data-modal-target="proj2">
-        <img src="https://images.unsplash.com/photo-1519337265831" class="w-full h-40 object-cover" />
+      <article class="bg-slate-800 rounded-xl overflow-hidden shadow-lg tilt" data-modal-target="proj2">
+        <div class="relative w-full h-40 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1519337265831" class="w-full h-full object-cover" loading="lazy" />
+        </div>
         <div class="p-4">
           <h3 class="font-semibold">E-commerce UI</h3>
           <p class="text-slate-400 text-sm mt-2">Shop with filters, cart and animations.</p>
@@ -156,8 +184,10 @@
         </div>
       </article>
 
-      <article class="bg-slate-800 rounded-xl overflow-hidden shadow-lg" data-modal-target="proj3">
-        <img src="https://images.unsplash.com/photo-1518779578993" class="w-full h-40 object-cover" />
+      <article class="bg-slate-800 rounded-xl overflow-hidden shadow-lg tilt" data-modal-target="proj3">
+        <div class="relative w-full h-40 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1518779578993" class="w-full h-full object-cover" loading="lazy" />
+        </div>
         <div class="p-4">
           <h3 class="font-semibold">Design System</h3>
           <p class="text-slate-400 text-sm mt-2">Component library with accessibility focus.</p>
@@ -170,8 +200,55 @@
     </div>
   </section>
 
-  <!-- Projects Modals -->
+  <!-- Modals container -->
   <div id="modalsContainer"></div>
+
+  <!-- Skills section -->
+  <section id="skills" class="py-20 max-w-6xl mx-auto px-6">
+    <h2 class="text-3xl font-bold mb-6">Skills</h2>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <p class="text-slate-400 mb-4">My main competencies include front-end development, performance optimization and accessible UI patterns.</p>
+        <div class="space-y-4">
+          <div>
+            <div class="flex justify-between mb-1"><span>HTML &amp; CSS</span><span class="text-slate-400">95%</span></div>
+            <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden"><div class="skill-bar h-3 rounded-full" data-percent="95"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-1"><span>JavaScript</span><span class="text-slate-400">92%</span></div>
+            <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden"><div class="skill-bar h-3 rounded-full" data-percent="92"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-1"><span>React / Vite</span><span class="text-slate-400">88%</span></div>
+            <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden"><div class="skill-bar h-3 rounded-full" data-percent="88"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-1"><span>Accessibility</span><span class="text-slate-400">85%</span></div>
+            <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden"><div class="skill-bar h-3 rounded-full" data-percent="85"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonials carousel -->
+      <div>
+        <h3 class="font-semibold mb-4">Testimonials</h3>
+        <div id="testimonials" class="bg-slate-800 p-6 rounded-xl testimonial">
+          <div class="test-item">
+            <p class="text-slate-300 mb-3">"Peerzada built an exceptional UI for our product. Fast, communicative and detail-oriented."</p>
+            <div class="text-sm text-slate-400">— Client A</div>
+          </div>
+          <div class="hidden test-item">
+            <p class="text-slate-300 mb-3">"Great component library and documentation — accessible by design."</p>
+            <div class="text-sm text-slate-400">— Client B</div>
+          </div>
+          <div class="hidden test-item">
+            <p class="text-slate-300 mb-3">"Animations & microinteractions elevated our UX considerably."</p>
+            <div class="text-sm text-slate-400">— Client C</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- Certificates -->
   <section id="certs" class="py-20 max-w-6xl mx-auto px-6">
@@ -180,16 +257,6 @@
       <div class="bg-slate-800 p-6 rounded-xl shadow"> <h4 class="font-semibold">Certified Web Dev</h4><p class="text-slate-400 text-sm mt-2">Issuer — 2024</p></div>
       <div class="bg-slate-800 p-6 rounded-xl shadow"> <h4 class="font-semibold">UI/UX Foundations</h4><p class="text-slate-400 text-sm mt-2">Issuer — 2023</p></div>
       <div class="bg-slate-800 p-6 rounded-xl shadow"> <h4 class="font-semibold">Accessibility Best Practices</h4><p class="text-slate-400 text-sm mt-2">Issuer — 2022</p></div>
-    </div>
-  </section>
-
-  <!-- Gallery + Lightbox -->
-  <section id="gallery" class="py-20 max-w-6xl mx-auto px-6">
-    <h2 class="text-3xl font-bold mb-6">Gallery</h2>
-    <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-      <img class="rounded-xl cursor-pointer hover:scale-105 transition openLightbox" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085" data-full="https://images.unsplash.com/photo-1498050108023-c5249f4df085" />
-      <img class="rounded-xl cursor-pointer hover:scale-105 transition openLightbox" src="https://images.unsplash.com/photo-1524492412937-4961a0b2a3d5" data-full="https://images.unsplash.com/photo-1524492412937-4961a0b2a3d5" />
-      <img class="rounded-xl cursor-pointer hover:scale-105 transition openLightbox" src="https://images.unsplash.com/photo-1505682634904-d7c6b8f0fe6a" data-full="https://images.unsplash.com/photo-1505682634904-d7c6b8f0fe6a" />
     </div>
   </section>
 
@@ -206,30 +273,25 @@
 
   <footer class="py-8 text-center text-slate-500">© 2025 Peerzada Ikhlas</footer>
 
-  <!-- Lightbox Modal (single element used for gallery) -->
-  <div id="lightbox" class="fixed inset-0 z-60 hidden items-center justify-center lightbox-bg">
-    <div class="max-w-4xl w-[90%]">
-      <button id="closeLightbox" class="absolute top-6 right-6 text-white text-2xl">✕</button>
-      <img id="lightboxImg" src="" class="w-full rounded-xl shadow-2xl" />
-    </div>
-  </div>
+  <!-- Back to top -->
+  <button id="backTop" class="bg-[var(--accent-1)] p-3 rounded-full shadow-lg" aria-label="Back to top"><i class='bx bx-up-arrow-alt'></i></button>
 
   <script>
-    /* --------------------- particles (interactive) --------------------- */
+    /* --------------------- particles (interactive & visible) --------------------- */
     (async () => {
       await tsParticles.load("tsparticles", {
         fpsLimit: 60,
         interactivity: {
           events: { onHover: { enable: true, mode: "repulse" }, onClick: { enable: true, mode: "push" } },
-          modes: { push: { quantity: 4 }, repulse: { distance: 120 } }
+          modes: { push: { quantity: 4 }, repulse: { distance: 140 } }
         },
         particles: {
-          number: { value: 60, density: { enable: true, area: 800 } },
+          number: { value: 80, density: { enable: true, area: 900 } },
           color: { value: ["#60a5fa", "#a78bfa", "#34d399"] },
-          links: { enable: true, color: "#94a3b8", distance: 140, opacity: 0.15 },
-          move: { enable: true, speed: 1.2, outModes: { default: "bounce" } },
-          size: { value: { min: 1, max: 4 } },
-          opacity: { value: 0.8 }
+          links: { enable: true, color: "#94a3b8", distance: 140, opacity: 0.22 },
+          move: { enable: true, speed: 1.5, outModes: { default: "bounce" } },
+          size: { value: { min: 1.2, max: 4.2 } },
+          opacity: { value: { min: 0.6, max: 0.95 } }
         },
         detectRetina: true
       });
@@ -330,42 +392,87 @@
       if(e.target.classList.contains('closeModal')) document.getElementById('modalsContainer').innerHTML = '';
     });
 
-    /* --------------------- Lightbox for gallery --------------------- */
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightboxImg');
-    document.querySelectorAll('.openLightbox').forEach(img=>{
-      img.addEventListener('click', ()=>{
-        lightboxImg.src = img.dataset.full || img.src;
-        lightbox.classList.remove('hidden');
-        lightbox.classList.add('flex');
-      });
+    /* --------------------- Skills bars animation --------------------- */
+    document.querySelectorAll('.skill-bar').forEach(bar=>{ bar.style.width = '0%'; bar.style.background = 'linear-gradient(90deg,var(--accent-1),var(--accent-2))'; });
+    ScrollTrigger.batch('.skill-bar', {
+      onEnter: batch => batch.forEach(el=>{
+        const pct = el.dataset.percent || 80;
+        gsap.to(el, { width: pct + '%', duration: 1.6, ease: 'power2.out' });
+      })
     });
-    document.getElementById('closeLightbox').addEventListener('click', ()=>{ lightbox.classList.add('hidden'); lightbox.classList.remove('flex'); });
 
-    /* --------------------- Flip profile on hover using GSAP 3D --------------------- */
+    /* --------------------- Testimonials carousel (simple) --------------------- */
+    (function(){
+      const items = Array.from(document.querySelectorAll('#testimonials .test-item'));
+      let idx = 0;
+      function show(i){ items.forEach((el, j)=> el.classList.toggle('hidden', j !== i)); }
+      show(0);
+      setInterval(()=>{ idx = (idx + 1) % items.length; show(idx); }, 4500);
+    })();
+
+    /* --------------------- Project hover 3D tilt --------------------- */
+    document.querySelectorAll('.tilt').forEach(card=>{
+      const strength = 18;
+      card.addEventListener('mousemove', e=>{
+        const rect = card.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        const rotY = x * strength;
+        const rotX = -y * strength;
+        card.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.02)`;
+      });
+      card.addEventListener('mouseleave', ()=> card.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)');
+    });
+
+    /* --------------------- Back to top button --------------------- */
+    const backTop = document.getElementById('backTop');
+    window.addEventListener('scroll', ()=>{
+      if(window.scrollY > 400) backTop.style.display = 'block'; else backTop.style.display = 'none';
+    });
+    backTop.addEventListener('click', ()=> gsap.to(window, {scrollTo:0, duration:0.8, ease:'power2.out'}));
+
+    /* --------------------- Scroll progress bar update --------------------- */
+    const progress = document.querySelector('#scrollProgress > i');
+    function updateProgress(){ const pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100; progress.style.width = pct + '%'; }
+    window.addEventListener('scroll', updateProgress); updateProgress();
+
+    /* --------------------- Lightbox removed (gallery removed) --------------------- */
+
+    /* --------------------- Flip profile enhanced (3D + back side) --------------------- */
     const flipInner = document.getElementById('flipInner');
-    flipInner.addEventListener('mouseenter', ()=> gsap.to(flipInner, {rotationY:180, duration:0.6, transformPerspective:800}));
-    flipInner.addEventListener('mouseleave', ()=> gsap.to(flipInner, {rotationY:0, duration:0.6}));
+    const flipBack = document.getElementById('flipBack');
+    flipInner.addEventListener('mouseenter', ()=>{
+      gsap.to(flipInner, {rotationY:180, duration:0.6, transformPerspective:800});
+      flipBack.classList.remove('hidden');
+    });
+    flipInner.addEventListener('mouseleave', ()=>{
+      gsap.to(flipInner, {rotationY:0, duration:0.6});
+      flipBack.classList.add('hidden');
+    });
 
-    /* --------------------- Magnetic CTA subtle scale on scroll --------------------- */
-    gsap.utils.toArray('.btn-primary').forEach(btn=> gsap.fromTo(btn, {y:10}, {y:0, scrollTrigger:{trigger:btn, start:'top bottom', end:'top center', scrub:true}}));
+    /* --------------------- small performance: lazy load images when near viewport (works with loading="lazy") --------------------- */
+    // Fallback: if browser doesn't lazy-load, we'll swap data-src -> src
+    document.querySelectorAll('img[loading="lazy"]').forEach(img=>{ if(!('loading' in HTMLImageElement.prototype)){
+      const src = img.getAttribute('data-src') || img.src; img.src = src;
+    }});
+
+    /* --------------------- small accessibility improvements --------------------- */
+    document.querySelectorAll('a, button').forEach(el=> el.setAttribute('tabindex','0'));
+
+    /* --------------------- small entrance fade animations for sections --------------------- */
+    gsap.utils.toArray('section, main').forEach(sec=>{
+      gsap.from(sec, {autoAlpha:0, y:30, duration:0.9, ease:'power2.out', scrollTrigger:{trigger:sec, start:'top 85%'}});
+    });
 
     /* --------------------- Resume download (placeholder) --------------------- */
     document.getElementById('resumeBtn').addEventListener('click', ()=>{
-      // Replace the URL with your resume file path
       const url = 'resume.pdf';
       const a = document.createElement('a'); a.href = url; a.download = 'Peerzada-Ikhlas-Resume.pdf'; document.body.appendChild(a); a.click(); a.remove();
     });
 
-    /* --------------------- small performance: lazy load images when near viewport --------------------- */
-    const lazyImages = document.querySelectorAll('img');
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(entry=>{ if(entry.isIntersecting){ const img = entry.target; const src = img.getAttribute('data-src'); if(src){ img.src = src; } io.unobserve(img); } });
-    }, {rootMargin: '200px'});
-    lazyImages.forEach(img=> io.observe(img));
+    /* --------------------- Projects counters trigger (ensure they run once) --------------------- */
+    ScrollTrigger.create({ trigger: '#projects', start: 'top 90%', onEnter: ()=>{ animateCounter(projectsCount); animateCounter(clientsCount); animateCounter(yearsCount); } });
 
-    /* --------------------- small accessibility improvements --------------------- */
-    document.querySelectorAll('a, button').forEach(el=> el.setAttribute('tabindex','0'));
   </script>
 </body>
 </html>
