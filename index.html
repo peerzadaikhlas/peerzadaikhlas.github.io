@@ -241,28 +241,46 @@
 </script>
 
 
-<!-- Skills -->
 <section id="skills" class="py-20 max-w-6xl mx-auto px-6">
   <h2 class="text-3xl font-bold mb-6">Skills</h2>
-  <div class="space-y-4">
+  <div class="grid md:grid-cols-2 gap-6">
+
+    <!-- Skills Bars -->
     <div>
-      <p class="text-sm">HTML / CSS</p>
-      <div class="bg-slate-700 h-2 rounded-full overflow-hidden">
-        <div class="bg-[var(--accent-1)] h-full w-0"></div>
+      <p class="text-slate-400 mb-4">My main competencies include front-end development, performance optimization, and accessible UI patterns.</p>
+      <div class="space-y-4">
+        <div>
+          <div class="flex justify-between mb-1"><span>HTML & CSS</span><span class="text-slate-400">95%</span></div>
+          <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden">
+            <div class="skill-bar h-3 rounded-full" data-percent="95"></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-between mb-1"><span>JavaScript</span><span class="text-slate-400">92%</span></div>
+          <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden">
+            <div class="skill-bar h-3 rounded-full" data-percent="92"></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-between mb-1"><span>React / Vite</span><span class="text-slate-400">88%</span></div>
+          <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden">
+            <div class="skill-bar h-3 rounded-full" data-percent="88"></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-between mb-1"><span>Accessibility</span><span class="text-slate-400">85%</span></div>
+          <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden">
+            <div class="skill-bar h-3 rounded-full" data-percent="85"></div>
+          </div>
+        </div>
       </div>
     </div>
+
+    <!-- Optional Testimonials / Other Content -->
     <div>
-      <p class="text-sm">JavaScript</p>
-      <div class="bg-slate-700 h-2 rounded-full overflow-hidden">
-        <div class="bg-[var(--accent-2)] h-full w-0"></div>
-      </div>
+      <!-- You can keep the testimonials card here or any content -->
     </div>
-    <div>
-      <p class="text-sm">React / Next.js</p>
-      <div class="bg-slate-700 h-2 rounded-full overflow-hidden">
-        <div class="bg-[var(--accent-3)] h-full w-0"></div>
-      </div>
-    </div>
+
   </div>
 </section>
 
@@ -366,13 +384,30 @@
     document.body.style.color = isLight ? '#0f172a':'';
   });
 
-  // Skills bars
-  const skillBars = document.querySelectorAll('#skills div > div > div');
-  ScrollTrigger.create({trigger:'#skills', start:'top 80%', onEnter:()=>{
-    skillBars.forEach((bar,i)=>{
-      gsap.to(bar,{width:["0%","100%"][i%3],duration:1.5,ease:'power2.out'});
-    });
-  }});
+// Skills bars animation
+document.querySelectorAll('.skill-bar').forEach(bar => {
+  bar.style.width = '0%'; // start from 0%
+  bar.style.background = 'linear-gradient(90deg,var(--accent-1),var(--accent-2))';
+});
+
+// Animate when the skills section enters viewport
+gsap.registerPlugin(ScrollTrigger);
+
+gsap.utils.toArray('.skill-bar').forEach(bar => {
+  ScrollTrigger.create({
+    trigger: '#skills',
+    start: 'top 80%',
+    onEnter: () => {
+      const percent = bar.dataset.percent || 80;
+      gsap.to(bar, {
+        width: percent + '%',
+        duration: 1.6,
+        ease: 'power2.out'
+      });
+    }
+  });
+});
+
 
 </script>
 </body>
