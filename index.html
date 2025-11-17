@@ -344,31 +344,6 @@
     progress.style.width = pct + '%';
   });
 
-
-  // Stats counter
-  <script>
-  gsap.registerPlugin(ScrollTrigger);
-
-  document.querySelectorAll('.counter').forEach(counter => {
-    const target = +counter.dataset.target;
-    gsap.fromTo(counter, 
-      { innerText: 0 }, 
-      { 
-        innerText: target, 
-        duration: 2, 
-        ease: 'power1.out', 
-        snap: { innerText: 1 }, 
-        scrollTrigger: {
-          trigger: counter,
-          start: 'top 80%', // start when element is 80% from top
-          once: true // only animate once
-        },
-        onUpdate: () => counter.innerText = Math.floor(counter.innerText)
-      }
-    );
-  });
-</script>
-
   // Skills bars animation
 document.querySelectorAll('.skill-bar').forEach(bar => {
   bar.style.width = '0%'; // start from 0%
