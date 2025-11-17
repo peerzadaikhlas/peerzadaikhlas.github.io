@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Peerzada Ikhlas • Portfolio</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Icons -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <!-- Typed.js for typing effect -->
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
+  <!-- tsParticles for advanced particles -->
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles-engine@3"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@3"></script>
+
+  <style>
+    :root{
+      --accent-1:#60a5fa; /* blue */
+      --accent-2:#a78bfa; /* purple */
+      --accent-3:#34d399; /* green */
+      --bg: #0f172a; /* dark */
+    }
+    .magnetic{transform: translate3d(0,0,0); transition: transform .2s ease-out}
+    .floating{ will-change: transform; }
+    .lightbox-bg{background:rgba(0,0,0,.75);}
+    .backface-hidden{backface-visibility:hidden}
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 antialiased">
+
+  <!-- Particles container -->
+  <div id="tsparticles" class="fixed inset-0 -z-10"></div>
+
+  <!-- Floating decorative layers (parallax) -->
+  <div id="float1" class="hidden md:block absolute -left-10 -top-10 w-48 h-48 rounded-full bg-gradient-to-br from-[var(--accent-2)] to-[var(--accent-1)] opacity-30 blur-3xl floating"></div>
+  <div id="float2" class="hidden md:block absolute right-6 top-40 w-36 h-36 rounded-full bg-gradient-to-br from-[var(--accent-3)] to-[var(--accent-2)] opacity-25 blur-2xl floating"></div>
+
+  <!-- NAVBAR (floating mobile optimized) -->
+  <header id="navbar" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[94%] md:w-[80%] bg-black/50 backdrop-blur rounded-xl shadow-lg p-3 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-[var(--accent-1)] to-[var(--accent-2)] flex items-center justify-center font-bold">PI</div>
+      <div class="hidden md:block">
+        <div class="text-sm font-semibold">Peerzada Ikhlas</div>
+        <div class="text-xs text-slate-400">Frontend Developer</div>
+      </div>
+    </div>
+
+    <nav class="hidden lg:flex gap-6 text-sm font-medium">
+      <a href="#home" class="hover:text-[var(--accent-1)]">Home</a>
+      <a href="#projects" class="hover:text-[var(--accent-1)]">Projects</a>
+      <a href="#certs" class="hover:text-[var(--accent-1)]">Certificates</a>
+      <a href="#contact" class="hover:text-[var(--accent-1)]">Contact</a>
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <button id="resumeBtn" class="px-3 py-2 rounded-full text-sm magnetic bg-[var(--accent-1)] text-black font-semibold">Download Resume</button>
+      <button id="themeToggle" class="p-2 rounded-full bg-white/10 magnetic" aria-label="Toggle theme"><i class='bx bx-moon'></i></button>
+      <button id="mobileOpen" class="lg:hidden p-2 magnetic"><i class='bx bx-menu text-2xl'></i></button>
+    </div>
+  </header>
+
+  <!-- Mobile bottom nav -->
+  <div id="mobileNav" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 bg-black/50 backdrop-blur rounded-full p-2 flex gap-3 lg:hidden">
+    <a href="#home" class="p-3 rounded-full magnetic"><i class='bx bx-home'></i></a>
+    <a href="#projects" class="p-3 rounded-full magnetic"><i class='bx bx-briefcase'></i></a>
+    <a href="#contact" class="p-3 rounded-full magnetic"><i class='bx bx-envelope'></i></a>
+  </div>
+
+  <!-- MOBILE SLIDE MENU -->
+  <div id="mobileMenu" class="fixed inset-0 bg-black/70 z-50 hidden">
+    <div class="absolute right-0 w-72 h-full bg-slate-900 p-6">
+      <button id="mobileClose" class="mb-6">Close ✕</button>
+      <nav class="flex flex-col gap-4">
+        <a href="#home">Home</a>
+        <a href="#projects">Projects</a>
+        <a href="#certs">Certificates</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <main id="home" class="min-h-screen flex flex-col items-center justify-center text-center px-6">
+    <!-- Profile flip card -->
+    <div class="relative w-44 h-44 md:w-56 md:h-56 perspective">
+      <div id="flipInner" class="flip-inner w-full h-full rounded-full shadow-2xl backface-hidden transition-transform duration-700">
+        <img src="https://i.postimg.cc/DZ1Zrw5T/profile.jpg" alt="profile" class="w-full h-full object-cover rounded-full" />
+      </div>
+      <!-- back side (for 3D rotate) -->
+      <div id="flipBack" class="absolute inset-0 hidden rounded-full bg-gradient-to-br from-[var(--accent-1)] to-[var(--accent-2)] text-black flex items-center justify-center font-bold">Hi 👋</div>
+    </div>
+
+    <h1 class="mt-6 text-4xl md:text-6xl font-extrabold leading-tight">
+      <span id="typedName" class="text-[var(--accent-1)]"></span>
+    </h1>
+    <p class="mt-4 max-w-2xl text-slate-300">I build performant, delightful interfaces — animations, microinteractions and accessible components.</p>
+
+    <!-- Magnetic CTAs -->
+    <div class="mt-8 flex gap-4">
+      <button class="magnetic btn-primary px-6 py-3 rounded-full font-semibold">Hire Me</button>
+      <button class="magnetic btn-outline px-6 py-3 rounded-full">View Work</button>
+    </div>
+
+    <!-- Stats counters -->
+    <div class="mt-12 flex gap-6 justify-center">
+      <div class="text-center">
+        <div class="text-3xl font-bold" data-target="120" id="projectsCount">0</div>
+        <div class="text-sm text-slate-400">Projects</div>
+      </div>
+      <div class="text-center">
+        <div class="text-3xl font-bold" data-target="85" id="clientsCount">0</div>
+        <div class="text-sm text-slate-400">Clients</div>
+      </div>
+      <div class="text-center">
+        <div class="text-3xl font-bold" data-target="5" id="yearsCount">0</div>
+        <div class="text-sm text-slate-400">Years Exp</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Projects (with modal previews) -->
+  <section id="projects" class="py-20 max-w-6xl mx-auto px-6">
+    <h2 class="text-3xl font-bold mb-6">Featured Projects</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+      <!-- Project Card Template -->
+      <article class="bg-slate-800 rounded-xl overflow-hidden shadow-lg" data-modal-target="proj1">
+        <img src="https://images.unsplash.com/photo-1526378722620" class="w-full h-40 object-cover" />
+        <div class="p-4">
+          <h3 class="font-semibold">Chat App</h3>
+          <p class="text-slate-400 text-sm mt-2">Real-time chat with rooms and notifications.</p>
+          <div class="mt-4 flex gap-2">
+            <button class="px-3 py-2 rounded-md bg-[var(--accent-1)] magnetic openModal" data-target="proj1">Preview</button>
+            <a href="#" class="px-3 py-2 rounded-md border">Repo</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="bg-slate-800 rounded-xl overflow-hidden shadow-lg" data-modal-target="proj2">
+        <img src="https://images.unsplash.com/photo-1519337265831" class="w-full h-40 object-cover" />
+        <div class="p-4">
+          <h3 class="font-semibold">E-commerce UI</h3>
+          <p class="text-slate-400 text-sm mt-2">Shop with filters, cart and animations.</p>
+          <div class="mt-4 flex gap-2">
+            <button class="px-3 py-2 rounded-md bg-[var(--accent-1)] magnetic openModal" data-target="proj2">Preview</button>
+            <a href="#" class="px-3 py-2 rounded-md border">Repo</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="bg-slate-800 rounded-xl overflow-hidden shadow-lg" data-modal-target="proj3">
+        <img src="https://images.unsplash.com/photo-1518779578993" class="w-full h-40 object-cover" />
+        <div class="p-4">
+          <h3 class="font-semibold">Design System</h3>
+          <p class="text-slate-400 text-sm mt-2">Component library with accessibility focus.</p>
+          <div class="mt-4 flex gap-2">
+            <button class="px-3 py-2 rounded-md bg-[var(--accent-1)] magnetic openModal" data-target="proj3">Preview</button>
+            <a href="#" class="px-3 py-2 rounded-md border">Repo</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Projects Modals -->
+  <div id="modalsContainer"></div>
+
+  <!-- Certificates -->
+  <section id="certs" class="py-20 max-w-6xl mx-auto px-6">
+    <h2 class="text-3xl font-bold mb-6">Certificates</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="bg-slate-800 p-6 rounded-xl shadow"> <h4 class="font-semibold">Certified Web Dev</h4><p class="text-slate-400 text-sm mt-2">Issuer — 2024</p></div>
+      <div class="bg-slate-800 p-6 rounded-xl shadow"> <h4 class="font-semibold">UI/UX Foundations</h4><p class="text-slate-400 text-sm mt-2">Issuer — 2023</p></div>
+      <div class="bg-slate-800 p-6 rounded-xl shadow"> <h4 class="font-semibold">Accessibility Best Practices</h4><p class="text-slate-400 text-sm mt-2">Issuer — 2022</p></div>
+    </div>
+  </section>
+
+  <!-- Gallery + Lightbox -->
+  <section id="gallery" class="py-20 max-w-6xl mx-auto px-6">
+    <h2 class="text-3xl font-bold mb-6">Gallery</h2>
+    <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <img class="rounded-xl cursor-pointer hover:scale-105 transition openLightbox" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085" data-full="https://images.unsplash.com/photo-1498050108023-c5249f4df085" />
+      <img class="rounded-xl cursor-pointer hover:scale-105 transition openLightbox" src="https://images.unsplash.com/photo-1524492412937-4961a0b2a3d5" data-full="https://images.unsplash.com/photo-1524492412937-4961a0b2a3d5" />
+      <img class="rounded-xl cursor-pointer hover:scale-105 transition openLightbox" src="https://images.unsplash.com/photo-1505682634904-d7c6b8f0fe6a" data-full="https://images.unsplash.com/photo-1505682634904-d7c6b8f0fe6a" />
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="py-20 max-w-4xl mx-auto px-6">
+    <h2 class="text-3xl font-bold mb-4">Contact</h2>
+    <form class="grid gap-4">
+      <input type="text" placeholder="Name" class="p-3 rounded bg-slate-800" />
+      <input type="email" placeholder="Email" class="p-3 rounded bg-slate-800" />
+      <textarea placeholder="Message" class="p-3 rounded bg-slate-800 h-32"></textarea>
+      <button class="bg-[var(--accent-1)] py-3 rounded text-black font-semibold magnetic">Send Message</button>
+    </form>
+  </section>
+
+  <footer class="py-8 text-center text-slate-500">© 2025 Peerzada Ikhlas</footer>
+
+  <!-- Lightbox Modal (single element used for gallery) -->
+  <div id="lightbox" class="fixed inset-0 z-60 hidden items-center justify-center lightbox-bg">
+    <div class="max-w-4xl w-[90%]">
+      <button id="closeLightbox" class="absolute top-6 right-6 text-white text-2xl">✕</button>
+      <img id="lightboxImg" src="" class="w-full rounded-xl shadow-2xl" />
+    </div>
+  </div>
+
+  <script>
+    /* --------------------- particles (interactive) --------------------- */
+    (async () => {
+      await tsParticles.load("tsparticles", {
+        fpsLimit: 60,
+        interactivity: {
+          events: { onHover: { enable: true, mode: "repulse" }, onClick: { enable: true, mode: "push" } },
+          modes: { push: { quantity: 4 }, repulse: { distance: 120 } }
+        },
+        particles: {
+          number: { value: 60, density: { enable: true, area: 800 } },
+          color: { value: ["#60a5fa", "#a78bfa", "#34d399"] },
+          links: { enable: true, color: "#94a3b8", distance: 140, opacity: 0.15 },
+          move: { enable: true, speed: 1.2, outModes: { default: "bounce" } },
+          size: { value: { min: 1, max: 4 } },
+          opacity: { value: 0.8 }
+        },
+        detectRetina: true
+      });
+    })();
+
+    /* --------------------- typed name --------------------- */
+    new Typed('#typedName', { strings: ["Peerzada Ikhlas", "Frontend Developer", "UI/UX Enthusiast"], typeSpeed: 80, backSpeed: 40, loop: true });
+
+    /* --------------------- Theme toggle (persist) --------------------- */
+    const themeToggle = document.getElementById('themeToggle');
+    const root = document.documentElement;
+    const saved = localStorage.getItem('theme');
+    if(saved === 'light') root.style.setProperty('--bg', '#f8fafc');
+    themeToggle.addEventListener('click', ()=>{
+      document.body.classList.toggle('light-mode');
+      const isLight = document.body.classList.contains('light-mode');
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      if(isLight){ document.body.style.background = '#f8fafc'; document.body.style.color = '#0f172a'; } else { document.body.style.background=''; document.body.style.color=''; }
+    });
+
+    /* --------------------- Mobile menu & floating nav interactions --------------------- */
+    const mobileOpen = document.getElementById('mobileOpen');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileClose = document.getElementById('mobileClose');
+    mobileOpen.addEventListener('click', ()=> mobileMenu.classList.remove('hidden'));
+    mobileClose && mobileClose.addEventListener('click', ()=> mobileMenu.classList.add('hidden'));
+
+    /* --------------------- Magnetic buttons --------------------- */
+    const magnets = document.querySelectorAll('.magnetic');
+    magnets.forEach(btn=>{
+      btn.addEventListener('mousemove', (e)=>{
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width/2;
+        const y = e.clientY - rect.top - rect.height/2;
+        btn.style.transform = `translate(${x*0.12}px, ${y*0.12}px)`;
+      });
+      btn.addEventListener('mouseleave', ()=> btn.style.transform = 'translate(0,0)');
+    });
+
+    /* --------------------- Floating parallax using GSAP --------------------- */
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.to('#float1', { y: 60, x: 30, rotation: 10, scrollTrigger: { scrub: 1, start: 'top top', end: 'bottom top' } });
+    gsap.to('#float2', { y: -40, x: -20, rotation: -6, scrollTrigger: { scrub: 1, start: 'top top', end: 'bottom top' } });
+
+    /* --------------------- Stats counters animation --------------------- */
+    function animateCounter(el){
+      const target = +el.dataset.target;
+      gsap.fromTo(el, { innerText: 0 }, { innerText: target, duration: 1.5, ease: 'power1.in', snap:{innerText:1}, onUpdate: ()=> el.innerText = Math.floor(el.innerText) });
+    }
+    const projectsCount = document.getElementById('projectsCount');
+    const clientsCount = document.getElementById('clientsCount');
+    const yearsCount = document.getElementById('yearsCount');
+    ScrollTrigger.create({ trigger: '#home', start: 'top top+=100', onEnter: ()=>{ animateCounter(projectsCount); animateCounter(clientsCount); animateCounter(yearsCount); } });
+
+    /* --------------------- Projects modals (dynamic) --------------------- */
+    const modalTemplates = {
+      proj1: `
+        <div class="fixed inset-0 z-60 flex items-center justify-center lightbox-bg">
+          <div class="bg-slate-900 max-w-4xl w-[95%] rounded-xl p-6 relative">
+            <button class="absolute top-4 right-4 text-2xl closeModal">✕</button>
+            <h3 class="text-2xl font-bold mb-4">Chat App — Preview</h3>
+            <p class="text-slate-400 mb-4">Detailed description of the Chat App, tech used, and features.</p>
+            <img src="https://images.unsplash.com/photo-1526378722620" class="w-full rounded-md mb-4" />
+            <a class="inline-block px-4 py-2 rounded bg-[var(--accent-1)] text-black" href="#">Open Repo</a>
+          </div>
+        </div>
+      `,
+      proj2: `
+        <div class="fixed inset-0 z-60 flex items-center justify-center lightbox-bg">
+          <div class="bg-slate-900 max-w-4xl w-[95%] rounded-xl p-6 relative">
+            <button class="absolute top-4 right-4 text-2xl closeModal">✕</button>
+            <h3 class="text-2xl font-bold mb-4">E-commerce UI — Preview</h3>
+            <p class="text-slate-400 mb-4">Details about product filters, cart flow and animations.</p>
+            <img src="https://images.unsplash.com/photo-1519337265831" class="w-full rounded-md mb-4" />
+            <a class="inline-block px-4 py-2 rounded bg-[var(--accent-1)] text-black" href="#">Open Repo</a>
+          </div>
+        </div>
+      `,
+      proj3: `
+        <div class="fixed inset-0 z-60 flex items-center justify-center lightbox-bg">
+          <div class="bg-slate-900 max-w-4xl w-[95%] rounded-xl p-6 relative">
+            <button class="absolute top-4 right-4 text-2xl closeModal">✕</button>
+            <h3 class="text-2xl font-bold mb-4">Design System — Preview</h3>
+            <p class="text-slate-400 mb-4">Components, tokens and accessibility rules included.</p>
+            <img src="https://images.unsplash.com/photo-1518779578993" class="w-full rounded-md mb-4" />
+            <a class="inline-block px-4 py-2 rounded bg-[var(--accent-1)] text-black" href="#">Open Repo</a>
+          </div>
+        </div>
+      `
+    };
+
+    document.addEventListener('click', (e)=>{
+      const op = e.target.closest('.openModal');
+      if(op){
+        const id = op.dataset.target;
+        document.getElementById('modalsContainer').innerHTML = modalTemplates[id];
+      }
+      if(e.target.classList.contains('closeModal')) document.getElementById('modalsContainer').innerHTML = '';
+    });
+
+    /* --------------------- Lightbox for gallery --------------------- */
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    document.querySelectorAll('.openLightbox').forEach(img=>{
+      img.addEventListener('click', ()=>{
+        lightboxImg.src = img.dataset.full || img.src;
+        lightbox.classList.remove('hidden');
+        lightbox.classList.add('flex');
+      });
+    });
+    document.getElementById('closeLightbox').addEventListener('click', ()=>{ lightbox.classList.add('hidden'); lightbox.classList.remove('flex'); });
+
+    /* --------------------- Flip profile on hover using GSAP 3D --------------------- */
+    const flipInner = document.getElementById('flipInner');
+    flipInner.addEventListener('mouseenter', ()=> gsap.to(flipInner, {rotationY:180, duration:0.6, transformPerspective:800}));
+    flipInner.addEventListener('mouseleave', ()=> gsap.to(flipInner, {rotationY:0, duration:0.6}));
+
+    /* --------------------- Magnetic CTA subtle scale on scroll --------------------- */
+    gsap.utils.toArray('.btn-primary').forEach(btn=> gsap.fromTo(btn, {y:10}, {y:0, scrollTrigger:{trigger:btn, start:'top bottom', end:'top center', scrub:true}}));
+
+    /* --------------------- Resume download (placeholder) --------------------- */
+    document.getElementById('resumeBtn').addEventListener('click', ()=>{
+      // Replace the URL with your resume file path
+      const url = 'resume.pdf';
+      const a = document.createElement('a'); a.href = url; a.download = 'Peerzada-Ikhlas-Resume.pdf'; document.body.appendChild(a); a.click(); a.remove();
+    });
+
+    /* --------------------- small performance: lazy load images when near viewport --------------------- */
+    const lazyImages = document.querySelectorAll('img');
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{ if(entry.isIntersecting){ const img = entry.target; const src = img.getAttribute('data-src'); if(src){ img.src = src; } io.unobserve(img); } });
+    }, {rootMargin: '200px'});
+    lazyImages.forEach(img=> io.observe(img));
+
+    /* --------------------- small accessibility improvements --------------------- */
+    document.querySelectorAll('a, button').forEach(el=> el.setAttribute('tabindex','0'));
+  </script>
+</body>
+</html>
