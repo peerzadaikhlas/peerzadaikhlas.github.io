@@ -61,12 +61,44 @@
 
   <!-- Hero Section -->
   <section id="home" class="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-32">
-    <img src="https://i.postimg.cc/DZ1Zrw5T/profile.jpg" class="w-40 h-40 rounded-full shadow-xl border-4 border-blue-400 animate-pulse" />
-    <h1 class="text-4xl md:text-6xl font-bold mt-6 animate__animated animate__fadeInDown">Hi, I'm <span class="text-blue-400">Peerzada Ikhlas</span></h1>
-    <p class="mt-4 text-gray-300 text-lg max-w-2xl animate__animated animate__fadeInUp">Frontend Developer passionate about creating clean, modern and user-friendly websites with animations and interactivity.</p>
+    <div class="relative w-40 h-40 [transform-style:preserve-3d] transition-transform duration-700 hover:[transform:rotateY(180deg)] cursor-pointer">
+  <div class="absolute inset-0 rounded-full bg-blue-500 text-center flex items-center justify-center text-xl font-bold [backface-visibility:hidden]">Front</div>
+  <div class="absolute inset-0 rounded-full bg-purple-500 text-center flex items-center justify-center text-xl font-bold [transform:rotateY(180deg)] [backface-visibility:hidden]">Back</div>
+</div>
+    <h1 class="text-4xl md:text-6xl font-bold mt-6"><span id="typedName" class="text-blue-400"></span></h1>
+    <p class="mt-4 text-gray-300 text-lg max-w-2xl animate__animated animate__fadeInUp">Frontend Developer passionate about creating clean, modern and user‑friendly websites with animations and interactivity.</p>
   </section>
 
-  <!-- About Section -->
+<!-- Skills Section -->
+<section id="skills" class="py-20 max-w-5xl mx-auto px-6">
+  <h2 class="text-4xl font-semibold mb-8 text-blue-400">Skills</h2>
+  <div class="space-y-6">
+    <div>
+      <p>HTML</p>
+      <div class="w-full bg-gray-700 h-3 rounded-full"><div class="bg-blue-500 h-3 rounded-full w-11/12"></div></div>
+    </div>
+    <div>
+      <p>CSS / Tailwind</p>
+      <div class="w-full bg-gray-700 h-3 rounded-full"><div class="bg-purple-500 h-3 rounded-full w-10/12"></div></div>
+    </div>
+    <div>
+      <p>JavaScript</p>
+      <div class="w-full bg-gray-700 h-3 rounded-full"><div class="bg-green-500 h-3 rounded-full w-9/12"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Image Gallery -->
+<section id="gallery" class="py-20 max-w-6xl mx-auto px-6">
+  <h2 class="text-4xl font-semibold mb-8 text-blue-400">Image Gallery</h2>
+  <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+    <img src="https://i.ibb.co/album1.jpg" class="rounded-xl shadow-lg hover:scale-105 transition" />
+    <img src="https://i.ibb.co/album2.jpg" class="rounded-xl shadow-lg hover:scale-105 transition" />
+    <img src="https://i.ibb.co/album3.jpg" class="rounded-xl shadow-lg hover:scale-105 transition" />
+  </div>
+</section>
+
+<!-- About Section -->
   <section id="about" class="py-20 max-w-5xl mx-auto px-6">
     <h2 class="text-4xl font-semibold mb-8 text-blue-400">About Me</h2>
     <p class="text-gray-300 text-lg leading-relaxed">I am a dedicated frontend developer with skills in HTML, CSS, JavaScript, Tailwind CSS, React, UI/UX design and modern animations. I enjoy creating visually appealing and fully responsive websites.</p>
@@ -133,5 +165,16 @@
     menuBtn.onclick = () => mobileMenu.classList.remove('hidden');
     closeMenu.onclick = () => mobileMenu.classList.add('hidden');
   </script>
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>
+  var typed = new Typed('#typedName', {
+    strings: ['Peerzada Ikhlas', 'Frontend Developer', 'UI/UX Designer'],
+    typeSpeed: 70,
+    backSpeed: 40,
+    loop: true,
+  });
+  AOS.init();
+</script>
 </body>
 </html>
