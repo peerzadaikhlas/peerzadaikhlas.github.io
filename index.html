@@ -346,5 +346,85 @@ if(menuBtn && mobileMenu){
   };
 }
 </script>
+  <!-- Projects Section -->
+  <section id="projects" class="fade-in section">
+    <h2>Projects</h2>
+    <div class="project-grid">
+      <div class="project-card parallax-item">
+        <img src="https://via.placeholder.com/400x250" alt="Project 1" />
+        <h3>Portfolio Website</h3>
+        <p>A modern animated portfolio built with HTML, CSS, and JavaScript.</p>
+      </div>
+      <div class="project-card parallax-item">
+        <img src="https://via.placeholder.com/400x250" alt="Project 2" />
+        <h3>Weather App</h3>
+        <p>Real‑time weather tracking app using API integration.</p>
+      </div>
+      <div class="project-card parallax-item">
+        <img src="https://via.placeholder.com/400x250" alt="Project 3" />
+        <h3>Chat App UI</h3>
+        <p>Clean and responsive messaging app interface.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Advanced Effects Styles -->
+  <style>
+    /* Projects Grid */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .project-card {
+      background: var(--card-bg);
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      overflow: hidden;
+    }
+    .project-card img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    .project-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    /* Parallax hover effect */
+    .parallax-item {
+      transition: transform 0.2s ease;
+    }
+
+    /* Glow effect */
+    .glow {
+      animation: glowAnim 2s infinite alternate;
+    }
+    @keyframes glowAnim {
+      from { box-shadow: 0 0 5px var(--accent); }
+      to { box-shadow: 0 0 20px var(--accent); }
+    }
+  </style>
+
+  <script>
+    // Parallax hover effect
+    document.querySelectorAll('.parallax-item').forEach(item => {
+      item.addEventListener('mousemove', e => {
+        const rect = item.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const moveX = (x - rect.width / 2) / 20;
+        const moveY = (y - rect.height / 2) / 20;
+        item.style.transform = `translate(${moveX}px, ${moveY}px)`;
+      });
+      item.addEventListener('mouseleave', () => {
+        item.style.transform = 'translate(0, 0)';
+      });
+    });
+  </script>
 </body>
 </html>
