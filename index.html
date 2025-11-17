@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Peerzada Ikhlas Portfolio</title>
@@ -296,11 +298,18 @@
 </section>
 
 <!-- Back to top -->
-<button id="backTop" class="bg-[var(--accent-1)] p-3 rounded-full magnetic"><i class='bx bx-up-arrow-alt'></i></button>
+const backTop = document.getElementById('backTop');
+window.addEventListener('scroll', () => {
+  backTop.style.display = window.scrollY > 400 ? 'block' : 'none';
+});
+backTop.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
 
 <script>
   // Typed.js
-  new Typed('#typedName',{strings:["Peerzada Ikhlas","Frontend Developer","UI/UX Enthusiast"],typeSpeed:60,backSpeed:40,loop:true});
+  new Typed('#typedName',{strings:["Peerzada Ikhlas","Frontend Dev.","UI/UX Enthusiast"],typeSpeed:60,backSpeed:40,loop:true});
 
   // tsParticles
   tsParticles.load("tsparticles", {
