@@ -33,41 +33,43 @@
   #backTop{position:fixed;right:18px;bottom:18px;z-index:70;display:none;}
   .tilt{transform-style:preserve-3d;will-change:transform;}
   .flip-inner{backface-visibility:hidden;}
-:root {
+
   --accent-1: #60a5fa;
   --accent-2: #a78bfa;
   --accent-3: #34d399;
 
-  /* Light mode glass colors */
-  --glass-bg-light: rgba(255, 255, 255, 0.15);
-  --glass-border-light: rgba(255, 255, 255, 0.3);
-
   /* Dark mode glass colors */
   --glass-bg-dark: rgba(15, 23, 42, 0.4);
   --glass-border-dark: rgba(255, 255, 255, 0.1);
+
+  /* Light mode glass colors */
+  --glass-bg-light: rgba(255, 255, 255, 0.15);
+  --glass-border-light: rgba(255, 255, 255, 0.3);
 }
 
-/* Card Glass Effect */
+/* Glass card effect */
 .card-glass {
   border-radius: 1rem;
-  background: var(--glass-bg-dark); /* default dark mode */
+  background: var(--glass-bg-dark); /* default: dark mode */
   border: 1px solid var(--glass-border-dark);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, border 0.3s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease;
 }
 
 .card-glass:hover {
   transform: scale(1.03);
-  box-shadow: 0 8px 40px var(--accent-1, #60a5fa), 0 0 25px var(--accent-2, #a78bfa);
+  box-shadow: 0 8px 40px var(--accent-1), 0 0 25px var(--accent-2);
 }
 
 /* Light mode override */
 body.light-mode .card-glass {
   background: var(--glass-bg-light);
   border: 1px solid var(--glass-border-light);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
+
 
 </style>
 </head>
@@ -163,13 +165,6 @@ body.light-mode .card-glass {
 <section id="projects" class="py-10 max-w-6xl mx-auto px-6">
   <h2 class="text-3xl font-bold mb-6">Featured Projects</h2>
   <div class="grid md:grid-cols-3 gap-6">
-    <article class="card-glass tilt overflow-hidden transition-transform duration-500">
-      <img src="https://kashmiriwikimedians.org/wp-content/uploads/2025/08/Picsart_25-10-02_10-07-13-347.png" class="w-full h-40 object-cover" loading="lazy">
-      <div class="p-4">
-        <h3 class="font-semibold text-lg">Kashmiriwikimedians Site</h3>
-        <p class="text-slate-400 text-sm mt-2">Responsive website with modern UI, smooth animations, and optimized performance.</p>
-      </div>
-    </article>
     <article class="card-glass tilt overflow-hidden transition-transform duration-500">
       <img src="https://placekitten.com/400/300" class="w-full h-40 object-cover" loading="lazy">
       <div class="p-4">
