@@ -342,22 +342,32 @@
     progress.style.width = pct + '%';
   });
 
-  // Back to top
-  const backTop = document.getElementById('backTop');
-  window.addEventListener('scroll', ()=> backTop.style.display = window.scrollY>400 ? 'block':'none');
-  backTop.addEventListener('click', ()=> gsap.to(window,{scrollTo:0,duration:0.8,ease:'power2.out'}));
 
   // Stats counter
-  const counters = ['projectsCount','clientsCount','yearsCount'].map(id=>document.getElementById(id));
-  let counterDone=false;
-  ScrollTrigger.create({trigger:'#home', start:'top center', onEnter:()=>{
-    if(counterDone) return;
-    counters.forEach(el=>{
-      const target = +el.dataset.target;
-      gsap.fromTo(el,{innerText:0},{innerText:target,duration:1.5,ease:'power1.in',snap:{innerText:1}, onUpdate:()=>el.innerText=Math.floor(el.innerText)});
-    });
-    counterDone=true;
-  }});
+  // Skills bars animation
+document.querySelectorAll('.skill-bar').forEach(bar => {
+  bar.style.width = '0%'; // start from 0%
+  bar.style.background = 'linear-gradient(90deg,var(--accent-1),var(--accent-2))';
+});
+
+// Animate when the skills section enters viewport
+gsap.registerPlugin(ScrollTrigger);
+
+gsap.utils.toArray('.skill-bar').forEach(bar => {
+  ScrollTrigger.create({
+    trigger: '#skills',
+    start: 'top 80%',
+    onEnter: () => {
+      const percent = bar.dataset.percent || 80;
+      gsap.to(bar, {
+        width: percent + '%',
+        duration: 1.6,
+        ease: 'power2.out'
+      });
+    }
+  });
+});
+
 
   // Flip card
   const flipInner = document.getElementById('flipInner');
