@@ -33,14 +33,21 @@
   #backTop{position:fixed;right:18px;bottom:18px;z-index:70;display:none;}
   .tilt{transform-style:preserve-3d;will-change:transform;}
   .flip-inner{backface-visibility:hidden;}
-  .glass-card {
-    @apply rounded-xl border border-white/20 shadow-lg bg-white/5 backdrop-blur-md transition-transform duration-300;
-  }
+.card-glass {
+  border-radius: 1rem; /* rounded corners */
+  background: rgba(255, 255, 255, 0.05); /* subtle translucency */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* light border */
+  backdrop-filter: blur(10px); /* glassy blur */
+  -webkit-backdrop-filter: blur(10px); /* Safari support */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3); /* soft shadow for depth */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-  .glass-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
-  }
+.card-glass:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 40px rgba(99, 102, 241, 0.6), 0 0 25px rgba(99, 102, 241, 0.4); /* subtle glow on hover */
+}
+
 </style>
 </head>
 <body class="antialiased">
@@ -163,15 +170,17 @@
     <section id="hobbies" class="py-10 max-w-6xl mx-auto px-6">
   <h2 class="text-3xl font-bold mb-6">Hobbies & Interests</h2>
   <div class="grid md:grid-cols-4 gap-6 text-center">
-  <div class="p-6 glass-card text-center">
-  <i class='bx bx-game text-4xl mb-2 text-[var(--accent-1)]'></i>
-  <p>Gaming</p>
-</div>
-
-<div class="p-6 bg-slate-800 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
+  <div class="p-6 card-glass">
   <i class='bx bx-music text-4xl mb-2 text-[var(--accent-2)]'></i>
   <p>Music</p>
 </div>
+
+
+<div class="p-6 card-glass">
+  <i class='bx bx-music text-4xl mb-2 text-[var(--accent-2)]'></i>
+  <p>Music</p>
+</div>
+
 
     <div class="p-6  rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
       <i class='bx bx-book text-4xl mb-2 text-[var(--accent-3)]'></i>
