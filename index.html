@@ -225,5 +225,76 @@ gsap.from(".project-card",{opacity:0,y:50,stagger:0.2,duration:1,scrollTrigger:"
     <a href="#contact"><i class="fa-solid fa-envelope"></i></a>
 </div>
 
+  <!-- Scroll & Fade Animations -->
+  <style>
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .slide-left {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .slide-left.visible {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    .scale-in {
+      opacity: 0;
+      transform: scale(0.9);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .scale-in.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Text typing animation */
+    .typing {
+      width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid var(--accent);
+      animation: typing 4s steps(30) forwards, blink 0.7s step-end infinite;
+    }
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+
+    /* Floating animation */
+    .float {
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+  </style>
+
+  <script>
+    // Scroll Animation Observer
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.fade-in, .slide-left, .scale-in').forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>
