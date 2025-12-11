@@ -1,10 +1,20 @@
 /* Custom Properties (Colors and Fonts) */
 :root {
-    --bg-color: #191919;
-    --secondary-bg-color: #242424;
-    --text-color: #ffffff;
+    /* Base Background - Dark Gradient for 'Liquid' Look */
+    --bg-color-start: #0f0a1c; /* Deep Purple/Black */
+    --bg-color-end: #191919;
+    
+    /* Accent Colors */
     --primary-color: #00ffc3; /* Vibrant Cyan/Green Accent */
     --hover-color: #00e0a9;
+    
+    /* Glassmorphism Properties */
+    --glass-background: rgba(255, 255, 255, 0.05); /* Very dark semi-transparent */
+    --glass-border: rgba(255, 255, 255, 0.1); /* Thin white border */
+    --text-color: #ffffff;
+    --border-radius-lg: 20px;
+    --shadow-color: rgba(0, 0, 0, 0.4);
+    
     --font: 'Poppins', sans-serif;
 }
 
@@ -25,8 +35,21 @@ html {
 }
 
 body {
-    background: var(--bg-color);
+    /* Using a linear gradient for the liquid background */
+    background: linear-gradient(135deg, var(--bg-color-start) 0%, var(--bg-color-end) 100%);
     color: var(--text-color);
+}
+
+/* --- GLASSMOPRHISM MIXIN --- */
+/* Applied to elements that should look like frosted glass */
+.glass-effect {
+    background: var(--glass-background);
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 8px 32px var(--shadow-color);
+    transition: 0.5s ease;
 }
 
 section {
@@ -43,18 +66,23 @@ section {
     color: var(--primary-color);
 }
 
-/* Header & Navbar */
+/* Header & Navigation */
 .header {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 2rem 9%;
-    background: var(--bg-color);
+    top: 1.5rem; /* Lifted from top */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%; /* Reduced width */
+    max-width: 120rem;
+    padding: 1.5rem 3rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 100;
+    /* Applying Glass effect to Header */
+    @extend .glass-effect; 
+    border-radius: 4rem; /* Rounded pills shape */
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .logo {
@@ -71,19 +99,23 @@ section {
     font-size: 1.7rem;
     color: var(--text-color);
     margin-left: 4rem;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
     transition: 0.3s;
 }
 
 .navbar a:hover,
 .navbar a.active {
     color: var(--primary-color);
+    background: rgba(0, 255, 195, 0.1); /* Subtle background glow on active/hover */
+    box-shadow: 0 0 5px var(--primary-color);
 }
 
 #menu-icon {
     font-size: 3.6rem;
     color: var(--text-color);
     cursor: pointer;
-    display: none; /* Hidden on desktop */
+    display: none; 
 }
 
 
@@ -92,19 +124,12 @@ section {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-top: 15rem; /* Adjust padding due to floating header */
 }
 
 .home-content h3 {
     font-size: 3.2rem;
     font-weight: 700;
-}
-
-.home-content h3:nth-child(2) {
-    margin-bottom: 2rem;
-}
-
-.home-content h3 span {
-    color: var(--primary-color);
 }
 
 .home-content h1 {
@@ -115,62 +140,29 @@ section {
 
 .home-img img {
     width: 35vw;
-    border-radius: 50%; /* Circular Image */
+    border-radius: 50%; 
     border: 0.8rem solid var(--primary-color);
-    box-shadow: 0 0 25px var(--primary-color);
+    box-shadow: 0 0 45px var(--primary-color); /* Enhanced glow for liquid look */
 }
 
-.home-content p {
-    font-size: 1.6rem;
-}
-
-.social-media a {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 4rem;
-    height: 4rem;
-    background: transparent;
-    border: .2rem solid var(--primary-color);
-    border-radius: 50%;
-    font-size: 2rem;
-    color: var(--primary-color);
-    margin: 3rem 1.5rem 3rem 0;
-    transition: 0.5s ease;
-}
-
-.social-media a:hover {
-    background: var(--primary-color);
-    color: var(--secondary-bg-color);
-    box-shadow: 0 0 1rem var(--primary-color);
-}
-
-.btn {
-    display: inline-block;
-    padding: 1rem 2.8rem;
-    background: var(--primary-color);
-    border-radius: 4rem;
-    box-shadow: 0 0 1rem var(--primary-color);
-    font-size: 1.6rem;
-    color: var(--secondary-bg-color);
-    letter-spacing: .1rem;
-    font-weight: 600;
-    transition: 0.5s ease;
-}
-
-.btn:hover {
-    box-shadow: none;
-    background: var(--hover-color);
-}
-
-
-/* About Section */
+/* --- About Section (Using Glass Effect) --- */
 .about {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 2rem;
-    background: var(--secondary-bg-color);
+    /* Apply Glass effect */
+    background: transparent;
+}
+
+.about-content {
+    /* Give content a glass card background */
+    padding: 3rem;
+    border-radius: var(--border-radius-lg);
+    background: var(--glass-background);
+    backdrop-filter: blur(10px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 0 25px var(--shadow-color);
 }
 
 .about-content h3 {
@@ -194,13 +186,21 @@ section {
     margin-top: 3rem;
 }
 
+.skill-box {
+    padding: 2rem;
+    background: var(--glass-background); /* Glass effect */
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
 .skill-box h3 {
     font-size: 1.8rem;
     margin-bottom: 0.8rem;
 }
 
 .progress-bar {
-    background-color: #333;
+    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 1rem;
     height: 2rem;
     overflow: hidden;
@@ -210,6 +210,7 @@ section {
     display: block;
     height: 100%;
     background-color: var(--primary-color);
+    box-shadow: 0 0 10px var(--primary-color); /* Skill bar glow */
     transition: width 1.5s ease;
 }
 
@@ -228,18 +229,18 @@ section {
 
 .services-container .services-box {
     flex: 1 1 30rem;
-    background: var(--secondary-bg-color);
+    /* Apply Glass effect */
+    @extend .glass-effect; 
     padding: 3rem 2rem 4rem;
-    border-radius: 2rem;
+    border-radius: var(--border-radius-lg);
     text-align: center;
-    border: .2rem solid var(--secondary-bg-color);
-    transition: 0.5s ease;
+    border-color: var(--glass-border);
 }
 
 .services-container .services-box:hover {
+    transform: translateY(-1rem); /* Lift on hover for 'floating' effect */
+    box-shadow: 0 0 35px var(--primary-color);
     border-color: var(--primary-color);
-    transform: scale(1.02);
-    box-shadow: 0 0 25px var(--primary-color);
 }
 
 .services-box i {
@@ -252,14 +253,9 @@ section {
     margin: 1rem 0 3rem;
 }
 
-.services-box p {
-    font-size: 1.6rem;
-    margin: 1rem 0 3rem;
-}
-
 /* Portfolio Section */
 .portfolio {
-    background: var(--secondary-bg-color);
+    background: transparent; /* Remove solid background */
 }
 
 .portfolio-container {
@@ -272,63 +268,11 @@ section {
 
 .portfolio-container .portfolio-box {
     position: relative;
-    border-radius: 2rem;
-    box-shadow: 0 0 1rem var(--bg-color);
+    border-radius: var(--border-radius-lg);
+    /* Apply Glass effect */
+    @extend .glass-effect;
     overflow: hidden;
     display: flex;
-}
-
-.portfolio-box img {
-    width: 100%;
-    transition: 0.5s ease;
-}
-
-.portfolio-box:hover img {
-    transform: scale(1.1);
-}
-
-.portfolio-box .portfolio-layer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8); /* Semi-transparent overlay */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 0 4rem;
-    transform: translateY(100%);
-    transition: 0.5s ease;
-}
-
-.portfolio-box:hover .portfolio-layer {
-    transform: translateY(0);
-}
-
-.portfolio-layer h4 {
-    font-size: 3rem;
-}
-
-.portfolio-layer p {
-    font-size: 1.6rem;
-    margin: .3rem 0 1rem;
-}
-
-.portfolio-layer a {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 5rem;
-    height: 5rem;
-    background: var(--text-color);
-    border-radius: 50%;
-}
-
-.portfolio-layer a i {
-    font-size: 2rem;
-    color: var(--secondary-bg-color);
 }
 
 /* Contact Section */
@@ -337,12 +281,12 @@ section {
     margin: 1rem auto;
     text-align: center;
     margin-bottom: 3rem;
-}
-
-.contact form .input-box {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    padding: 3rem;
+    /* Apply Glass effect to the form container */
+    background: var(--glass-background);
+    backdrop-filter: blur(10px);
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--glass-border);
 }
 
 .contact form .input-box input,
@@ -351,18 +295,10 @@ section {
     padding: 1.5rem;
     font-size: 1.6rem;
     color: var(--text-color);
-    background: var(--secondary-bg-color);
+    background: rgba(255, 255, 255, 0.05); /* Lighter input background */
     border-radius: .8rem;
     margin: .7rem 0;
-}
-
-.contact form .input-box input {
-    width: 49%;
-}
-
-.contact form .btn {
-    margin-top: 2rem;
-    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Footer */
@@ -372,57 +308,11 @@ section {
     align-items: center;
     flex-wrap: wrap;
     padding: 2rem 9%;
-    background: var(--secondary-bg-color);
-}
-
-.footer-text p {
-    font-size: 1.6rem;
-}
-
-.footer-iconTop a {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    padding: .8rem;
-    background: var(--primary-color);
-    border-radius: .8rem;
-    transition: 0.5s ease;
-}
-
-.footer-iconTop a:hover {
-    box-shadow: 0 0 1rem var(--primary-color);
-}
-
-.footer-iconTop a i {
-    font-size: 2.4rem;
-    color: var(--secondary-bg-color);
+    background: rgba(0, 0, 0, 0.2); /* Slightly transparent footer */
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* --- BREAKPOINTS (Responsiveness) --- */
-@media (max-width: 1200px) {
-    html {
-        font-size: 55%;
-    }
-}
-
-@media (max-width: 991px) {
-    .header {
-        padding: 2rem 4%;
-    }
-
-    section {
-        padding: 10rem 4% 2rem;
-    }
-
-    .home-img img {
-        width: 45vw;
-    }
-
-    .footer {
-        padding: 2rem 4%;
-    }
-}
-
 @media (max-width: 768px) {
     #menu-icon {
         display: block;
@@ -434,13 +324,15 @@ section {
         left: 0;
         width: 100%;
         padding: 1rem 4%;
-        background: var(--bg-color);
+        background: rgba(25, 25, 25, 0.9); /* Opaque background for better readability on mobile */
         box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .2);
-        display: none; /* Hide by default */
+        display: none;
+        border-radius: 0;
+        border: none;
     }
     
     .navbar.active {
-        display: block; /* Show when active */
+        display: block;
     }
 
     .navbar a {
@@ -449,12 +341,18 @@ section {
         margin: 3rem 0;
     }
     
+    .header {
+        width: 100%;
+        left: 0;
+        transform: none;
+        top: 0;
+        border-radius: 0;
+        border: none;
+        background: rgba(25, 25, 25, 0.9);
+    }
+    
     .home {
         flex-direction: column;
-    }
-
-    .home-content h1 {
-        font-size: 5rem;
     }
 
     .home-img img {
@@ -464,11 +362,5 @@ section {
 
     .about {
         flex-direction: column;
-    }
-
-    .services h2,
-    .portfolio h2,
-    .contact h2 {
-        margin-bottom: 3rem;
     }
 }
