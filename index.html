@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Peerzada Ikhlas</title>
+    <title>Peerzada Ikhlas - Portfolio</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
         :root {
+            /* These will be animated by JS/CSS Keyframes */
             --bg-base: #dfe5f3;
             --bg-soft: #edf2ff;
             --bg-gray: #cfd5e2;
@@ -49,6 +50,8 @@
             color: var(--text-dark);
             background: var(--bg-base);
             overflow-x: hidden;
+             filter: hue-rotate(0deg);
+             transition: filter 20s linear infinite;
         }
 
         body.dark {
@@ -67,6 +70,14 @@
         }
 
         /* BACKGROUND LAYERS (SOFT NEON ANIMATION) */
+        @keyframes colorCycle {
+            0% { --accent-main: #FF5EA5; --accent-secondary: #A55EFF; } /* Magenta/Violet */
+            25% { --accent-main: #5EFFD6; --accent-secondary: #5EAAFF; } /* Teal/Blue */
+            50% { --accent-main: #FFD65E; --accent-secondary: #FF8F5E; } /* Yellow/Orange */
+            75% { --accent-main: #A55EFF; --accent-secondary: #FF5EA5; } /* Violet/Magenta */
+            100% { --accent-main: #FF5EA5; --accent-secondary: #A55EFF; } /* Back to start */
+        }
+
         .bg-layer {
             position: fixed;
             inset: -80px;
@@ -78,7 +89,7 @@
                 radial-gradient(circle at 100% 100%, rgba(169, 181, 220, 0.3), transparent 55%),
                 radial-gradient(circle at 0% 100%, rgba(151, 174, 216, 0.27), transparent 55%),
                 linear-gradient(135deg, var(--bg-base), var(--bg-soft));
-            animation: bgFloat 18s ease-in-out infinite alternate;
+            animation: bgFloat 18s ease-in-out infinite alternate, colorCycle 20s linear infinite;
             filter: saturate(0.95);
         }
 
@@ -89,6 +100,7 @@
                 radial-gradient(circle at 50% 100%, rgba(62, 83, 141, 0.45), transparent 55%),
                 linear-gradient(135deg, #050712, #050812);
             filter: saturate(1.05);
+            animation: bgFloat 18s ease-in-out infinite alternate, colorCycle 20s linear infinite;
         }
 
         @keyframes bgFloat {
@@ -215,7 +227,7 @@
                 radial-gradient(circle at 30% 20%, #fff, transparent 60%),
                 linear-gradient(135deg, var(--accent-main), var(--accent-secondary));
             box-shadow: 0 0 12px rgba(255, 94, 165, 0.7); /* Magenta Shadow */
-            animation: brandPulse 1.8s infinite;
+            animation: brandPulse 1.8s infinite, colorCycle 20s linear infinite; /* Added colorCycle */
         }
 
         @keyframes brandPulse {
@@ -266,6 +278,7 @@
             background: linear-gradient(135deg, var(--accent-main), var(--accent-secondary));
             box-shadow: var(--shadow-neon-soft);
             transition: transform var(--transition-fast);
+            animation: colorCycle 20s linear infinite; /* Added colorCycle */
         }
 
         body.dark .theme-toggle-thumb {
@@ -358,6 +371,15 @@
             font-size: 0.86rem;
             cursor: pointer;
             gap: 0.6rem;
+            transition: background var(--transition-fast);
+        }
+        /* NEW: Menu Item Hover State */
+        .hamburger-menu button:hover {
+            background: rgba(255, 94, 165, 0.12); /* Magenta tint */
+        }
+        
+        body.dark .hamburger-menu button:hover {
+            background: rgba(255, 94, 165, 0.2); /* Stronger Magenta tint for dark mode */
         }
 
         .hamburger-menu button span:first-child {
@@ -513,11 +535,12 @@
             background: rgba(15, 23, 42, 0.9);
         }
 
+        /* UPDATED: Pulse Dot */
         .pulse-dot {
             width: 8px;
             height: 8px;
             border-radius: 999px;
-            background: var(--accent-secondary); /* Violet */
+            background: linear-gradient(45deg, var(--accent-main), var(--accent-secondary));
             position: relative;
         }
 
@@ -526,14 +549,15 @@
             position: absolute;
             inset: -4px;
             border-radius: inherit;
-            border: 1px solid rgba(165, 94, 255, 0.7); /* Violet */
+            border: 2px solid var(--accent-secondary);
             opacity: 0.6;
-            animation: pulse 1.6s infinite;
+            animation: pulse 1.6s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         @keyframes pulse {
-            0% { transform: scale(0.6); opacity: 0.9; }
-            100% { transform: scale(1.25); opacity: 0; }
+            0% { transform: scale(0.7); opacity: 0.9; }
+            50% { opacity: 0.4; }
+            100% { transform: scale(2.5); opacity: 0; }
         }
 
         .hero-actions {
@@ -634,6 +658,14 @@
             width: 18px;
             height: 18px;
             display: inline-flex;
+            transition: stroke var(--transition-fast), filter var(--transition-fast);
+        }
+        
+        /* NEW: Dynamic Icon Fill on Hover */
+        .icon-pill:hover .icon-svg,
+        .social-card-mini:hover .icon-svg {
+            stroke: var(--accent-main);
+            filter: drop-shadow(0 0 2px rgba(255, 94, 165, 0.7));
         }
 
         .icon-pill:hover {
@@ -967,7 +999,7 @@
         .cert-title { font-weight: 500; }
         .cert-meta { font-size: 0.74rem; opacity: 0.75; text-align: right; }
 
-        /* PROJECTS GRID WITH HOVER POPUPS */
+        /* PROJECTS GRID WITH HOVER POPUPS & FLIP */
         .three-card-grid {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -994,12 +1026,57 @@
                 box-shadow var(--transition-fast),
                 border-color var(--transition-fast),
                 background var(--transition-fast);
+            
+            /* NEW: 3D Flip Styles */
+            perspective: 1000px;
+            cursor: pointer;
+            height: 100%; 
+            min-height: 150px; /* Ensure a minimum height for the flip effect */
         }
 
         body.dark .mini-card {
             background: rgba(8, 11, 24, 0.9);
             border-color: rgba(255, 94, 165, 0.28); /* Magenta Border */
         }
+
+        .mini-card-front, .mini-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            border-radius: inherit;
+            padding: inherit;
+            left: 0;
+            top: 0;
+            background: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .mini-card-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, rgba(255, 94, 165, 0.1), rgba(165, 94, 255, 0.1));
+            border: 1px solid var(--accent-main);
+            color: var(--text-dark);
+            justify-content: center;
+        }
+        body.dark .mini-card-back {
+            background: linear-gradient(135deg, rgba(255, 94, 165, 0.25), rgba(165, 94, 255, 0.2));
+            color: var(--text-light);
+        }
+
+        .mini-card.flipped .mini-card-front {
+            transform: rotateY(-180deg);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .mini-card.flipped .mini-card-back {
+            transform: rotateY(0deg);
+            opacity: 1;
+        }
+
 
         .mini-title { font-size: 0.84rem; font-weight: 600; margin-bottom: 0.2rem; }
         .mini-meta { font-size: 0.75rem; opacity: 0.8; margin-bottom: 0.35rem; }
@@ -1023,10 +1100,14 @@
             background: radial-gradient(circle at top, rgba(5, 7, 16, 0.9), transparent 70%);
         }
 
-        .mini-card:hover {
+        .mini-card:hover:not(.flipped) {
             transform: translateY(-3px);
             box-shadow: 0 14px 26px rgba(0, 0, 0, 0.18);
             border-color: rgba(255, 94, 165, 0.45); /* Magenta Border */
+        }
+        
+        .mini-card.flipped:hover {
+             transform: none; /* No movement when flipped */
         }
 
         body.dark .mini-card:hover {
@@ -1035,6 +1116,9 @@
 
         .mini-card:hover .mini-popup {
             opacity: 1;
+        }
+        .mini-card.flipped .mini-popup {
+             opacity: 0; /* Hide the popup when flipped */
         }
 
         /* SOCIAL CARDS */
@@ -1364,17 +1448,21 @@
 
       
 
-        /* FADE-IN */
+        /* FADE-IN (Updated for JS Scroll Triggering) */
         .fade-in-up {
             opacity: 0;
             transform: translateY(14px);
-            animation: fadeUp 0.65s ease-out forwards;
+            transition: opacity 0.65s ease-out, transform 0.65s ease-out;
         }
 
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
-        .delay-4 { animation-delay: 0.4s; }
+        .fade-in-up.animated {
+             animation: fadeUp 0.65s ease-out forwards;
+        }
+
+        .delay-1.animated { animation-delay: 0.1s; }
+        .delay-2.animated { animation-delay: 0.2s; }
+        .delay-3.animated { animation-delay: 0.3s; }
+        .delay-4.animated { animation-delay: 0.4s; }
 
         @keyframes fadeUp {
             to { opacity: 1; transform: translateY(0); }
@@ -1692,80 +1780,146 @@
                 <div class="section-header">
                     <div class="section-title">PROJECTS &amp; INTERESTS</div>
                     <div class="section-subtitle">
-                        Hands‑on work, practice, and what I enjoy exploring.
+                        Hands‑on work, practice, and what I enjoy exploring. (Click cards for details)
                     </div>
                 </div>
 
                 <div class="three-card-grid">
-                    <div class="mini-card">
-                        <div class="mini-title">Distance Detector Using Arduino UNO</div>
-                        <div class="mini-meta">Hardware &amp; IoT · Ultrasonic sensor</div>
-                        <div class="mini-body">
-                            Designed and programmed a working distance‑measurement device using an ultrasonic sensor
-                            and Arduino UNO. It taught me how hardware, sensor data, and code come together.
+                    <div class="mini-card" onclick="this.classList.toggle('flipped');">
+                        <div class="mini-card-front">
+                            <div class="mini-title">Distance Detector Using Arduino UNO</div>
+                            <div class="mini-meta">Hardware &amp; IoT · Ultrasonic sensor</div>
+                            <div class="mini-body">
+                                Designed and programmed a working distance‑measurement device using an ultrasonic sensor
+                                and Arduino UNO. It taught me how hardware, sensor data, and code come together.
+                            </div>
+                            <div class="mini-popup">
+                                A simple concept that shows how small components can become smart tools.
+                            </div>
                         </div>
-                        <div class="mini-popup">
-                            A simple concept that shows how small components can become smart tools.
-                        </div>
-                    </div>
-
-                    <div class="mini-card">
-                        <div class="mini-title">IoT &amp; Small Electronic Projects</div>
-                        <div class="mini-meta">DIY projects · Circuits &amp; automation</div>
-                        <div class="mini-body">
-                            Worked on mini‑projects involving sensors, simple circuits, and basic automation.
-                            I enjoy experimenting with small ideas that could grow into bigger solutions.
-                        </div>
-                        <div class="mini-popup">
-                            Tiny circuits, real curiosity — learning from each small build.
-                        </div>
-                    </div>
-
-                    <div class="mini-card">
-                        <div class="mini-title">Hardware &amp; System Setup Practice</div>
-                        <div class="mini-meta">Hands‑on · Troubleshooting &amp; OS</div>
-                        <div class="mini-body">
-                            Practice tasks with assembling systems, checking components, installing operating systems,
-                            and setting up essential software to make machines ready to use.
-                        </div>
-                        <div class="mini-popup">
-                            Every working PC started as loose parts on a table.
+                        <div class="mini-card-back">
+                            <div class="mini-title" style="color:var(--accent-main);">DETAIL: DISTANCE DETECTOR</div>
+                            <p style="font-size: 0.8rem; margin-top: 0.4rem;">
+                                **Focus:** Microcontroller interaction & data processing.
+                                **Outcome:** Successfully measured distance up to 400cm with a 1cm error margin.
+                                **Skills:** C/C++ programming for Arduino, sensor calibration.
+                            </p>
+                            <div style="font-size: 0.75rem; margin-top: 0.7rem; opacity: 0.7;">Click to close.</div>
                         </div>
                     </div>
 
-                    <div class="mini-card">
-                        <div class="mini-title">Internet &amp; Tech Exploration</div>
-                        <div class="mini-meta">Hobby · Continuous learning</div>
-                        <div class="mini-body">
-                            I use the internet as my learning space — from tutorials and forums
-                            to documentation and videos about hardware, networking, and IoT.
-                        </div>
-                        <div class="mini-popup">
-                            Curiosity + internet = infinite learning path.
+                    <div class="mini-card" onclick="this.classList.toggle('flipped');">
+                         <div class="mini-card-front">
+                            <div class="mini-title">IoT &amp; Small Electronic Projects</div>
+                            <div class="mini-meta">DIY projects · Circuits &amp; automation</div>
+                            <div class="mini-body">
+                                Worked on mini‑projects involving sensors, simple circuits, and basic automation.
+                                I enjoy experimenting with small ideas that could grow into bigger solutions.
+                            </div>
+                            <div class="mini-popup">
+                                Tiny circuits, real curiosity — learning from each small build.
+                            </div>
+                         </div>
+                         <div class="mini-card-back">
+                            <div class="mini-title" style="color:var(--accent-main);">DETAIL: IOT EXPERIMENTS</div>
+                            <p style="font-size: 0.8rem; margin-top: 0.4rem;">
+                                **Focus:** Connecting simple sensors (temp/light) to microcontrollers.
+                                **Outcome:** Built basic environment monitors and simple light controls.
+                                **Skills:** Breadboarding, basic circuit design, component testing.
+                            </p>
+                            <div style="font-size: 0.75rem; margin-top: 0.7rem; opacity: 0.7;">Click to close.</div>
                         </div>
                     </div>
 
-                    <div class="mini-card">
-                        <div class="mini-title">Documentation &amp; Typing</div>
-                        <div class="mini-meta">Stenography · MS Office</div>
-                        <div class="mini-body">
-                            With a stenography background and computer application skills,
-                            I can handle structured note‑taking, documentation, and typed reports clearly.
+                    <div class="mini-card" onclick="this.classList.toggle('flipped');">
+                        <div class="mini-card-front">
+                            <div class="mini-title">Hardware &amp; System Setup Practice</div>
+                            <div class="mini-meta">Hands‑on · Troubleshooting &amp; OS</div>
+                            <div class="mini-body">
+                                Practice tasks with assembling systems, checking components, installing operating systems,
+                                and setting up essential software to make machines ready to use.
+                            </div>
+                            <div class="mini-popup">
+                                Every working PC started as loose parts on a table.
+                            </div>
                         </div>
-                        <div class="mini-popup">
-                            Clean documents make technical work easier to share and understand.
+                        <div class="mini-card-back">
+                            <div class="mini-title" style="color:var(--accent-main);">DETAIL: SYSTEM WORKFLOW</div>
+                            <p style="font-size: 0.8rem; margin-top: 0.4rem;">
+                                **Focus:** End-to-end system preparation.
+                                **Outcome:** Able to diagnose boot errors, optimize BIOS settings, and configure drives.
+                                **Skills:** PC assembly, OS installation (Windows/Linux dual boot), driver management.
+                            </p>
+                            <div style="font-size: 0.75rem; margin-top: 0.7rem; opacity: 0.7;">Click to close.</div>
                         </div>
                     </div>
 
-                    <div class="mini-card">
-                        <div class="mini-title">Future Direction</div>
-                        <div class="mini-meta">Growth · Career path</div>
-                        <div class="mini-body">
-                            I want to grow in roles related to computer hardware support, networking,
-                            and possibly IoT‑based solutions — while staying open to new technologies.
+                    <div class="mini-card" onclick="this.classList.toggle('flipped');">
+                        <div class="mini-card-front">
+                            <div class="mini-title">Internet &amp; Tech Exploration</div>
+                            <div class="mini-meta">Hobby · Continuous learning</div>
+                            <div class="mini-body">
+                                I use the internet as my learning space — from tutorials and forums
+                                to documentation and videos about hardware, networking, and IoT.
+                            </div>
+                            <div class="mini-popup">
+                                Curiosity + internet = infinite learning path.
+                            </div>
                         </div>
-                        <div class="mini-popup">
-                            Step by step, project by project, I’m building my own path.
+                        <div class="mini-card-back">
+                            <div class="mini-title" style="color:var(--accent-main);">DETAIL: EXPLORATION METHOD</div>
+                            <p style="font-size: 0.8rem; margin-top: 0.4rem;">
+                                **Focus:** Self-directed learning and resource management.
+                                **Outcome:** Strong familiarity with tech forums, educational platforms, and technical documentation.
+                                **Skills:** Digital research, resource filtering, technical reading comprehension.
+                            </p>
+                            <div style="font-size: 0.75rem; margin-top: 0.7rem; opacity: 0.7;">Click to close.</div>
+                        </div>
+                    </div>
+
+                    <div class="mini-card" onclick="this.classList.toggle('flipped');">
+                        <div class="mini-card-front">
+                            <div class="mini-title">Documentation &amp; Typing</div>
+                            <div class="mini-meta">Stenography · MS Office</div>
+                            <div class="mini-body">
+                                With a stenography background and computer application skills,
+                                I can handle structured note‑taking, documentation, and typed reports clearly.
+                            </div>
+                            <div class="mini-popup">
+                                Clean documents make technical work easier to share and understand.
+                            </div>
+                        </div>
+                        <div class="mini-card-back">
+                            <div class="mini-title" style="color:var(--accent-main);">DETAIL: ADMINISTRATIVE SKILLS</div>
+                            <p style="font-size: 0.8rem; margin-top: 0.4rem;">
+                                **Focus:** Efficiency and accuracy in communication.
+                                **Outcome:** Certified proficiency in Stenography and advanced Microsoft Office suite usage.
+                                **Skills:** High-speed typing, professional formatting, data organization (Excel/Sheets).
+                            </p>
+                            <div style="font-size: 0.75rem; margin-top: 0.7rem; opacity: 0.7;">Click to close.</div>
+                        </div>
+                    </div>
+
+                    <div class="mini-card" onclick="this.classList.toggle('flipped');">
+                        <div class="mini-card-front">
+                            <div class="mini-title">Future Direction</div>
+                            <div class="mini-meta">Growth · Career path</div>
+                            <div class="mini-body">
+                                I want to grow in roles related to computer hardware support, networking,
+                                and possibly IoT‑based solutions — while staying open to new technologies.
+                            </div>
+                            <div class="mini-popup">
+                                Step by step, project by project, I’m building my own path.
+                            </div>
+                        </div>
+                        <div class="mini-card-back">
+                            <div class="mini-title" style="color:var(--accent-main);">DETAIL: CAREER VISION</div>
+                            <p style="font-size: 0.8rem; margin-top: 0.4rem;">
+                                **Short-term:** Secure an entry-level role focusing on technical support or help desk.
+                                **Long-term:** Specialize in embedded systems or network security certification (e.g., CCNA).
+                                **Goal:** Become a trusted professional bridging hardware and connectivity.
+                            </p>
+                            <div style="font-size: 0.75rem; margin-top: 0.7rem; opacity: 0.7;">Click to close.</div>
                         </div>
                     </div>
                 </div>
@@ -1996,6 +2150,50 @@
 </div>
 
 <script>
+    var contactUnlocked = false; // Initial state
+
+    // --- NEW: Password System Function ---
+    function askForPassword(actionText, successCallback) {
+        openModal(
+            actionText + " ACCESS",
+            '<div style="margin-bottom: 0.8rem;">Enter the security code to unlock contact details and the resume PDF.</div>' +
+            '<input type="password" id="passwordInput" placeholder="Enter code" style="' +
+            'width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid #A55EFF; ' +
+            'background: rgba(255, 255, 255, 0.9); color: #050711; font-size: 0.9rem; margin-top: 0.2rem;' +
+            '"/>' +
+            '<div id="passwordError" style="color: #FF5EA5; font-size: 0.75rem; margin-top: 0.5rem; height: 1.1rem;"></div>',
+            [
+                { label: "Cancel", onClick: function () { modalBackdrop.classList.remove("show"); } },
+                {
+                    label: actionText,
+                    primary: true,
+                    onClick: function () {
+                        var input = document.getElementById("passwordInput");
+                        var errorDiv = document.getElementById("passwordError");
+                        // --- SET YOUR CODE HERE ---
+                        var correctCode = "1234"; 
+
+                        if (input.value === correctCode) {
+                            contactUnlocked = true;
+                            modalBackdrop.classList.remove("show");
+                            successCallback();
+                        } else {
+                            errorDiv.textContent = "Incorrect code. Try '1234' for this demo.";
+                            input.value = "";
+                            input.focus();
+                        }
+                    }
+                }
+            ]
+        );
+        // Focus the input field when the modal is shown
+        setTimeout(function() {
+            document.getElementById("passwordInput").focus();
+        }, 100);
+    }
+    // --- END NEW: Password System Function ---
+
+
     // Smooth scroll
     document.querySelectorAll("[data-scroll]").forEach(function (btn) {
         btn.addEventListener("click", function () {
@@ -2208,7 +2406,7 @@
         }
     });
 
-    // Let’s talk – connect now
+    // Let’s talk – connect now (UPDATED with Validation)
     var connectNowBtn = document.getElementById("connectNowBtn");
     connectNowBtn.addEventListener("click", function () {
         var name = (document.getElementById("talkName") || {}).value || "";
@@ -2218,6 +2416,19 @@
         name = name.trim();
         contact = contact.trim();
         message = message.trim();
+        
+        // --- NEW: Basic Validation ---
+        if (!name || !contact || !message) {
+             openModal(
+                "FORM INCOMPLETE",
+                "Please fill in your **Name**, **Contact**, and **Message** before connecting. Context is important!",
+                [
+                    { label: "Got it", primary: true, onClick: function () { modalBackdrop.classList.remove("show"); } }
+                ]
+            );
+            return; // Stop execution if form is incomplete
+        }
+        // --- END NEW: Basic Validation ---
 
         var subject = encodeURIComponent("Let’s connect | From your portfolio");
         var bodyLines = [];
@@ -2242,6 +2453,23 @@
 
     // Footer year
     document.getElementById("yearSpan").textContent = new Date().getFullYear();
+    
+    // --- NEW: Scroll-Based Fade-In Trigger ---
+    document.addEventListener("DOMContentLoaded", function() {
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("animated");
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 }); 
+
+        document.querySelectorAll(".fade-in-up").forEach(function(element) {
+            observer.observe(element);
+        });
+    });
+    // --- END NEW: Scroll-Based Fade-In Trigger ---
 </script>
 </body>
 </html>
