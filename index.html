@@ -6,15 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
         :root {
-            /* These will be animated by JS/CSS Keyframes */
-            --bg-base: #dfe5f3;
-            --bg-soft: #edf2ff;
-            --bg-gray: #cfd5e2;
-            --bg-dark-main: #050712;
+            /* NEW THEME: Electric Teal and Goldenrod */
+            --bg-base: #e0f2f1; /* Light Teal Background */
+            --bg-soft: #f0fdfa;
+            --bg-gray: #c0e0de;
+            --bg-dark-main: #071a26; /* Deep Teal/Navy */
 
-            /* NEW ACCENT COLORS: Magenta and Violet */
-            --accent-main: #FF5EA5; /* Vibrant Magenta */
-            --accent-secondary: #A55EFF; /* Electric Violet */
+            /* NEW ACCENT COLORS: Teal and Gold */
+            --accent-main: #20c997; /* Electric Teal */
+            --accent-secondary: #ffc107; /* Goldenrod/Bright Yellow */
 
             --text-dark: #111827;
             --text-muted-dark: #4b5563;
@@ -22,15 +22,16 @@
             --text-muted-light: #e5e7eb;
 
             /* Updated borders/shadows using new accents */
-            --border-soft-main: rgba(255, 94, 165, 0.45);
-            --border-soft-secondary: rgba(165, 94, 255, 0.45);
+            --border-soft-main: rgba(32, 201, 151, 0.5); /* Teal */
+            --border-soft-secondary: rgba(255, 193, 7, 0.5); /* Gold */
             --border-soft-gray: rgba(15, 23, 42, 0.08);
 
             --glass-light: rgba(255, 255, 255, 0.86);
             --glass-dark: rgba(15, 23, 42, 0.86);
 
-            --shadow-neon-soft: 0 0 18px rgba(255, 94, 165, 0.38),
-                                0 0 28px rgba(165, 94, 255, 0.28);
+            /* UPDATED SHADOW to Teal/Gold Neon */
+            --shadow-neon-soft: 0 0 16px rgba(32, 201, 151, 0.5),
+                                0 0 24px rgba(255, 193, 7, 0.35);
 
             --transition-fast: 0.2s ease;
             --transition-med: 0.45s ease;
@@ -50,8 +51,7 @@
             color: var(--text-dark);
             background: var(--bg-base);
             overflow-x: hidden;
-             filter: hue-rotate(0deg);
-             transition: filter 20s linear infinite;
+            /* Animation Removed: Filter hue-rotate is distracting with this color scheme */
         }
 
         body.dark {
@@ -70,12 +70,12 @@
         }
 
         /* BACKGROUND LAYERS (SOFT NEON ANIMATION) */
-        @keyframes colorCycle {
-            0% { --accent-main: #FF5EA5; --accent-secondary: #A55EFF; } /* Magenta/Violet */
-            25% { --accent-main: #5EFFD6; --accent-secondary: #5EAAFF; } /* Teal/Blue */
-            50% { --accent-main: #FFD65E; --accent-secondary: #FF8F5E; } /* Yellow/Orange */
-            75% { --accent-main: #A55EFF; --accent-secondary: #FF5EA5; } /* Violet/Magenta */
-            100% { --accent-main: #FF5EA5; --accent-secondary: #A55EFF; } /* Back to start */
+        /* Removed colorCycle keyframes as a static Teal/Gold is cleaner */
+
+        @keyframes bgFloat {
+            0% { transform: translate3d(0, 0, 0) scale(1); }
+            50% { transform: translate3d(-10px, 8px, 0) scale(1.03); }
+            100% { transform: translate3d(10px, -8px, 0) scale(1.02); }
         }
 
         .bg-layer {
@@ -84,29 +84,22 @@
             z-index: -3;
             pointer-events: none;
             background:
-                radial-gradient(circle at 0% 0%, rgba(255, 94, 165, 0.26), transparent 55%), /* Magenta */
-                radial-gradient(circle at 100% 0%, rgba(165, 94, 255, 0.22), transparent 55%), /* Violet */
+                radial-gradient(circle at 0% 0%, rgba(32, 201, 151, 0.26), transparent 55%), /* Teal */
+                radial-gradient(circle at 100% 0%, rgba(255, 193, 7, 0.22), transparent 55%), /* Gold */
                 radial-gradient(circle at 100% 100%, rgba(169, 181, 220, 0.3), transparent 55%),
                 radial-gradient(circle at 0% 100%, rgba(151, 174, 216, 0.27), transparent 55%),
                 linear-gradient(135deg, var(--bg-base), var(--bg-soft));
-            animation: bgFloat 18s ease-in-out infinite alternate, colorCycle 20s linear infinite;
+            animation: bgFloat 18s ease-in-out infinite alternate;
             filter: saturate(0.95);
         }
 
         body.dark .bg-layer {
             background:
-                radial-gradient(circle at 0% 0%, rgba(255, 94, 165, 0.33), transparent 55%), /* Magenta */
-                radial-gradient(circle at 100% 0%, rgba(165, 94, 255, 0.26), transparent 55%), /* Violet */
+                radial-gradient(circle at 0% 0%, rgba(32, 201, 151, 0.33), transparent 55%), /* Teal */
+                radial-gradient(circle at 100% 0%, rgba(255, 193, 7, 0.26), transparent 55%), /* Gold */
                 radial-gradient(circle at 50% 100%, rgba(62, 83, 141, 0.45), transparent 55%),
-                linear-gradient(135deg, #050712, #050812);
+                linear-gradient(135deg, #071a26, #071b27);
             filter: saturate(1.05);
-            animation: bgFloat 18s ease-in-out infinite alternate, colorCycle 20s linear infinite;
-        }
-
-        @keyframes bgFloat {
-            0% { transform: translate3d(0, 0, 0) scale(1); }
-            50% { transform: translate3d(-10px, 8px, 0) scale(1.03); }
-            100% { transform: translate3d(10px, -8px, 0) scale(1.02); }
         }
 
         .bg-watermark {
@@ -127,8 +120,8 @@
             color: #7b8193;
             text-align: center;
             transform: rotate(-18deg);
-            border-top: 1px solid rgba(255, 94, 165, 0.5); /* Magenta */
-            border-bottom: 1px solid rgba(165, 94, 255, 0.45); /* Violet */
+            border-top: 1px solid var(--accent-main); /* Teal */
+            border-bottom: 1px solid var(--accent-secondary); /* Gold */
             padding: 0.6rem 2.8rem;
             backdrop-filter: blur(10px);
         }
@@ -139,7 +132,7 @@
 
         body.dark .heart-core {
             background: linear-gradient(135deg, #1e293b, #0f172a);
-            box-shadow: 0 0 22px rgba(255, 94, 165, 0.7); /* Magenta Shadow */
+            box-shadow: 0 0 22px var(--border-soft-main); 
         }
 
         @keyframes heartBeat {
@@ -178,11 +171,11 @@
         body.dark header {
             background: linear-gradient(
                 to bottom,
-                rgba(6, 9, 20, 0.96),
-                rgba(6, 9, 20, 0.86),
+                rgba(7, 26, 38, 0.96),
+                rgba(7, 26, 38, 0.86),
                 transparent
             );
-            border-bottom-color: rgba(255, 94, 165, 0.28); /* Magenta */
+            border-bottom-color: var(--border-soft-main); /* Teal */
         }
 
         .header-inner {
@@ -226,8 +219,8 @@
             background:
                 radial-gradient(circle at 30% 20%, #fff, transparent 60%),
                 linear-gradient(135deg, var(--accent-main), var(--accent-secondary));
-            box-shadow: 0 0 12px rgba(255, 94, 165, 0.7); /* Magenta Shadow */
-            animation: brandPulse 1.8s infinite, colorCycle 20s linear infinite; /* Added colorCycle */
+            box-shadow: 0 0 12px var(--border-soft-main); /* Teal Shadow */
+            animation: brandPulse 1.8s infinite;
         }
 
         @keyframes brandPulse {
@@ -278,7 +271,6 @@
             background: linear-gradient(135deg, var(--accent-main), var(--accent-secondary));
             box-shadow: var(--shadow-neon-soft);
             transition: transform var(--transition-fast);
-            animation: colorCycle 20s linear infinite; /* Added colorCycle */
         }
 
         body.dark .theme-toggle-thumb {
@@ -347,7 +339,7 @@
 
         body.dark .hamburger-menu {
             background: rgba(15, 23, 42, 0.96);
-            border-color: var(--border-soft-main); /* Magenta Border */
+            border-color: var(--border-soft-main); /* Teal Border */
             box-shadow: var(--shadow-neon-soft);
         }
 
@@ -373,13 +365,13 @@
             gap: 0.6rem;
             transition: background var(--transition-fast);
         }
-        /* NEW: Menu Item Hover State */
+        
         .hamburger-menu button:hover {
-            background: rgba(255, 94, 165, 0.12); /* Magenta tint */
+            background: rgba(32, 201, 151, 0.12); /* Teal tint */
         }
         
         body.dark .hamburger-menu button:hover {
-            background: rgba(255, 94, 165, 0.2); /* Stronger Magenta tint for dark mode */
+            background: rgba(32, 201, 151, 0.2); /* Stronger Teal tint for dark mode */
         }
 
         .hamburger-menu button span:first-child {
@@ -411,7 +403,7 @@
 
         body.dark .section-card {
             background: var(--glass-dark);
-            border-color: var(--border-soft-main); /* Magenta Border */
+            border-color: var(--border-soft-main); /* Teal Border */
             box-shadow: var(--shadow-neon-soft);
             color: var(--text-light);
         }
@@ -464,7 +456,7 @@
 
         body.dark .hero-card {
             background: var(--glass-dark);
-            border-color: var(--border-soft-main); /* Magenta Border */
+            border-color: var(--border-soft-main); /* Teal Border */
             box-shadow: var(--shadow-neon-soft);
             color: var(--text-light);
         }
@@ -488,10 +480,18 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            /* NEW: Text Shadow Animation */
+            text-shadow: 0 0 1px rgba(32, 201, 151, 0.4);
+            animation: textNeonGlow 4s ease-in-out infinite alternate;
+        }
+        
+        @keyframes textNeonGlow {
+            0% { text-shadow: 0 0 1px rgba(32, 201, 151, 0.4), 0 0 3px rgba(255, 193, 7, 0.1); }
+            100% { text-shadow: 0 0 5px rgba(32, 201, 151, 0.7), 0 0 10px rgba(255, 193, 7, 0.3); }
         }
 
         body.dark .hero-heading span {
-            text-shadow: 0 0 14px rgba(255, 94, 165, 0.5); /* Magenta Shadow */
+            text-shadow: 0 0 14px var(--border-soft-main); /* Teal Shadow */
         }
 
         .hero-sub {
@@ -514,7 +514,7 @@
             width: 8px;
             height: 8px;
             border-radius: 999px;
-            background: var(--accent-main); /* Magenta */
+            background: var(--accent-main); /* Teal */
         }
 
         .hero-highlight-strip {
@@ -589,12 +589,12 @@
         .btn-primary {
             background: linear-gradient(135deg, var(--accent-main), var(--accent-secondary));
             color: #050711;
-            box-shadow: 0 14px 24px rgba(255, 94, 165, 0.35); /* Magenta Shadow */
+            box-shadow: 0 14px 24px rgba(32, 201, 151, 0.35); /* Teal Shadow */
         }
 
         .btn-primary:hover {
             transform: translateY(-1px) scale(1.01);
-            box-shadow: 0 16px 28px rgba(255, 94, 165, 0.45); /* Magenta Shadow */
+            box-shadow: 0 16px 28px rgba(32, 201, 151, 0.45); /* Teal Shadow */
         }
 
         .btn-ghost {
@@ -608,9 +608,9 @@
         }
 
         .btn-ghost:hover {
-            background: rgba(255, 94, 165, 0.12); /* Magenta tint */
+            background: rgba(32, 201, 151, 0.12); /* Teal tint */
             transform: translateY(-1px);
-            box-shadow: 0 10px 20px rgba(255, 94, 165, 0.25); /* Magenta Shadow */
+            box-shadow: 0 10px 20px rgba(32, 201, 151, 0.25); /* Teal Shadow */
         }
 
         .hero-meta-row {
@@ -661,16 +661,16 @@
             transition: stroke var(--transition-fast), filter var(--transition-fast);
         }
         
-        /* NEW: Dynamic Icon Fill on Hover */
+        /* Dynamic Icon Fill on Hover */
         .icon-pill:hover .icon-svg,
         .social-card-mini:hover .icon-svg {
             stroke: var(--accent-main);
-            filter: drop-shadow(0 0 2px rgba(255, 94, 165, 0.7));
+            filter: drop-shadow(0 0 2px rgba(32, 201, 151, 0.7));
         }
 
         .icon-pill:hover {
-            background: rgba(255, 94, 165, 0.08); /* Magenta tint */
-            box-shadow: 0 10px 20px rgba(255, 94, 165, 0.18); /* Magenta Shadow */
+            background: rgba(32, 201, 151, 0.08); /* Teal tint */
+            box-shadow: 0 10px 20px rgba(32, 201, 151, 0.18); /* Teal Shadow */
             transform: translateY(-1px);
         }
 
@@ -694,7 +694,7 @@
 
         body.dark .glass-shell {
             background: var(--glass-dark);
-            border-color: var(--border-soft-main); /* Magenta Border */
+            border-color: var(--border-soft-main); /* Teal Border */
             box-shadow: var(--shadow-neon-soft);
             color: var(--text-light);
         }
@@ -712,8 +712,8 @@
             margin: 0 auto 0.6rem auto;
             border-radius: 50%;
             overflow: hidden;
-            border: 2px solid rgba(255, 94, 165, 0.75); /* Magenta Border */
-            box-shadow: 0 0 18px rgba(255, 94, 165, 0.4); /* Magenta Shadow */
+            border: 2px solid var(--accent-main); /* Teal Border */
+            box-shadow: 0 0 18px rgba(32, 201, 151, 0.4); /* Teal Shadow */
         }
 
         .photo-circle img {
@@ -770,7 +770,7 @@
             width: 7px;
             height: 7px;
             border-radius: 999px;
-            background: var(--accent-secondary); /* Violet */
+            background: var(--accent-secondary); /* Gold */
         }
 
         /* ABOUT */
@@ -820,7 +820,7 @@
 
         body.dark .highlight-card {
             background: rgba(7, 11, 26, 0.85);
-            border-color: var(--border-soft-main); /* Magenta Border */
+            border-color: var(--border-soft-main); /* Teal Border */
         }
 
         .highlight-inner { position: relative; }
@@ -951,7 +951,7 @@
             width: 9px;
             height: 9px;
             border-radius: 999px;
-            background: var(--accent-main); /* Magenta */
+            background: var(--accent-main); /* Teal */
         }
 
         .timeline-title { font-size: 0.86rem; font-weight: 600; }
@@ -1027,16 +1027,15 @@
                 border-color var(--transition-fast),
                 background var(--transition-fast);
             
-            /* NEW: 3D Flip Styles */
             perspective: 1000px;
             cursor: pointer;
             height: 100%; 
-            min-height: 150px; /* Ensure a minimum height for the flip effect */
+            min-height: 150px; 
         }
 
         body.dark .mini-card {
             background: rgba(8, 11, 24, 0.9);
-            border-color: rgba(255, 94, 165, 0.28); /* Magenta Border */
+            border-color: rgba(32, 201, 151, 0.28); /* Teal Border */
         }
 
         .mini-card-front, .mini-card-back {
@@ -1056,13 +1055,13 @@
         
         .mini-card-back {
             transform: rotateY(180deg);
-            background: linear-gradient(135deg, rgba(255, 94, 165, 0.1), rgba(165, 94, 255, 0.1));
+            background: linear-gradient(135deg, rgba(32, 201, 151, 0.1), rgba(255, 193, 7, 0.1));
             border: 1px solid var(--accent-main);
             color: var(--text-dark);
             justify-content: center;
         }
         body.dark .mini-card-back {
-            background: linear-gradient(135deg, rgba(255, 94, 165, 0.25), rgba(165, 94, 255, 0.2));
+            background: linear-gradient(135deg, rgba(32, 201, 151, 0.25), rgba(255, 193, 7, 0.2));
             color: var(--text-light);
         }
 
@@ -1103,7 +1102,7 @@
         .mini-card:hover:not(.flipped) {
             transform: translateY(-3px);
             box-shadow: 0 14px 26px rgba(0, 0, 0, 0.18);
-            border-color: rgba(255, 94, 165, 0.45); /* Magenta Border */
+            border-color: rgba(32, 201, 151, 0.45); /* Teal Border */
         }
         
         .mini-card.flipped:hover {
@@ -1155,7 +1154,7 @@
 
         body.dark .social-card-mini {
             background: rgba(8, 11, 24, 0.9);
-            border-color: rgba(255, 94, 165, 0.28); /* Magenta Border */
+            border-color: rgba(32, 201, 151, 0.28); /* Teal Border */
         }
 
         .social-card-header {
@@ -1188,7 +1187,7 @@
         body.dark .social-mini-btn { border-color: rgba(191, 219, 254, 0.9); }
 
         .social-mini-btn:hover {
-            background: rgba(255, 94, 165, 0.16); /* Magenta tint */
+            background: rgba(32, 201, 151, 0.16); /* Teal tint */
             transform: translateY(-1px);
         }
 
@@ -1213,7 +1212,7 @@
         .social-card-mini:hover {
             transform: translateY(-3px);
             box-shadow: 0 14px 26px rgba(0, 0, 0, 0.18);
-            border-color: rgba(255, 94, 165, 0.45); /* Magenta Border */
+            border-color: rgba(32, 201, 151, 0.45); /* Teal Border */
         }
 
         body.dark .social-card-mini:hover {
@@ -1246,7 +1245,7 @@
 
         body.dark .contact-card {
             background: rgba(8, 11, 24, 0.9);
-            border-color: rgba(255, 94, 165, 0.3); /* Magenta Border */
+            border-color: rgba(32, 201, 151, 0.3); /* Teal Border */
         }
 
         .contact-row {
@@ -1293,8 +1292,8 @@
         body.dark .contact-actions button { border-color: rgba(191, 219, 254, 0.9); }
 
         .contact-actions button:hover {
-            background: rgba(255, 94, 165, 0.16); /* Magenta tint */
-            box-shadow: 0 10px 20px rgba(255, 94, 165, 0.22); /* Magenta Shadow */
+            background: rgba(32, 201, 151, 0.16); /* Teal tint */
+            box-shadow: 0 10px 20px rgba(32, 201, 151, 0.22); /* Teal Shadow */
             transform: translateY(-1px);
         }
 
@@ -1352,8 +1351,8 @@
 
         .field-input:focus,
         .field-textarea:focus {
-            border-color: var(--accent-main); /* Magenta Focus */
-            box-shadow: 0 0 14px rgba(255, 94, 165, 0.5); /* Magenta Shadow */
+            border-color: var(--accent-main); /* Teal Focus */
+            box-shadow: 0 0 14px rgba(32, 201, 151, 0.5); /* Teal Shadow */
         }
 
         .talk-footer {
@@ -1395,7 +1394,7 @@
             border-radius: 16px;
             padding: 1rem 1rem 0.95rem;
             background: #0a0f1f;
-            border: 1px solid rgba(255, 94, 165, 0.6); /* Magenta Border */
+            border: 1px solid var(--border-soft-main); /* Teal Border */
             box-shadow: var(--shadow-neon-soft);
             color: #f5f7ff;
             transform: translateY(8px) scale(0.96);
@@ -1467,6 +1466,53 @@
         @keyframes fadeUp {
             to { opacity: 1; transform: translateY(0); }
         }
+        
+        /* NEW: 3D Flip/Detail Card Styles */
+        .mini-card {
+            perspective: 1000px;
+            cursor: pointer;
+            height: 100%; 
+            min-height: 150px; 
+        }
+
+        .mini-card-front, .mini-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            border-radius: inherit;
+            padding: inherit;
+            left: 0;
+            top: 0;
+            background: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .mini-card-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, rgba(32, 201, 151, 0.1), rgba(255, 193, 7, 0.1));
+            border: 1px solid var(--accent-main);
+            color: var(--text-dark);
+            justify-content: center;
+        }
+        body.dark .mini-card-back {
+            background: linear-gradient(135deg, rgba(32, 201, 151, 0.25), rgba(255, 193, 7, 0.2));
+            color: var(--text-light);
+        }
+
+        .mini-card.flipped .mini-card-front {
+            transform: rotateY(-180deg);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .mini-card.flipped .mini-card-back {
+            transform: rotateY(0deg);
+            opacity: 1;
+        }
+
 
         @media (max-width: 600px) {
             .hero { gap: 1.4rem; }
@@ -1542,10 +1588,10 @@
                 </div>
 
                 <div class="hero-actions">
-                    <button class="btn-primary" id="lockedResumeBtn">
+                    <button class="btn-primary" id="viewResumeBtn">
                         <span>View resume</span>
                     </button>
-                    <button class="btn-ghost" id="contactPopupBtn">
+                    <button class="btn-ghost" id="quickContactBtn">
                         <span>Quick contact</span>
                     </button>
                 </div>
@@ -2038,7 +2084,7 @@
                 <div class="section-header">
                     <div class="section-title">CONTACT</div>
                     <div class="section-subtitle">
-                        WhatsApp &amp; Gmail — unlocked only with the password.
+                        Direct links to my communication channels are available below.
                     </div>
                 </div>
 
@@ -2079,8 +2125,7 @@
                         </div>
 
                         <div class="status-strip">
-                            Contact details are protected by a simple password. Once unlocked, icons
-                            open pre‑filled messages so it’s easy to say hello.
+                            Contact details are now instantly available. Icons open pre‑filled messages for ease of use.
                         </div>
                     </div>
 
@@ -2133,7 +2178,7 @@
     </main>
 
     <footer>
-        © <span id="yearSpan"></span> Peerzada Ikhlas · Built in light neon magenta and violet with Forever Knights energy.
+        © <span id="yearSpan"></span> Peerzada Ikhlas · Built in Electric Teal and Goldenrod with optimized performance.
     </footer>
 </div>
 
@@ -2150,49 +2195,8 @@
 </div>
 
 <script>
-    var contactUnlocked = false; // Initial state
-
-    // --- NEW: Password System Function ---
-    function askForPassword(actionText, successCallback) {
-        openModal(
-            actionText + " ACCESS",
-            '<div style="margin-bottom: 0.8rem;">Enter the security code to unlock contact details and the resume PDF.</div>' +
-            '<input type="password" id="passwordInput" placeholder="Enter code" style="' +
-            'width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid #A55EFF; ' +
-            'background: rgba(255, 255, 255, 0.9); color: #050711; font-size: 0.9rem; margin-top: 0.2rem;' +
-            '"/>' +
-            '<div id="passwordError" style="color: #FF5EA5; font-size: 0.75rem; margin-top: 0.5rem; height: 1.1rem;"></div>',
-            [
-                { label: "Cancel", onClick: function () { modalBackdrop.classList.remove("show"); } },
-                {
-                    label: actionText,
-                    primary: true,
-                    onClick: function () {
-                        var input = document.getElementById("passwordInput");
-                        var errorDiv = document.getElementById("passwordError");
-                        // --- SET YOUR CODE HERE ---
-                        var correctCode = "1234"; 
-
-                        if (input.value === correctCode) {
-                            contactUnlocked = true;
-                            modalBackdrop.classList.remove("show");
-                            successCallback();
-                        } else {
-                            errorDiv.textContent = "Incorrect code. Try '1234' for this demo.";
-                            input.value = "";
-                            input.focus();
-                        }
-                    }
-                }
-            ]
-        );
-        // Focus the input field when the modal is shown
-        setTimeout(function() {
-            document.getElementById("passwordInput").focus();
-        }, 100);
-    }
-    // --- END NEW: Password System Function ---
-
+    // --- NO PASSWORD REQUIRED ---
+    var contactUnlocked = true; // Always true as requested.
 
     // Smooth scroll
     document.querySelectorAll("[data-scroll]").forEach(function (btn) {
@@ -2319,94 +2323,85 @@
             url: "https://www.snapchat.com/add/ion.ayan?share_id=kSGHloIg3B0&locale=en-IN"
         },
         whatsapp: {
-            title: "WHATSAPP",
-            bodyUnlocked: "You can message me on WhatsApp at:<br><br>" +
-                "<strong>+91 6262591914</strong><br><br>" +
-                "Click <strong>Open chat</strong> to start a chat with a pre‑filled greeting.",
-            // Changed "Ayan" to "Peerzada Ikhlas" in the pre-filled text
+            title: "WHATSAPP: +91 6262591914",
+            bodyUnlocked: "Click <strong>Open chat</strong> to start a chat with a pre‑filled greeting.",
             url: "https://wa.me/916262591914?text=Hi%20Peerzada%20Ikhlas%2C%20I%27m%20reaching%20out%20after%20visiting%20your%20portfolio."
         },
         email: {
-            title: "GMAIL",
-            bodyUnlocked: "My primary email address is:<br><br>" +
-                "<strong>imshahayan@gmail.com</strong><br><br>" +
-                "Click <strong>Write email</strong> to open your mail app with details pre‑filled.",
-            // Changed "Hello Ayan" to "Hello Peerzada Ikhlas" in the subject
-            // Changed "Hi Ayan" to "Hi Peerzada Ikhlas" in the body
+            title: "GMAIL: imshahayan@gmail.com",
+            bodyUnlocked: "Click <strong>Write email</strong> to open your mail app with details pre‑filled.",
             url: "mailto:imshahayan@gmail.com?subject=Hello%20Peerzada%20Ikhlas%20%7C%20From%20your%20portfolio&body=Hi%20Peerzada%20Ikhlas%2C%0D%0A%0D%0AI%20just%20visited%20your%20portfolio%20and%20would%20like%20to%20connect%20with%20you%20about..."
         }
     };
 
-    // Icon and social card buttons
+    // Consolidated function to show modal content (always unlocked)
+    function showContactModal(key) {
+        var conf = contactMap[key];
+        if (!conf) return;
+
+        openModal(
+            conf.title.includes(":") ? conf.title.split(":")[0].trim() : conf.title, // Use base title for modal header
+            conf.bodyUnlocked,
+            [
+                { label: "Close", onClick: function () { modalBackdrop.classList.remove("show"); } },
+                {
+                    label: key === "email" ? "Write email" :
+                            key === "whatsapp" ? "Open chat" : "Open",
+                    primary: true,
+                    onClick: function () {
+                        window.open(conf.url, "_blank");
+                        modalBackdrop.classList.remove("show");
+                    }
+                }
+            ]
+        );
+    }
+
+    // Icon and social card buttons (Updated to open instantly)
     document.querySelectorAll("[data-contact]").forEach(function (btn) {
         btn.addEventListener("click", function () {
             var key = btn.getAttribute("data-contact");
-            var conf = contactMap[key];
-            if (!conf) return;
-
-            function showUnlocked() {
-                openModal(
-                    conf.title,
-                    conf.bodyUnlocked,
-                    [
-                        { label: "Close", onClick: function () { modalBackdrop.classList.remove("show"); } },
-                        {
-                            label: key === "email" ? "Write email" :
-                                   key === "whatsapp" ? "Open chat" : "Open",
-                            primary: true,
-                            onClick: function () {
-                                window.open(conf.url, "_blank");
-                                modalBackdrop.classList.remove("show");
-                            }
-                        }
-                    ]
-                );
-            }
-
-            if (!contactUnlocked) {
-                askForPassword("Unlock", showUnlocked);
+            if (key === "email" || key === "whatsapp") {
+                 showContactModal(key);
             } else {
-                showUnlocked();
+                // For social media, directly open the URL without a modal
+                var conf = contactMap[key];
+                if (conf && conf.url) window.open(conf.url, "_blank");
             }
         });
     });
-
-    // Quick contact button (hero)
-    var contactPopupBtn = document.getElementById("contactPopupBtn");
-    contactPopupBtn.addEventListener("click", function () {
+    
+    // Quick contact button (hero) - Updated
+    var quickContactBtn = document.getElementById("quickContactBtn");
+    quickContactBtn.addEventListener("click", function () {
         openModal(
-            "QUICK CONTACT",
-            "All my contact and social details are hidden inside the icons. " +
-            "Use the password to unlock them and then choose WhatsApp, Gmail, or a social platform to reach me.",
+            "REACH OUT",
+            "You can easily connect with me directly on WhatsApp or Email using the buttons below, or visit my social profiles.",
             [
+                { label: "WhatsApp", primary: true, onClick: function() { 
+                    window.open(contactMap.whatsapp.url, "_blank"); 
+                    modalBackdrop.classList.remove("show");
+                }},
+                { label: "Email", onClick: function() { 
+                    window.open(contactMap.email.url, "_blank"); 
+                    modalBackdrop.classList.remove("show");
+                }},
                 { label: "Close", onClick: function () { modalBackdrop.classList.remove("show"); } }
             ]
         );
     });
 
-    // Locked resume button
-    var lockedResumeBtn = document.getElementById("lockedResumeBtn");
-    lockedResumeBtn.addEventListener("click", function () {
-        function openResume() { window.open("resume.pdf", "_blank"); }
-        if (!contactUnlocked) {
-            askForPassword("Unlock", openResume);
-        } else {
-            openResume();
-        }
-    });
-
-    // Resume in menu (also locked)
+    // Resume button (Now direct link)
+    var viewResumeBtn = document.getElementById("viewResumeBtn");
     var downloadResumeBtn = document.getElementById("downloadResumeBtn");
-    downloadResumeBtn.addEventListener("click", function () {
-        function openResume() { window.open("resume.pdf", "_blank"); }
-        if (!contactUnlocked) {
-            askForPassword("Unlock", openResume);
-        } else {
-            openResume();
-        }
-    });
+    
+    function openResume() { window.open("resume.pdf", "_blank"); }
+    
+    if (viewResumeBtn) viewResumeBtn.addEventListener("click", openResume);
+    if (downloadResumeBtn) downloadResumeBtn.addEventListener("click", openResume);
 
-    // Let’s talk – connect now (UPDATED with Validation)
+
+    // Let’s talk – connect now (Validation kept)
     var connectNowBtn = document.getElementById("connectNowBtn");
     connectNowBtn.addEventListener("click", function () {
         var name = (document.getElementById("talkName") || {}).value || "";
@@ -2417,7 +2412,7 @@
         contact = contact.trim();
         message = message.trim();
         
-        // --- NEW: Basic Validation ---
+        // Basic Validation
         if (!name || !contact || !message) {
              openModal(
                 "FORM INCOMPLETE",
@@ -2426,13 +2421,12 @@
                     { label: "Got it", primary: true, onClick: function () { modalBackdrop.classList.remove("show"); } }
                 ]
             );
-            return; // Stop execution if form is incomplete
+            return; 
         }
-        // --- END NEW: Basic Validation ---
 
         var subject = encodeURIComponent("Let’s connect | From your portfolio");
         var bodyLines = [];
-        bodyLines.push("Hi Peerzada Ikhlas,"); // Updated name
+        bodyLines.push("Hi Peerzada Ikhlas,"); 
         bodyLines.push("");
         bodyLines.push("I visited your portfolio and would like to connect.");
         bodyLines.push("");
@@ -2454,7 +2448,7 @@
     // Footer year
     document.getElementById("yearSpan").textContent = new Date().getFullYear();
     
-    // --- NEW: Scroll-Based Fade-In Trigger ---
+    // Scroll-Based Fade-In Trigger
     document.addEventListener("DOMContentLoaded", function() {
         var observer = new IntersectionObserver(function(entries) {
             entries.forEach(function(entry) {
@@ -2469,7 +2463,6 @@
             observer.observe(element);
         });
     });
-    // --- END NEW: Scroll-Based Fade-In Trigger ---
 </script>
 </body>
 </html>
