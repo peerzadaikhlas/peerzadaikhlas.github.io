@@ -6,36 +6,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
         :root {
-          /* NEW THEME: Midnight Sky and Coral Glow */
---bg-base: #1f2937;         /* Dark Gray / Midnight Blue */
---bg-soft: #111827;         /* Very Dark Blue/Black */
---bg-gray: #374151;         /* Medium Slate Gray */
---bg-dark-main: #0c0f16;    /* Deepest Black-Blue */
+    :root {
+    /* NEW THEME: Midnight Sky and Coral Glow */
+    --bg-base: #1f2937;         /* Dark Gray / Midnight Blue */
+    --bg-soft: #111827;         /* Very Dark Blue/Black */
+    --bg-gray: #374151;         /* Medium Slate Gray */
+    --bg-dark-main: #0c0f16;    /* Deepest Black-Blue */
 
-/* NEW ACCENT COLORS: Coral and Cool Mint */
---accent-main: #ff6b6b;     /* Vibrant Coral Red */
---accent-secondary: #64ffda; /* Cool Mint Green / Aqua */
+    /* NEW ACCENT COLORS: Coral and Cool Mint */
+    --accent-main: #ff6b6b;     /* Vibrant Coral Red */
+    --accent-secondary: #64ffda; /* Cool Mint Green / Aqua */
 
---text-dark: #f3f4f6;       /* Near White (for dark backgrounds) */
---text-muted-dark: #a1a1aa; /* Light Gray (Muted text for dark backgrounds) */
---text-light: #f9fafb;      /* White (Used in place of text-dark for consistency) */
---text-muted-light: #e5e7eb; /* Off-White (Used for contrast on text-light) */
+    --text-dark: #f3f4f6;       /* Near White (for dark backgrounds) */
+    --text-muted-dark: #a1a1aa; /* Light Gray (Muted text for dark backgrounds) */
+    --text-light: #f9fafb;      /* White */
+    --text-muted-light: #e5e7eb; /* Off-White */
 
-            /* Updated borders/shadows using new accents */
-            --border-soft-main: rgba(32, 201, 151, 0.5); /* Teal */
-            --border-soft-secondary: rgba(255, 193, 7, 0.5); /* Gold */
-            --border-soft-gray: rgba(15, 23, 42, 0.08);
+    /* Updated borders/shadows using new accents */
+    --border-soft-main: rgba(255, 107, 107, 0.5); /* Coral (from --accent-main) */
+    --border-soft-secondary: rgba(100, 255, 218, 0.5); /* Mint (from --accent-secondary) */
+    --border-soft-gray: rgba(255, 255, 255, 0.08); /* Light border on dark base */
 
-            --glass-light: rgba(255, 255, 255, 0.86);
-            --glass-dark: rgba(15, 23, 42, 0.86);
+    --glass-light: rgba(255, 255, 255, 0.15); /* Slightly transparent white on dark background */
+    --glass-dark: rgba(0, 0, 0, 0.86);
 
-            /* UPDATED SHADOW to Teal/Gold Neon */
-            --shadow-neon-soft: 0 0 16px rgba(32, 201, 151, 0.5),
-                                0 0 24px rgba(255, 193, 7, 0.35);
+    /* UPDATED SHADOW to Coral/Mint Neon */
+    --shadow-neon-soft: 
+        0 0 16px rgba(255, 107, 107, 0.6),    /* Stronger Coral Glow */
+        0 0 24px rgba(100, 255, 218, 0.4);   /* Softer Mint Secondary Glow */
 
-            --transition-fast: 0.2s ease;
-            --transition-med: 0.45s ease;
-        }
+    --transition-fast: 0.2s ease;
+    --transition-med: 0.45s ease;
+}
 
         * {
             box-sizing: border-box;
