@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Ayan | FOREVER ^ KNIGHTS </title>
+    <title>Peerzada Ikhlas | FOREVER ^ KNIGHTS </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
         :root {
@@ -11,23 +11,25 @@
             --bg-gray: #cfd5e2;
             --bg-dark-main: #050712;
 
-            --accent-blue: #5ea5ff;
-            --accent-green: #49d4b2;
+            /* NEW ACCENT COLORS: Magenta and Violet */
+            --accent-main: #FF5EA5; /* Vibrant Magenta */
+            --accent-secondary: #A55EFF; /* Electric Violet */
 
             --text-dark: #111827;
             --text-muted-dark: #4b5563;
             --text-light: #f9fafb;
             --text-muted-light: #e5e7eb;
 
-            --border-soft-blue: rgba(94, 165, 255, 0.45);
-            --border-soft-green: rgba(73, 212, 178, 0.45);
+            /* Updated borders/shadows using new accents */
+            --border-soft-main: rgba(255, 94, 165, 0.45);
+            --border-soft-secondary: rgba(165, 94, 255, 0.45);
             --border-soft-gray: rgba(15, 23, 42, 0.08);
 
             --glass-light: rgba(255, 255, 255, 0.86);
             --glass-dark: rgba(15, 23, 42, 0.86);
 
-            --shadow-neon-soft: 0 0 18px rgba(94, 165, 255, 0.38),
-                                0 0 28px rgba(73, 212, 178, 0.28);
+            --shadow-neon-soft: 0 0 18px rgba(255, 94, 165, 0.38),
+                                0 0 28px rgba(165, 94, 255, 0.28);
 
             --transition-fast: 0.2s ease;
             --transition-med: 0.45s ease;
@@ -71,8 +73,8 @@
             z-index: -3;
             pointer-events: none;
             background:
-                radial-gradient(circle at 0% 0%, rgba(94, 165, 255, 0.26), transparent 55%),
-                radial-gradient(circle at 100% 0%, rgba(73, 212, 178, 0.22), transparent 55%),
+                radial-gradient(circle at 0% 0%, rgba(255, 94, 165, 0.26), transparent 55%), /* Magenta */
+                radial-gradient(circle at 100% 0%, rgba(165, 94, 255, 0.22), transparent 55%), /* Violet */
                 radial-gradient(circle at 100% 100%, rgba(169, 181, 220, 0.3), transparent 55%),
                 radial-gradient(circle at 0% 100%, rgba(151, 174, 216, 0.27), transparent 55%),
                 linear-gradient(135deg, var(--bg-base), var(--bg-soft));
@@ -82,8 +84,8 @@
 
         body.dark .bg-layer {
             background:
-                radial-gradient(circle at 0% 0%, rgba(94, 165, 255, 0.33), transparent 55%),
-                radial-gradient(circle at 100% 0%, rgba(73, 212, 178, 0.26), transparent 55%),
+                radial-gradient(circle at 0% 0%, rgba(255, 94, 165, 0.33), transparent 55%), /* Magenta */
+                radial-gradient(circle at 100% 0%, rgba(165, 94, 255, 0.26), transparent 55%), /* Violet */
                 radial-gradient(circle at 50% 100%, rgba(62, 83, 141, 0.45), transparent 55%),
                 linear-gradient(135deg, #050712, #050812);
             filter: saturate(1.05);
@@ -113,8 +115,8 @@
             color: #7b8193;
             text-align: center;
             transform: rotate(-18deg);
-            border-top: 1px solid rgba(94, 165, 255, 0.5);
-            border-bottom: 1px solid rgba(73, 212, 178, 0.45);
+            border-top: 1px solid rgba(255, 94, 165, 0.5); /* Magenta */
+            border-bottom: 1px solid rgba(165, 94, 255, 0.45); /* Violet */
             padding: 0.6rem 2.8rem;
             backdrop-filter: blur(10px);
         }
@@ -164,7 +166,7 @@
 
         body.dark .heart-core {
             background: linear-gradient(135deg, #1e293b, #0f172a);
-            box-shadow: 0 0 22px rgba(94, 165, 255, 0.7);
+            box-shadow: 0 0 22px rgba(255, 94, 165, 0.7); /* Magenta Shadow */
         }
 
         @keyframes heartBeat {
@@ -207,7 +209,7 @@
                 rgba(6, 9, 20, 0.86),
                 transparent
             );
-            border-bottom-color: rgba(94, 165, 255, 0.28);
+            border-bottom-color: rgba(255, 94, 165, 0.28); /* Magenta */
         }
 
         .header-inner {
@@ -250,8 +252,8 @@
             border-radius: 999px;
             background:
                 radial-gradient(circle at 30% 20%, #fff, transparent 60%),
-                linear-gradient(135deg, var(--accent-blue), var(--accent-green));
-            box-shadow: 0 0 12px rgba(94, 165, 255, 0.7);
+                linear-gradient(135deg, var(--accent-main), var(--accent-secondary));
+            box-shadow: 0 0 12px rgba(255, 94, 165, 0.7); /* Magenta Shadow */
             animation: brandPulse 1.8s infinite;
         }
 
@@ -300,7 +302,7 @@
             width: 18px;
             height: 18px;
             border-radius: 999px;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+            background: linear-gradient(135deg, var(--accent-main), var(--accent-secondary));
             box-shadow: var(--shadow-neon-soft);
             transition: transform var(--transition-fast);
         }
@@ -330,7 +332,7 @@
             width: 16px;
             height: 1.7px;
             border-radius: 999px;
-            background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
+            background: linear-gradient(90deg, var(--accent-main), var(--accent-secondary));
         }
 
         .hamburger span::before,
@@ -371,7 +373,7 @@
 
         body.dark .hamburger-menu {
             background: rgba(15, 23, 42, 0.96);
-            border-color: var(--border-soft-blue);
+            border-color: var(--border-soft-main); /* Magenta Border */
             box-shadow: var(--shadow-neon-soft);
         }
 
@@ -426,7 +428,7 @@
 
         body.dark .section-card {
             background: var(--glass-dark);
-            border-color: var(--border-soft-blue);
+            border-color: var(--border-soft-main); /* Magenta Border */
             box-shadow: var(--shadow-neon-soft);
             color: var(--text-light);
         }
@@ -479,7 +481,7 @@
 
         body.dark .hero-card {
             background: var(--glass-dark);
-            border-color: var(--border-soft-blue);
+            border-color: var(--border-soft-main); /* Magenta Border */
             box-shadow: var(--shadow-neon-soft);
             color: var(--text-light);
         }
@@ -499,14 +501,14 @@
         }
 
         .hero-heading span {
-            background: linear-gradient(120deg, var(--accent-blue), var(--accent-green));
+            background: linear-gradient(120deg, var(--accent-main), var(--accent-secondary));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
 
         body.dark .hero-heading span {
-            text-shadow: 0 0 14px rgba(94, 165, 255, 0.5);
+            text-shadow: 0 0 14px rgba(255, 94, 165, 0.5); /* Magenta Shadow */
         }
 
         .hero-sub {
@@ -529,7 +531,7 @@
             width: 8px;
             height: 8px;
             border-radius: 999px;
-            background: var(--accent-blue);
+            background: var(--accent-main); /* Magenta */
         }
 
         .hero-highlight-strip {
@@ -554,7 +556,7 @@
             width: 8px;
             height: 8px;
             border-radius: 999px;
-            background: var(--accent-green);
+            background: var(--accent-secondary); /* Violet */
             position: relative;
         }
 
@@ -563,7 +565,7 @@
             position: absolute;
             inset: -4px;
             border-radius: inherit;
-            border: 1px solid rgba(73, 212, 178, 0.7);
+            border: 1px solid rgba(165, 94, 255, 0.7); /* Violet */
             opacity: 0.6;
             animation: pulse 1.6s infinite;
         }
@@ -600,14 +602,14 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+            background: linear-gradient(135deg, var(--accent-main), var(--accent-secondary));
             color: #050711;
-            box-shadow: 0 14px 24px rgba(94, 165, 255, 0.35);
+            box-shadow: 0 14px 24px rgba(255, 94, 165, 0.35); /* Magenta Shadow */
         }
 
         .btn-primary:hover {
             transform: translateY(-1px) scale(1.01);
-            box-shadow: 0 16px 28px rgba(94, 165, 255, 0.45);
+            box-shadow: 0 16px 28px rgba(255, 94, 165, 0.45); /* Magenta Shadow */
         }
 
         .btn-ghost {
@@ -621,9 +623,9 @@
         }
 
         .btn-ghost:hover {
-            background: rgba(94, 165, 255, 0.12);
+            background: rgba(255, 94, 165, 0.12); /* Magenta tint */
             transform: translateY(-1px);
-            box-shadow: 0 10px 20px rgba(94, 165, 255, 0.25);
+            box-shadow: 0 10px 20px rgba(255, 94, 165, 0.25); /* Magenta Shadow */
         }
 
         .hero-meta-row {
@@ -674,8 +676,8 @@
         }
 
         .icon-pill:hover {
-            background: rgba(94, 165, 255, 0.08);
-            box-shadow: 0 10px 20px rgba(94, 165, 255, 0.18);
+            background: rgba(255, 94, 165, 0.08); /* Magenta tint */
+            box-shadow: 0 10px 20px rgba(255, 94, 165, 0.18); /* Magenta Shadow */
             transform: translateY(-1px);
         }
 
@@ -699,7 +701,7 @@
 
         body.dark .glass-shell {
             background: var(--glass-dark);
-            border-color: var(--border-soft-blue);
+            border-color: var(--border-soft-main); /* Magenta Border */
             box-shadow: var(--shadow-neon-soft);
             color: var(--text-light);
         }
@@ -717,8 +719,8 @@
             margin: 0 auto 0.6rem auto;
             border-radius: 50%;
             overflow: hidden;
-            border: 2px solid rgba(94, 165, 255, 0.75);
-            box-shadow: 0 0 18px rgba(94, 165, 255, 0.4);
+            border: 2px solid rgba(255, 94, 165, 0.75); /* Magenta Border */
+            box-shadow: 0 0 18px rgba(255, 94, 165, 0.4); /* Magenta Shadow */
         }
 
         .photo-circle img {
@@ -775,7 +777,7 @@
             width: 7px;
             height: 7px;
             border-radius: 999px;
-            background: var(--accent-green);
+            background: var(--accent-secondary); /* Violet */
         }
 
         /* ABOUT */
@@ -825,7 +827,7 @@
 
         body.dark .highlight-card {
             background: rgba(7, 11, 26, 0.85);
-            border-color: var(--border-soft-blue);
+            border-color: var(--border-soft-main); /* Magenta Border */
         }
 
         .highlight-inner { position: relative; }
@@ -911,7 +913,7 @@
         body.dark .dot-btn { background: rgba(180, 200, 240, 0.8); }
 
         .dot-btn.active {
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+            background: linear-gradient(135deg, var(--accent-main), var(--accent-secondary));
             box-shadow: var(--shadow-neon-soft);
             transform: scale(1.25);
         }
@@ -939,7 +941,7 @@
             top: 0.15rem;
             bottom: 0.15rem;
             width: 2px;
-            background: linear-gradient(to bottom, var(--accent-blue), var(--accent-green));
+            background: linear-gradient(to bottom, var(--accent-main), var(--accent-secondary));
             opacity: 0.5;
         }
 
@@ -956,7 +958,7 @@
             width: 9px;
             height: 9px;
             border-radius: 999px;
-            background: var(--accent-blue);
+            background: var(--accent-main); /* Magenta */
         }
 
         .timeline-title { font-size: 0.86rem; font-weight: 600; }
@@ -1035,7 +1037,7 @@
 
         body.dark .mini-card {
             background: rgba(8, 11, 24, 0.9);
-            border-color: rgba(94, 165, 255, 0.28);
+            border-color: rgba(255, 94, 165, 0.28); /* Magenta Border */
         }
 
         .mini-title { font-size: 0.84rem; font-weight: 600; margin-bottom: 0.2rem; }
@@ -1063,7 +1065,7 @@
         .mini-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 14px 26px rgba(0, 0, 0, 0.18);
-            border-color: rgba(94, 165, 255, 0.45);
+            border-color: rgba(255, 94, 165, 0.45); /* Magenta Border */
         }
 
         body.dark .mini-card:hover {
@@ -1108,7 +1110,7 @@
 
         body.dark .social-card-mini {
             background: rgba(8, 11, 24, 0.9);
-            border-color: rgba(94, 165, 255, 0.28);
+            border-color: rgba(255, 94, 165, 0.28); /* Magenta Border */
         }
 
         .social-card-header {
@@ -1141,7 +1143,7 @@
         body.dark .social-mini-btn { border-color: rgba(191, 219, 254, 0.9); }
 
         .social-mini-btn:hover {
-            background: rgba(94, 165, 255, 0.16);
+            background: rgba(255, 94, 165, 0.16); /* Magenta tint */
             transform: translateY(-1px);
         }
 
@@ -1166,7 +1168,7 @@
         .social-card-mini:hover {
             transform: translateY(-3px);
             box-shadow: 0 14px 26px rgba(0, 0, 0, 0.18);
-            border-color: rgba(94, 165, 255, 0.45);
+            border-color: rgba(255, 94, 165, 0.45); /* Magenta Border */
         }
 
         body.dark .social-card-mini:hover {
@@ -1199,7 +1201,7 @@
 
         body.dark .contact-card {
             background: rgba(8, 11, 24, 0.9);
-            border-color: rgba(94, 165, 255, 0.3);
+            border-color: rgba(255, 94, 165, 0.3); /* Magenta Border */
         }
 
         .contact-row {
@@ -1246,8 +1248,8 @@
         body.dark .contact-actions button { border-color: rgba(191, 219, 254, 0.9); }
 
         .contact-actions button:hover {
-            background: rgba(94, 165, 255, 0.16);
-            box-shadow: 0 10px 20px rgba(94, 165, 255, 0.22);
+            background: rgba(255, 94, 165, 0.16); /* Magenta tint */
+            box-shadow: 0 10px 20px rgba(255, 94, 165, 0.22); /* Magenta Shadow */
             transform: translateY(-1px);
         }
 
@@ -1305,8 +1307,8 @@
 
         .field-input:focus,
         .field-textarea:focus {
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 14px rgba(94, 165, 255, 0.5);
+            border-color: var(--accent-main); /* Magenta Focus */
+            box-shadow: 0 0 14px rgba(255, 94, 165, 0.5); /* Magenta Shadow */
         }
 
         .talk-footer {
@@ -1348,7 +1350,7 @@
             border-radius: 16px;
             padding: 1rem 1rem 0.95rem;
             background: #0a0f1f;
-            border: 1px solid rgba(94, 165, 255, 0.6);
+            border: 1px solid rgba(255, 94, 165, 0.6); /* Magenta Border */
             box-shadow: var(--shadow-neon-soft);
             color: #f5f7ff;
             transform: translateY(8px) scale(0.96);
@@ -1394,7 +1396,7 @@
         }
 
         .modal-footer .primary {
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+            background: linear-gradient(135deg, var(--accent-main), var(--accent-secondary));
             color: #050711;
             border: none;
         }
@@ -1483,7 +1485,6 @@
     <div class="heart-core"></div>
 </div>
 
-<!-- WELCOME OVERLAY -->
 <div class="welcome-overlay" id="welcomeOverlay">
     <div class="welcome-inner">
         <div class="welcome-arabic">
@@ -1499,7 +1500,7 @@
     <div class="header-inner">
         <div class="brand">
             <div>
-                <div class="brand-main">AYAN</div>
+                <div class="brand-main">PEERZADA IKHLAS</div>
                 <div class="brand-tagline">HARDWARE • NETWORKING • IOT</div>
             </div>
             <div class="brand-dot"></div>
@@ -1530,12 +1531,11 @@
 
 <div class="page-wrap">
     <main>
-        <!-- HERO -->
         <section class="hero" id="hero">
             <div class="hero-card hero-text fade-in-up">
                 <div class="hero-kicker">CURIOUS TECH-DRIVEN LEARNER</div>
                 <h1 class="hero-heading">
-                    I’m <span>Ayan</span>, a tech‑savvy fresher exploring hardware, networking, and IoT.
+                    I’m <span>Peerzada Ikhlas</span>, a tech‑savvy fresher exploring hardware, networking, and IoT.
                 </h1>
                 <p class="hero-sub">
                     I enjoy understanding systems from the inside — from computer hardware and networking
@@ -1567,7 +1567,6 @@
                     <div class="hero-socials">
                         <button class="icon-pill" data-contact="twitter">
                             <span class="icon-svg">
-                                <!-- X SVG -->
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M4 4l16 16M20 4L4 20" />
                                 </svg>
@@ -1576,7 +1575,6 @@
                         </button>
                         <button class="icon-pill" data-contact="instagram">
                             <span class="icon-svg">
-                                <!-- Instagram SVG -->
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
                                     <rect x="4" y="4" width="16" height="16" rx="4"></rect>
                                     <circle cx="12" cy="12" r="3.5"></circle>
@@ -1587,7 +1585,6 @@
                         </button>
                         <button class="icon-pill" data-contact="facebook">
                             <span class="icon-svg">
-                                <!-- Facebook SVG -->
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                                     <path d="M14 8h2V4h-2a4 4 0 0 0-4 4v2H8v4h2v6h4v-6h2l1-4h-3V8a1 1 0 0 1 1-1z" />
                                 </svg>
@@ -1596,7 +1593,6 @@
                         </button>
                         <button class="icon-pill" data-contact="snapchat">
                             <span class="icon-svg">
-                                <!-- Snapchat SVG-ish ghost -->
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                     <path d="M8 9a4 4 0 0 1 8 0v4c0 1.6-1.1 3.3-2.9 3.8L12 18l-1.1-0.2A4 4 0 0 1 8 13V9z"/>
                                     <path d="M6 17c1.2.4 1.6 1.6 3.3 1.6 1.2 0 1.7-.6 2.7-.6s1.5.6 2.7.6c1.7 0 2.1-1.2 3.3-1.6" />
@@ -1612,10 +1608,10 @@
                 <div class="glass-shell">
                     <div class="glass-inner">
                         <div class="photo-circle">
-                            <img src="ayan.jpg" alt="Ayan portrait" />
+                            <img src="ayan.jpg" alt="Peerzada Ikhlas portrait" />
                         </div>
                         <div class="card-footer">
-                            <div class="card-name">Ayan</div>
+                            <div class="card-name">PEERZADA IKHLAS</div>
                             <div class="card-role">Computer Hardware • Networking • IoT</div>
                             <div class="card-status-pill">
                                 <div class="dot"></div>
@@ -1627,7 +1623,6 @@
             </div>
         </section>
 
-        <!-- ABOUT -->
         <section id="about" class="fade-in-up delay-2">
             <div class="section-card">
                 <div class="section-header">
@@ -1640,7 +1635,7 @@
                 <div class="about-grid">
                     <div class="about-text">
                         <p>
-                            I’m Ayan, a motivated fresher with a foundation in
+                            I’m Peerzada Ikhlas, a motivated fresher with a foundation in
                             <strong>computer hardware, networking, and IoT technologies</strong>.
                             I like working with machines, cables, sensors, and code — and understanding how
                             they connect to solve real problems.
@@ -1710,7 +1705,6 @@
             </div>
         </section>
 
-        <!-- EDUCATION & CERTIFICATIONS -->
         <section id="edu" class="fade-in-up delay-3">
             <div class="section-card">
                 <div class="section-header">
@@ -1793,7 +1787,6 @@
             </div>
         </section>
 
-        <!-- PROJECTS & INTERESTS -->
         <section id="projects" class="fade-in-up delay-4">
             <div class="section-card">
                 <div class="section-header">
@@ -1879,7 +1872,6 @@
             </div>
         </section>
 
-        <!-- SOCIAL CARDS -->
         <section id="social" class="fade-in-up delay-4" style="margin-top:3rem;">
             <div class="section-card">
                 <div class="section-header">
@@ -1987,7 +1979,6 @@
             </div>
         </section>
 
-        <!-- CONTACT -->
         <section id="contact" class="fade-in-up delay-4" style="margin-top:3rem;">
             <div class="section-card">
                 <div class="section-header">
@@ -2015,7 +2006,6 @@
                         <div class="contact-actions">
                             <button data-contact="whatsapp">
                                 <span class="icon-svg">
-                                    <!-- WhatsApp SVG -->
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
                                         <path d="M5 19l1.2-3.4A7 7 0 1 1 19 12a7 7 0 0 1-9.8 6.2L5 19z"/>
                                         <path d="M10.5 8.8c-.2-.4-.3-.4-.6-.4h-.4c-.2 0-.4.1-.5.3-.1.2-.7.6-.7 1.5 0 .9.7 1.8.8 1.9.1.2 1.5 2.4 3.7 3.3 1.8.7 2.2.6 2.6.5.4-.1 1.3-.5 1.4-1s.2-.9.1-1c-.1-.2-.2-.2-.5-.3l-1.4-.7c-.2-.1-.4-.1-.5.1l-.4.5c-.1.1-.2.1-.4 0-.2-.1-.9-.3-1.7-1.1-.6-.5-1-1.2-1.1-1.4-.1-.2 0-.3.1-.4l.3-.3c.1-.1.1-.2.2-.3l-.7-1.3z"/>
@@ -2025,7 +2015,6 @@
                             </button>
                             <button data-contact="email">
                                 <span class="icon-svg">
-                                    <!-- Gmail style envelope -->
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
                                         <rect x="3" y="5" width="18" height="14" rx="2"></rect>
                                         <path d="M4 7l8 6 8-6" />
@@ -2056,7 +2045,6 @@
             </div>
         </section>
 
-        <!-- LET'S TALK -->
         <section id="talk" class="fade-in-up delay-4" style="margin-top:3rem;">
             <div class="section-card">
                 <div class="section-header">
@@ -2091,11 +2079,10 @@
     </main>
 
     <footer>
-        © <span id="yearSpan"></span> Ayan · Built in light neon gray and blue with Forever Knights energy.
+        © <span id="yearSpan"></span> Peerzada Ikhlas · Built in light neon magenta and violet with Forever Knights energy.
     </footer>
 </div>
 
-<!-- MODAL -->
 <div class="modal-backdrop" id="modalBackdrop">
     <div class="modal">
         <div class="modal-title" id="modalTitle">QUICK CONTACT</div>
@@ -2281,14 +2268,17 @@
             bodyUnlocked: "You can message me on WhatsApp at:<br><br>" +
                 "<strong>+91 6262591914</strong><br><br>" +
                 "Click <strong>Open chat</strong> to start a chat with a pre‑filled greeting.",
-            url: "https://wa.me/916262591914?text=Hi%20Ayan%2C%20I%27m%20reaching%20out%20after%20visiting%20your%20portfolio."
+            // Changed "Ayan" to "Peerzada Ikhlas" in the pre-filled text
+            url: "https://wa.me/916262591914?text=Hi%20Peerzada%20Ikhlas%2C%20I%27m%20reaching%20out%20after%20visiting%20your%20portfolio."
         },
         email: {
             title: "GMAIL",
             bodyUnlocked: "My primary email address is:<br><br>" +
                 "<strong>imshahayan@gmail.com</strong><br><br>" +
                 "Click <strong>Write email</strong> to open your mail app with details pre‑filled.",
-            url: "mailto:imshahayan@gmail.com?subject=Hello%20Ayan%20%7C%20From%20your%20portfolio&body=Hi%20Ayan%2C%0D%0A%0D%0AI%20just%20visited%20your%20portfolio%20and%20would%20like%20to%20connect%20with%20you%20about..."
+            // Changed "Hello Ayan" to "Hello Peerzada Ikhlas" in the subject
+            // Changed "Hi Ayan" to "Hi Peerzada Ikhlas" in the body
+            url: "mailto:imshahayan@gmail.com?subject=Hello%20Peerzada%20Ikhlas%20%7C%20From%20your%20portfolio&body=Hi%20Peerzada%20Ikhlas%2C%0D%0A%0D%0AI%20just%20visited%20your%20portfolio%20and%20would%20like%20to%20connect%20with%20you%20about..."
         }
     };
 
@@ -2374,7 +2364,7 @@
 
         var subject = encodeURIComponent("Let’s connect | From your portfolio");
         var bodyLines = [];
-        bodyLines.push("Hi Ayan,");
+        bodyLines.push("Hi Peerzada Ikhlas,"); // Updated name
         bodyLines.push("");
         bodyLines.push("I visited your portfolio and would like to connect.");
         bodyLines.push("");
