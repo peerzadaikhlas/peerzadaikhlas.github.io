@@ -125,45 +125,6 @@
             color: #4b5263;
         }
 
-        /* ROBOT HEART BACKGROUND */
-        .bg-heart {
-            position: fixed;
-            bottom: 8%;
-            right: 8%;
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            border: 1px solid rgba(148, 163, 184, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0.35;
-            z-index: -1;
-        }
-
-        .heart-core {
-            position: relative;
-            width: 34px;
-            height: 30px;
-            transform: rotate(-45deg);
-            background: linear-gradient(135deg, #e5e7eb, #cbd5f5);
-            box-shadow: 0 0 22px rgba(148, 163, 184, 0.7);
-            animation: heartBeat 3.6s ease-in-out infinite;
-        }
-
-        .heart-core::before,
-        .heart-core::after {
-            content: "";
-            position: absolute;
-            width: 34px;
-            height: 30px;
-            border-radius: 50%;
-            background: inherit;
-        }
-
-        .heart-core::before { top: -50%; left: 0; }
-        .heart-core::after { left: 50%; top: 0; }
-
         body.dark .heart-core {
             background: linear-gradient(135deg, #1e293b, #0f172a);
             box-shadow: 0 0 22px rgba(255, 94, 165, 0.7); /* Magenta Shadow */
@@ -2198,41 +2159,7 @@
         if (e.target === modalBackdrop) modalBackdrop.classList.remove("show");
     });
 
-    // Password protection
-    var contactUnlocked = false;
-    var PASSWORD = "iloveyou";
-
-    function askForPassword(actionLabel, onSuccess) {
-        openModal(
-            "ENTER PASSWORD",
-            "To access my contact and resume info, enter the password.<br><br>" +
-            "<strong>Hint:</strong> It’s three words, simple and honest.<br><br>" +
-            "<input id='passwordInput' type='password' " +
-            "style='width:100%;margin-top:0.35rem;border-radius:8px;padding:0.35rem 0.5rem;" +
-            "border:1px solid rgba(191,219,254,0.9);background:#050711;color:#fdfdff;'>",
-            [
-                { label: "Cancel", onClick: function () { modalBackdrop.classList.remove("show"); } },
-                {
-                    label: actionLabel,
-                    primary: true,
-                    onClick: function () {
-                        var inputEl = document.getElementById("passwordInput");
-                        var val = (inputEl.value || "").toLowerCase().replace(/\s+/g, "");
-                        if (val === PASSWORD) {
-                            contactUnlocked = true;
-                            modalBackdrop.classList.remove("show");
-                            onSuccess();
-                        } else {
-                            inputEl.value = "";
-                            inputEl.placeholder = "Wrong password, try again.";
-                            inputEl.style.borderColor = "#ea4335";
-                        }
-                    }
-                }
-            ]
-        );
-    }
-
+ 
     // Contact map
     var contactMap = {
         twitter: {
