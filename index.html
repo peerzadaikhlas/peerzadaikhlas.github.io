@@ -5,43 +5,37 @@
     <title>Peerzada Ikhlas - Portfolio</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
-     :root {
-    /* ELEGANT THEME: Classic Obsidian and Copper */
-    --bg-base: #1c1c1c;         /* Deep Charcoal / Obsidian */
-    --bg-soft: #282828;         /* Slightly lighter Card/Box background */
-    --bg-gray: #4a4a4a;         /* Muted Slate Gray for subtle borders */
-    --bg-dark-main: #0a0a0a;    /* Pure Black for main headers/sections */
+        :root {
+            /* NEW THEME: Electric Teal and Goldenrod */
+            --bg-base: #e0f2f1; /* Light Teal Background */
+            --bg-soft: #f0fdfa;
+            --bg-gray: #c0e0de;
+            --bg-dark-main: #071a26; /* Deep Teal/Navy */
 
-    /* ELEGANT ACCENT COLORS: Copper and Cream */
-    --accent-main: #b87333;     /* Copper (Primary highlight/action) */
-    --accent-secondary: #f0e68c; /* Khaki/Soft Gold (Secondary accent) */
+            /* NEW ACCENT COLORS: Teal and Gold */
+            --accent-main: #20c997; /* Electric Teal */
+            --accent-secondary: #ffc107; /* Goldenrod/Bright Yellow */
 
-    --text-dark: #f5f5f5;       /* Off-White/Soft Light Gray */
-    --text-muted-dark: #b0b0b0; /* Light Muted Gray (Elegant contrast) */
-    --text-light: #f9fafb;      /* White */
-    --text-muted-light: #e0e0e0; /* Very Light Gray */
+            --text-dark: #111827;
+            --text-muted-dark: #4b5563;
+            --text-light: #f9fafb;
+            --text-muted-light: #e5e7eb;
 
-    /* ELEGANT UTILITIES */
-    --border-soft-main: rgba(184, 115, 51, 0.4); /* Subtle Copper Border */
-    --border-soft-secondary: rgba(240, 230, 140, 0.3); /* Subtle Soft Gold Border */
-    --border-soft-gray: rgba(255, 255, 255, 0.05); /* Very thin, light divider */
+            /* Updated borders/shadows using new accents */
+            --border-soft-main: rgba(32, 201, 151, 0.5); /* Teal */
+            --border-soft-secondary: rgba(255, 193, 7, 0.5); /* Gold */
+            --border-soft-gray: rgba(15, 23, 42, 0.08);
 
-    --glass-light: rgba(255, 255, 255, 0.08); /* Minimalist frosted glass */
-    --glass-dark: rgba(0, 0, 0, 0.9);
+            --glass-light: rgba(255, 255, 255, 0.86);
+            --glass-dark: rgba(15, 23, 42, 0.86);
 
-    /* ELEGANT SHADOW: Subtle Lift and Copper Glow */
-    --shadow-soft: 
-        0 4px 12px rgba(0, 0, 0, 0.3),
-        0 1px 4px rgba(0, 0, 0, 0.15); /* Standard soft shadow */
+            /* UPDATED SHADOW to Teal/Gold Neon */
+            --shadow-neon-soft: 0 0 16px rgba(32, 201, 151, 0.5),
+                                0 0 24px rgba(255, 193, 7, 0.35);
 
-    --shadow-neon-soft: 
-        0 0 10px rgba(184, 115, 51, 0.5),    /* Soft Copper Glow for focus */
-        0 0 20px rgba(184, 115, 51, 0.2);
-
-    --transition-fast: 0.25s ease-in-out;
-    --transition-med: 0.5s ease-out;
-}
-
+            --transition-fast: 0.2s ease;
+            --transition-med: 0.45s ease;
+        }
         * {
             box-sizing: border-box;
             margin: 0;
