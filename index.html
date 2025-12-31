@@ -3,244 +3,249 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peerzada_OS // Terminal_v3.0</title>
+    <title>Peerzada OS // Quantum 2026</title>
     <style>
         :root {
-            --bg: #0d1117; --panel: #161b22; --border: #30363d;
+            --bg: #0d1117; --panel: rgba(22, 27, 34, 0.8); --border: #30363d;
             --green: #39d353; --text: #c9d1d9; --accent: #58a6ff;
-            --purple: #bc8cff;
+            --glass: blur(15px);
         }
+
+        /* --- THEMES --- */
+        .theme-cyber { --bg: #030303; --green: #00d4ff; --accent: #ff00ff; --border: #ff00ff; }
+        .theme-matrix { --bg: #000; --green: #00ff00; --accent: #008f11; --border: #00ff00; }
 
         body, html {
             margin: 0; padding: 0; height: 100%;
             background: var(--bg); color: var(--text);
             font-family: 'Segoe UI', system-ui, sans-serif; overflow: hidden;
-            background-image: linear-gradient(rgba(57, 211, 83, 0.05) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(57, 211, 83, 0.05) 1px, transparent 1px);
-            background-size: 50px 50px;
+            transition: 0.5s;
         }
 
-        /* --- DESKTOP GRID --- */
         #desktop {
-            width: 100%; height: calc(100% - 55px);
-            display: grid; grid-template-columns: repeat(auto-fill, 100px);
-            grid-template-rows: repeat(auto-fill, 100px);
-            gap: 10px; padding: 20px; box-sizing: border-box;
+            width: 100%; height: calc(100% - 60px);
+            padding: 20px; display: flex; flex-direction: column; flex-wrap: wrap; gap: 15px;
+            background-image: radial-gradient(var(--border) 1px, transparent 1px);
+            background-size: 40px 40px;
         }
 
+        /* --- DESKTOP WIDGET --- */
+        .widget {
+            position: absolute; right: 30px; top: 30px;
+            background: var(--panel); backdrop-filter: var(--glass);
+            border: 1px solid var(--border); padding: 20px; border-radius: 15px;
+            text-align: center; width: 200px;
+        }
+
+        /* --- ICONS --- */
         .icon {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            cursor: pointer; border-radius: 8px; transition: 0.2s;
-            border: 1px solid transparent; text-shadow: 0 1px 2px black;
+            width: 80px; display: flex; flex-direction: column; align-items: center;
+            cursor: pointer; padding: 10px; border-radius: 10px; transition: 0.3s;
         }
-        .icon:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--border); }
-        .icon-img { font-size: 30px; margin-bottom: 5px; }
-        .icon-label { font-size: 11px; font-weight: 500; text-align: center; }
+        .icon:hover { background: rgba(255,255,255,0.1); transform: scale(1.1); }
+        .icon-img { font-size: 35px; }
+        .icon-label { font-size: 11px; margin-top: 5px; font-weight: bold; }
 
-        /* --- WINDOW SYSTEM --- */
+        /* --- WINDOWS --- */
         .window {
-            position: absolute; width: 600px; height: 400px;
-            background: var(--panel); border: 1px solid var(--border);
-            border-radius: 10px; box-shadow: 0 20px 50px rgba(0,0,0,0.7);
-            display: none; flex-direction: column; z-index: 10;
+            position: absolute; width: 700px; height: 450px;
+            background: var(--panel); backdrop-filter: var(--glass);
+            border: 1px solid var(--border); border-radius: 12px;
+            display: none; flex-direction: column; box-shadow: 0 30px 60px rgba(0,0,0,0.5);
         }
 
         .win-header {
-            background: #21262d; padding: 12px 15px; border-bottom: 1px solid var(--border);
+            padding: 12px 15px; background: rgba(255,255,255,0.05);
             display: flex; justify-content: space-between; align-items: center;
-            cursor: move; border-radius: 10px 10px 0 0;
+            cursor: move; border-bottom: 1px solid var(--border);
         }
 
-        .win-controls { display: flex; gap: 8px; }
-        .dot { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; }
-        .close { background: #ff5f56; } .min { background: #ffbd2e; }
-
-        .win-body { flex: 1; overflow: auto; padding: 15px; position: relative; }
-
-        /* --- APPS STYLING --- */
-        .term-output { color: var(--green); font-family: 'Consolas', monospace; font-size: 13px; }
-        #code-area { width: 100%; height: 90%; background: #010409; color: var(--accent); border: none; outline: none; resize: none; font-family: monospace; }
-        .file-list { display: flex; flex-wrap: wrap; gap: 20px; }
-        .file-item { text-align: center; width: 60px; cursor: pointer; font-size: 11px; }
+        .win-body { flex: 1; padding: 0; overflow: hidden; display: flex; flex-direction: column; }
+        
+        iframe { width: 100%; height: 100%; border: none; background: white; }
 
         /* --- TASKBAR --- */
         #taskbar {
-            height: 55px; background: rgba(22, 27, 34, 0.95);
-            border-top: 1px solid var(--border); position: fixed; bottom: 0; width: 100%;
-            display: flex; align-items: center; padding: 0 20px; gap: 10px; z-index: 1000;
+            height: 60px; background: rgba(1, 4, 9, 0.9); border-top: 1px solid var(--border);
+            position: fixed; bottom: 0; width: 100%; display: flex; align-items: center;
+            padding: 0 20px; gap: 12px; z-index: 9999;
+        }
+
+        .start-btn { 
+            background: var(--green); color: black; border: none; 
+            padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer;
         }
 
         .dock-item {
-            width: 40px; height: 40px; background: #30363d; border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-size: 20px; transition: 0.3s;
+            font-size: 24px; cursor: pointer; transition: 0.2s; padding: 5px;
         }
-        .dock-item:hover { transform: translateY(-5px); background: #2f81f7; }
+        .dock-item:hover { transform: translateY(-10px); }
 
-        #clock-widget { margin-left: auto; text-align: right; }
-        #clock-time { font-weight: bold; font-family: monospace; color: var(--green); font-size: 16px; }
-
-        /* --- IOT MONITOR --- */
-        .net-stat { font-size: 12px; margin-bottom: 5px; color: var(--purple); }
-        .pulse { display: inline-block; width: 8px; height: 8px; background: red; border-radius: 50%; animation: blink 1s infinite; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        /* --- APPS --- */
+        #wiki-input { width: 80%; padding: 10px; background: #1b1f23; border: 1px solid var(--border); color: white; border-radius: 5px; }
+        #term-view { background: black; color: var(--green); flex: 1; padding: 15px; font-family: monospace; overflow-y: auto; }
     </style>
 </head>
-<body>
+<body id="body-main">
 
 <div id="desktop">
-    <div class="icon" onclick="openApp('explorer')">
-        <div class="icon-img">📂</div><div class="icon-label">File Explorer</div>
-    </div>
-    <div class="icon" onclick="openApp('terminal')">
-        <div class="icon-img">🐚</div><div class="icon-label">Terminal</div>
-    </div>
-    <div class="icon" onclick="openApp('editor')">
-        <div class="icon-img">📝</div><div class="icon-label">Code Editor</div>
-    </div>
-    <div class="icon" onclick="openApp('network')">
-        <div class="icon-img">📡</div><div class="icon-label">IoT Monitor</div>
-    </div>
-    <div class="icon" onclick="openApp('zoology')">
-        <div class="icon-img">🔬</div><div class="icon-label">Zoology</div>
+    <div class="icon" onclick="openApp('wiki')"><span class="icon-img">🌍</span><span class="icon-label">Wikipedia</span></div>
+    <div class="icon" onclick="openApp('editor')"><span class="icon-img">👨‍💻</span><span class="icon-label">IDE</span></div>
+    <div class="icon" onclick="openApp('terminal')"><span class="icon-img">🐚</span><span class="icon-label">Terminal</span></div>
+    <div class="icon" onclick="openApp('zoology')"><span class="icon-img">🦁</span><span class="icon-label">Zoo-Database</span></div>
+    <div class="icon" onclick="toggleTheme()"><span class="icon-img">🎨</span><span class="icon-label">Themes</span></div>
+
+    <div class="widget">
+        <div style="font-size: 12px; color: var(--green);">COUNTDOWN TO 2026</div>
+        <div id="timer" style="font-size: 22px; font-weight: bold; margin: 10px 0;">00:00:00</div>
+        <div style="font-size: 10px; color: var(--accent);">Status: Finalizing 2025</div>
     </div>
 </div>
 
-<div id="win-terminal" class="window" style="top:50px; left:100px;">
-    <div class="win-header" onmousedown="dragWindow(event, 'win-terminal')">
-        <span>root@github: ~</span>
-        <div class="win-controls"><div class="dot min"></div><div class="dot close" onclick="closeApp('terminal')"></div></div>
+<div id="win-wiki" class="window" style="top:50px; left:100px;">
+    <div class="win-header" onmousedown="dragWin(event, 'win-wiki')">
+        <span>Wikipedia Research Tool</span>
+        <button onclick="closeApp('wiki')" style="background:red; border:none; color:white; border-radius:3px;">X</button>
     </div>
-    <div class="win-body" style="background: black;">
-        <div id="term-log" class="term-output">> GitHub OS initialized. Type 'neofetch'</div>
-        <div style="display:flex"><span style="color:var(--green)">$ </span><input id="term-in" style="background:transparent; border:none; color:white; outline:none; flex:1; font-family:monospace;"></div>
-    </div>
-</div>
-
-<div id="win-explorer" class="window" style="top:80px; left:150px;">
-    <div class="win-header" onmousedown="dragWindow(event, 'win-explorer')">
-        <span>File Explorer</span>
-        <div class="win-controls"><div class="dot close" onclick="closeApp('explorer')"></div></div>
-    </div>
-    <div class="win-body">
-        <div class="file-list">
-            <div class="file-item" onclick="viewFile('README.md')">📄<br>README.md</div>
-            <div class="file-item" onclick="viewFile('zoology_2026.pdf')">📕<br>Zoology.pdf</div>
-            <div class="file-item">📁<br>Projects</div>
-            <div class="file-item">📁<br>IoT_Config</div>
+    <div class="win-body" style="padding: 10px;">
+        <div style="display:flex; gap:10px; margin-bottom:10px;">
+            <input type="text" id="wiki-input" placeholder="Search Zoology, IoT, Networking...">
+            <button onclick="searchWiki()" class="start-btn">Search</button>
+        </div>
+        <div id="wiki-results" style="overflow-y:auto; flex:1; font-size:14px; background:white; color:black; padding:15px; border-radius:5px;">
+            Enter a topic to fetch data...
         </div>
     </div>
 </div>
 
-<div id="win-editor" class="window" style="top:120px; left:200px;">
-    <div class="win-header" onmousedown="dragWindow(event, 'win-editor')">
-        <span>Content Editor - untitled.txt</span>
-        <div class="win-controls"><div class="dot close" onclick="closeApp('editor')"></div></div>
+<div id="win-editor" class="window" style="top:100px; left:200px;">
+    <div class="win-header" onmousedown="dragWin(event, 'win-editor')">
+        <span>Quantum Code Editor</span>
+        <button onclick="closeApp('editor')" style="background:red; border:none; color:white; border-radius:3px;">X</button>
     </div>
     <div class="win-body">
-        <textarea id="code-area" placeholder="Start writing code or content..."></textarea>
-        <button onclick="saveFile()" style="background:var(--green); border:none; color:white; padding:5px 10px; border-radius:4px; cursor:pointer;">Save to Mainframe</button>
+        <textarea id="code-area" style="flex:1; background:#1b1f23; color:var(--accent); padding:20px; border:none; outline:none; font-family:monospace;">
+// Peerzada Ikhlas v2026.0.1
+function deployNewYear() {
+    console.log("Welcome to 2026!");
+    return "SUCCESS";
+}
+        </textarea>
     </div>
 </div>
 
-<div id="win-network" class="window" style="top:150px; left:250px; width:300px; height:250px;">
-    <div class="win-header" onmousedown="dragWindow(event, 'win-network')">
-        <span>IoT / Network Stats</span>
-        <div class="win-controls"><div class="dot close" onclick="closeApp('network')"></div></div>
+<div id="win-terminal" class="window" style="top:150px; left:300px;">
+    <div class="win-header" onmousedown="dragWin(event, 'win-terminal')">
+        <span>peerzada@mainframe:~</span>
+        <button onclick="closeApp('terminal')" style="background:red; border:none; color:white; border-radius:3px;">X</button>
     </div>
     <div class="win-body">
-        <div class="net-stat"><span class="pulse" style="background:#39d353"></span> Link: Peerzada_Home_IoT</div>
-        <div class="net-stat">Ping: 12ms</div>
-        <div class="net-stat">Status: <span style="color:var(--green)">Secure</span></div>
-        <div class="net-stat">Packets: <span id="packets">0</span></div>
+        <div id="term-view">
+            > System Online. Type 'help' to start.<br>
+        </div>
+        <div style="display:flex; background:black; padding:5px 15px;">
+            <span style="color:var(--green)">$ </span>
+            <input type="text" id="term-input" style="background:transparent; border:none; color:white; outline:none; flex:1; font-family:monospace;">
+        </div>
     </div>
 </div>
 
 <div id="taskbar">
-    <div class="dock-item" onclick="openApp('explorer')">📂</div>
-    <div class="dock-item" onclick="openApp('terminal')">🐚</div>
+    <button class="start-btn" onclick="openApp('terminal')">START</button>
+    <div class="dock-item" onclick="openApp('wiki')">🌍</div>
     <div class="dock-item" onclick="openApp('editor')">📝</div>
-    <div class="dock-item" onclick="openApp('network')">📡</div>
-    <div id="clock-widget">
-        <div id="clock-time">00:00:00</div>
-        <div style="font-size:10px; color:var(--gray)">Dec 31, 2025</div>
+    <div class="dock-item" onclick="openApp('terminal')">🐚</div>
+    <div style="margin-left: auto; text-align: right;">
+        <div id="sys-time" style="font-weight: bold; color: var(--green);">00:00:00</div>
+        <div id="sys-date" style="font-size: 10px; color: var(--accent);">31 DEC 2025</div>
     </div>
 </div>
 
 <script>
-    // --- Window Core Logic ---
-    let highestZ = 100;
+    let zIdx = 1000;
 
+    // --- Core Window Logic ---
     function openApp(id) {
         const win = document.getElementById('win-' + id);
         win.style.display = 'flex';
-        win.style.zIndex = ++highestZ;
+        win.style.zIndex = ++zIdx;
     }
+    function closeApp(id) { document.getElementById('win-' + id).style.display = 'none'; }
 
-    function closeApp(id) {
-        document.getElementById('win-' + id).style.display = 'none';
-    }
-
-    // --- Draggable Feature ---
-    function dragWindow(e, id) {
+    function dragWin(e, id) {
         const win = document.getElementById(id);
-        win.style.zIndex = ++highestZ;
-        let offsetX = e.clientX - win.offsetLeft;
-        let offsetY = e.clientY - win.offsetTop;
-
-        function mouseMoveHandler(e) {
-            win.style.left = (e.clientX - offsetX) + 'px';
-            win.style.top = (e.clientY - offsetY) + 'px';
-        }
-
-        function reset() {
-            window.removeEventListener('mousemove', mouseMoveHandler);
-            window.removeEventListener('mouseup', reset);
-        }
-
-        window.addEventListener('mousemove', mouseMoveHandler);
-        window.addEventListener('mouseup', reset);
+        win.style.zIndex = ++zIdx;
+        let ox = e.clientX - win.offsetLeft;
+        let oy = e.clientY - win.offsetTop;
+        function move(e) { win.style.left = (e.clientX - ox) + 'px'; win.style.top = (e.clientY - oy) + 'px'; }
+        function stop() { window.removeEventListener('mousemove', move); }
+        window.addEventListener('mousemove', move);
+        window.addEventListener('mouseup', stop);
     }
 
-    // --- Terminal Commands ---
-    const termInput = document.getElementById('term-in');
-    const termLog = document.getElementById('term-log');
-
-    termInput.addEventListener('keydown', (e) => {
-        if(e.key === 'Enter') {
-            const cmd = termInput.value.toLowerCase();
-            termLog.innerHTML += `\n<span style="color:white">$ ${cmd}</span>`;
-            
-            if(cmd === 'neofetch') {
-                termLog.innerHTML += `\nOS: Peerzada_Linux v2026\nKernel: Zoology_IoT_4.2\nAuthor: Peerzada Ikhlas\nUptime: 365 Days`;
-            } else if(cmd === 'matrix') {
-                termLog.innerHTML += `\n<span style="color:lime">Entering Matrix... [ERROR] Mainframe encrypted.</span>`;
-            } else if(cmd === 'sudo deploy') {
-                termLog.innerHTML += `\n<span style="color:yellow">Pushing 2026 to production... SUCCESS.</span>`;
+    // --- Wikipedia Search (Real Data Fetching) ---
+    async function searchWiki() {
+        const query = document.getElementById('wiki-input').value;
+        const resDiv = document.getElementById('wiki-results');
+        resDiv.innerHTML = "Fetching data from Wikipedia API...";
+        
+        try {
+            const response = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${query}`);
+            const data = await response.json();
+            if(data.extract) {
+                resDiv.innerHTML = `<h3>${data.title}</h3><p>${data.extract}</p><a href="${data.content_urls.desktop.page}" target="_blank">Read more...</a>`;
             } else {
-                termLog.innerHTML += `\nbash: command not found: ${cmd}`;
+                resDiv.innerHTML = "Topic not found. Try 'Zoology' or 'IoT'.";
             }
-            termInput.value = "";
-            termLog.parentElement.scrollTop = termLog.parentElement.scrollHeight;
+        } catch (e) {
+            resDiv.innerHTML = "Network Error.";
+        }
+    }
+
+    // --- Theme Switcher ---
+    let themes = ['', 'theme-cyber', 'theme-matrix'];
+    let currentTheme = 0;
+    function toggleTheme() {
+        currentTheme = (currentTheme + 1) % themes.length;
+        document.getElementById('body-main').className = themes[currentTheme];
+        document.getElementById('term-view').innerHTML += `<br>> Theme changed to: ${themes[currentTheme] || 'Default GitHub'}`;
+    }
+
+    // --- Terminal Logic ---
+    document.getElementById('term-input').addEventListener('keydown', (e) => {
+        if(e.key === 'Enter') {
+            const cmd = e.target.value;
+            const view = document.getElementById('term-view');
+            view.innerHTML += `<br><span style="color:white">$ ${cmd}</span>`;
+            
+            if(cmd === 'help') view.innerHTML += `<br>Available: fetch-stats, deploy-2026, matrix-mode, clear`;
+            else if(cmd === 'deploy-2026') view.innerHTML += `<br><span style="color:yellow">Merging 2025 into 2026... Progress: 100% SUCCESS.</span>`;
+            else if(cmd === 'fetch-stats') view.innerHTML += `<br>User: Peerzada Ikhlas | Pincode: 192231 | Status: Expert`;
+            else if(cmd === 'clear') view.innerHTML = "> System Online.";
+            else view.innerHTML += `<br>Unknown command: ${cmd}`;
+            
+            e.target.value = "";
+            view.scrollTop = view.scrollHeight;
         }
     });
 
-    // --- File System ---
-    function viewFile(name) {
-        openApp('editor');
-        document.getElementById('code-area').value = `/* Viewing: ${name} */\n\nContent specialized for Peerzada Ikhlas.\nLocation: Akhran, 192231.\nStatus: Finalizing 2026 Roadmap.`;
-    }
-
-    function saveFile() {
-        alert("Changes saved to the 2026 repository!");
-    }
-
-    // --- Live Widgets ---
+    // --- Live System Services ---
     setInterval(() => {
-        document.getElementById('clock-time').innerText = new Date().toLocaleTimeString();
-        document.getElementById('packets').innerText = Math.floor(Math.random() * 5000);
+        const now = new Date();
+        document.getElementById('sys-time').innerText = now.toLocaleTimeString();
+        
+        const target = new Date('January 1, 2026 00:00:00');
+        const diff = target - now;
+        if(diff > 0) {
+            const h = String(Math.floor(diff/3600000)).padStart(2,'0');
+            const m = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+            const s = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+            document.getElementById('timer').innerText = `${h}:${m}:${s}`;
+        } else {
+            document.getElementById('timer').innerText = "HAPPY 2026!";
+            document.getElementById('timer').style.color = "gold";
+        }
     }, 1000);
-
 </script>
 </body>
 </html>
