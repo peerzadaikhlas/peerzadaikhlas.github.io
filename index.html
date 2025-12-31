@@ -3,208 +3,244 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peerzada OS v2.0 // GitHub-Hacker</title>
+    <title>Peerzada_OS // Terminal_v3.0</title>
     <style>
         :root {
-            --bg: #010409; --panel: #161b22; --border: #30363d;
-            --green: #238636; --text: #e6edf3; --accent: #2f81f7;
+            --bg: #0d1117; --panel: #161b22; --border: #30363d;
+            --green: #39d353; --text: #c9d1d9; --accent: #58a6ff;
+            --purple: #bc8cff;
         }
 
         body, html {
             margin: 0; padding: 0; height: 100%;
             background: var(--bg); color: var(--text);
-            font-family: 'Segoe UI', Tahoma, sans-serif; overflow: hidden;
-            background-image: radial-gradient(#1b1f23 1px, transparent 1px);
-            background-size: 30px 30px;
+            font-family: 'Segoe UI', system-ui, sans-serif; overflow: hidden;
+            background-image: linear-gradient(rgba(57, 211, 83, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(57, 211, 83, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
         }
 
-        /* --- DESKTOP --- */
-        #desktop { width: 100%; height: calc(100% - 50px); position: relative; }
-
-        .desktop-icon {
-            width: 80px; text-align: center; padding: 15px;
-            cursor: pointer; transition: 0.2s;
+        /* --- DESKTOP GRID --- */
+        #desktop {
+            width: 100%; height: calc(100% - 55px);
+            display: grid; grid-template-columns: repeat(auto-fill, 100px);
+            grid-template-rows: repeat(auto-fill, 100px);
+            gap: 10px; padding: 20px; box-sizing: border-box;
         }
-        .desktop-icon:hover { background: rgba(255,255,255,0.05); border-radius: 8px; }
-        .desktop-icon img { width: 40px; display: block; margin: 0 auto 5px; }
-        .desktop-icon span { font-size: 12px; }
 
-        /* --- WINDOWS --- */
+        .icon {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            cursor: pointer; border-radius: 8px; transition: 0.2s;
+            border: 1px solid transparent; text-shadow: 0 1px 2px black;
+        }
+        .icon:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--border); }
+        .icon-img { font-size: 30px; margin-bottom: 5px; }
+        .icon-label { font-size: 11px; font-weight: 500; text-align: center; }
+
+        /* --- WINDOW SYSTEM --- */
         .window {
-            position: absolute; width: 500px; height: 350px;
+            position: absolute; width: 600px; height: 400px;
             background: var(--panel); border: 1px solid var(--border);
-            border-radius: 8px; box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-            display: none; flex-direction: column; overflow: hidden;
-            z-index: 10;
+            border-radius: 10px; box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            display: none; flex-direction: column; z-index: 10;
         }
 
         .win-header {
-            background: #21262d; padding: 10px 15px;
+            background: #21262d; padding: 12px 15px; border-bottom: 1px solid var(--border);
             display: flex; justify-content: space-between; align-items: center;
-            cursor: move; border-bottom: 1px solid var(--border);
+            cursor: move; border-radius: 10px 10px 0 0;
         }
 
         .win-controls { display: flex; gap: 8px; }
-        .win-dot { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; }
-        .dot-close { background: #ff5f56; }
-        .dot-min { background: #ffbd2e; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; }
+        .close { background: #ff5f56; } .min { background: #ffbd2e; }
 
-        .win-content { flex: 1; padding: 15px; overflow-y: auto; font-family: monospace; }
+        .win-body { flex: 1; overflow: auto; padding: 15px; position: relative; }
 
-        /* --- APPS --- */
-        #term-out { color: #39d353; font-size: 13px; white-space: pre-wrap; }
-        #term-in { background: transparent; border: none; color: white; width: 100%; outline: none; font-family: inherit; }
+        /* --- APPS STYLING --- */
+        .term-output { color: var(--green); font-family: 'Consolas', monospace; font-size: 13px; }
+        #code-area { width: 100%; height: 90%; background: #010409; color: var(--accent); border: none; outline: none; resize: none; font-family: monospace; }
+        .file-list { display: flex; flex-wrap: wrap; gap: 20px; }
+        .file-item { text-align: center; width: 60px; cursor: pointer; font-size: 11px; }
 
         /* --- TASKBAR --- */
         #taskbar {
-            height: 50px; background: rgba(22, 27, 34, 0.9);
-            backdrop-filter: blur(10px); border-top: 1px solid var(--border);
-            position: fixed; bottom: 0; width: 100%;
-            display: flex; align-items: center; padding: 0 20px; gap: 15px;
+            height: 55px; background: rgba(22, 27, 34, 0.95);
+            border-top: 1px solid var(--border); position: fixed; bottom: 0; width: 100%;
+            display: flex; align-items: center; padding: 0 20px; gap: 10px; z-index: 1000;
         }
 
-        .task-btn {
-            background: #30363d; border: 1px solid var(--border);
-            color: white; padding: 5px 12px; border-radius: 4px; cursor: pointer;
-            font-size: 13px; display: flex; align-items: center; gap: 8px;
+        .dock-item {
+            width: 40px; height: 40px; background: #30363d; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 20px; transition: 0.3s;
         }
-        .task-btn:hover { background: #3d444d; }
+        .dock-item:hover { transform: translateY(-5px); background: #2f81f7; }
 
-        /* --- CLOCK --- */
-        #clock { margin-left: auto; font-weight: bold; font-family: monospace; color: var(--green); }
+        #clock-widget { margin-left: auto; text-align: right; }
+        #clock-time { font-weight: bold; font-family: monospace; color: var(--green); font-size: 16px; }
 
-        .loading-bar { width: 0%; height: 10px; background: var(--green); margin-top: 10px; transition: 0.1s; }
+        /* --- IOT MONITOR --- */
+        .net-stat { font-size: 12px; margin-bottom: 5px; color: var(--purple); }
+        .pulse { display: inline-block; width: 8px; height: 8px; background: red; border-radius: 50%; animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
     </style>
 </head>
 <body>
 
 <div id="desktop">
-    <div class="desktop-icon" onclick="openApp('terminal')">
-        <span>🐚</span><br><span>Terminal</span>
+    <div class="icon" onclick="openApp('explorer')">
+        <div class="icon-img">📂</div><div class="icon-label">File Explorer</div>
     </div>
-    <div class="desktop-icon" onclick="openApp('zoology')">
-        <span>🔬</span><br><span>Zoology Lab</span>
+    <div class="icon" onclick="openApp('terminal')">
+        <div class="icon-img">🐚</div><div class="icon-label">Terminal</div>
     </div>
-</div>
-
-<div id="win-terminal" class="window" style="top: 50px; left: 50px;">
-    <div class="win-header">
-        <span>bash — peerzada@github</span>
-        <div class="win-controls">
-            <div class="win-dot dot-min" onclick="minimizeApp('terminal')"></div>
-            <div class="win-dot dot-close" onclick="closeApp('terminal')"></div>
-        </div>
+    <div class="icon" onclick="openApp('editor')">
+        <div class="icon-img">📝</div><div class="icon-label">Code Editor</div>
     </div>
-    <div class="win-content">
-        <div id="term-out">Welcome to GitHub OS. Type 'help' for commands.</div>
-        <div style="display:flex">
-            <span>$ </span><input type="text" id="term-in" autofocus>
-        </div>
+    <div class="icon" onclick="openApp('network')">
+        <div class="icon-img">📡</div><div class="icon-label">IoT Monitor</div>
+    </div>
+    <div class="icon" onclick="openApp('zoology')">
+        <div class="icon-img">🔬</div><div class="icon-label">Zoology</div>
     </div>
 </div>
 
-<div id="win-zoology" class="window" style="top: 100px; left: 400px; width: 400px; height: 300px;">
-    <div class="win-header">
-        <span>Specimen Explorer</span>
-        <div class="win-controls">
-            <div class="win-dot dot-min" onclick="minimizeApp('zoology')"></div>
-            <div class="win-dot dot-close" onclick="closeApp('zoology')"></div>
+<div id="win-terminal" class="window" style="top:50px; left:100px;">
+    <div class="win-header" onmousedown="dragWindow(event, 'win-terminal')">
+        <span>root@github: ~</span>
+        <div class="win-controls"><div class="dot min"></div><div class="dot close" onclick="closeApp('terminal')"></div></div>
+    </div>
+    <div class="win-body" style="background: black;">
+        <div id="term-log" class="term-output">> GitHub OS initialized. Type 'neofetch'</div>
+        <div style="display:flex"><span style="color:var(--green)">$ </span><input id="term-in" style="background:transparent; border:none; color:white; outline:none; flex:1; font-family:monospace;"></div>
+    </div>
+</div>
+
+<div id="win-explorer" class="window" style="top:80px; left:150px;">
+    <div class="win-header" onmousedown="dragWindow(event, 'win-explorer')">
+        <span>File Explorer</span>
+        <div class="win-controls"><div class="dot close" onclick="closeApp('explorer')"></div></div>
+    </div>
+    <div class="win-body">
+        <div class="file-list">
+            <div class="file-item" onclick="viewFile('README.md')">📄<br>README.md</div>
+            <div class="file-item" onclick="viewFile('zoology_2026.pdf')">📕<br>Zoology.pdf</div>
+            <div class="file-item">📁<br>Projects</div>
+            <div class="file-item">📁<br>IoT_Config</div>
         </div>
     </div>
-    <div class="win-content">
-        <h4 style="color:var(--accent)">Phylum: Chordata</h4>
-        <ul style="font-size: 12px;">
-            <li>Class: Mammalia</li>
-            <li>Status: Analyzing...</li>
-            <li>2026 Objective: Master Angiosperm Morphology</li>
-        </ul>
-        <div id="dna-anim" style="color:var(--green); font-size:10px;">ATGC...ATGC...ATGC</div>
+</div>
+
+<div id="win-editor" class="window" style="top:120px; left:200px;">
+    <div class="win-header" onmousedown="dragWindow(event, 'win-editor')">
+        <span>Content Editor - untitled.txt</span>
+        <div class="win-controls"><div class="dot close" onclick="closeApp('editor')"></div></div>
+    </div>
+    <div class="win-body">
+        <textarea id="code-area" placeholder="Start writing code or content..."></textarea>
+        <button onclick="saveFile()" style="background:var(--green); border:none; color:white; padding:5px 10px; border-radius:4px; cursor:pointer;">Save to Mainframe</button>
+    </div>
+</div>
+
+<div id="win-network" class="window" style="top:150px; left:250px; width:300px; height:250px;">
+    <div class="win-header" onmousedown="dragWindow(event, 'win-network')">
+        <span>IoT / Network Stats</span>
+        <div class="win-controls"><div class="dot close" onclick="closeApp('network')"></div></div>
+    </div>
+    <div class="win-body">
+        <div class="net-stat"><span class="pulse" style="background:#39d353"></span> Link: Peerzada_Home_IoT</div>
+        <div class="net-stat">Ping: 12ms</div>
+        <div class="net-stat">Status: <span style="color:var(--green)">Secure</span></div>
+        <div class="net-stat">Packets: <span id="packets">0</span></div>
     </div>
 </div>
 
 <div id="taskbar">
-    <button class="task-btn" onclick="openApp('terminal')">💻 Terminal</button>
-    <button class="task-btn" onclick="openApp('zoology')">🔬 Lab</button>
-    <div id="clock">00:00:00</div>
+    <div class="dock-item" onclick="openApp('explorer')">📂</div>
+    <div class="dock-item" onclick="openApp('terminal')">🐚</div>
+    <div class="dock-item" onclick="openApp('editor')">📝</div>
+    <div class="dock-item" onclick="openApp('network')">📡</div>
+    <div id="clock-widget">
+        <div id="clock-time">00:00:00</div>
+        <div style="font-size:10px; color:var(--gray)">Dec 31, 2025</div>
+    </div>
 </div>
 
 <script>
-    let zIndexCounter = 100;
+    // --- Window Core Logic ---
+    let highestZ = 100;
 
-    // --- Window Logic ---
-    function openApp(appId) {
-        const win = document.getElementById(`win-${appId}`);
+    function openApp(id) {
+        const win = document.getElementById('win-' + id);
         win.style.display = 'flex';
-        win.style.zIndex = ++zIndexCounter;
+        win.style.zIndex = ++highestZ;
     }
 
-    function closeApp(appId) {
-        document.getElementById(`win-${appId}`).style.display = 'none';
+    function closeApp(id) {
+        document.getElementById('win-' + id).style.display = 'none';
     }
 
-    function minimizeApp(appId) {
-        document.getElementById(`win-${appId}`).style.display = 'none';
+    // --- Draggable Feature ---
+    function dragWindow(e, id) {
+        const win = document.getElementById(id);
+        win.style.zIndex = ++highestZ;
+        let offsetX = e.clientX - win.offsetLeft;
+        let offsetY = e.clientY - win.offsetTop;
+
+        function mouseMoveHandler(e) {
+            win.style.left = (e.clientX - offsetX) + 'px';
+            win.style.top = (e.clientY - offsetY) + 'px';
+        }
+
+        function reset() {
+            window.removeEventListener('mousemove', mouseMoveHandler);
+            window.removeEventListener('mouseup', reset);
+        }
+
+        window.addEventListener('mousemove', mouseMoveHandler);
+        window.addEventListener('mouseup', reset);
     }
 
-    // --- Terminal Logic ---
-    const input = document.getElementById('term-in');
-    const output = document.getElementById('term-out');
+    // --- Terminal Commands ---
+    const termInput = document.getElementById('term-in');
+    const termLog = document.getElementById('term-log');
 
-    input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            const cmd = input.value.trim().toLowerCase();
-            output.innerHTML += `\n$ ${input.value}`;
+    termInput.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter') {
+            const cmd = termInput.value.toLowerCase();
+            termLog.innerHTML += `\n<span style="color:white">$ ${cmd}</span>`;
             
-            if (cmd === 'help') {
-                output.innerHTML += `\nAvailable: ls, neofetch, sudo deploy, clear, whoami`;
-            } else if (cmd === 'ls') {
-                output.innerHTML += `\n2025_archive/  zoology_notes.md  github_secrets.env`;
-            } else if (cmd === 'whoami') {
-                output.innerHTML += `\nUser: Peerzada Ikhlas | Role: Developer & Zoology Student`;
-            } else if (cmd === 'neofetch') {
-                output.innerHTML += `\nOS: GitHub Linux 2.0\nUptime: 365 Days\nTheme: Matrix-Green`;
-            } else if (cmd === 'sudo deploy') {
-                startDeployment();
-            } else if (cmd === 'clear') {
-                output.innerHTML = "Terminal Cleared.";
+            if(cmd === 'neofetch') {
+                termLog.innerHTML += `\nOS: Peerzada_Linux v2026\nKernel: Zoology_IoT_4.2\nAuthor: Peerzada Ikhlas\nUptime: 365 Days`;
+            } else if(cmd === 'matrix') {
+                termLog.innerHTML += `\n<span style="color:lime">Entering Matrix... [ERROR] Mainframe encrypted.</span>`;
+            } else if(cmd === 'sudo deploy') {
+                termLog.innerHTML += `\n<span style="color:yellow">Pushing 2026 to production... SUCCESS.</span>`;
             } else {
-                output.innerHTML += `\nCommand not found: ${cmd}`;
+                termLog.innerHTML += `\nbash: command not found: ${cmd}`;
             }
-
-            input.value = "";
-            output.parentElement.scrollTop = output.parentElement.scrollHeight;
+            termInput.value = "";
+            termLog.parentElement.scrollTop = termLog.parentElement.scrollHeight;
         }
     });
 
-    function startDeployment() {
-        output.innerHTML += `\n<span style="color:yellow">Initiating 2026 Deployment...</span>\n`;
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += 10;
-            output.innerHTML += `[${'#'.repeat(progress/10)}${'.'.repeat(10-progress/10)}] ${progress}% Done\n`;
-            if (progress >= 100) {
-                clearInterval(interval);
-                output.innerHTML += `\n<span style="color:#39d353">✔ 2026 DEPLOYMENT SUCCESSFUL. HAPPY NEW YEAR!</span>`;
-            }
-            output.parentElement.scrollTop = output.parentElement.scrollHeight;
-        }, 200);
+    // --- File System ---
+    function viewFile(name) {
+        openApp('editor');
+        document.getElementById('code-area').value = `/* Viewing: ${name} */\n\nContent specialized for Peerzada Ikhlas.\nLocation: Akhran, 192231.\nStatus: Finalizing 2026 Roadmap.`;
     }
 
-    // --- System Clock ---
+    function saveFile() {
+        alert("Changes saved to the 2026 repository!");
+    }
+
+    // --- Live Widgets ---
     setInterval(() => {
-        const now = new Date();
-        document.getElementById('clock').innerText = now.toLocaleTimeString();
+        document.getElementById('clock-time').innerText = new Date().toLocaleTimeString();
+        document.getElementById('packets').innerText = Math.floor(Math.random() * 5000);
     }, 1000);
 
-    // --- Zoology DNA Effect ---
-    setInterval(() => {
-        const dna = document.getElementById('dna-anim');
-        const chars = "ATGC-";
-        let str = "";
-        for(let i=0; i<20; i++) str += chars.charAt(Math.floor(Math.random()*chars.length));
-        dna.innerText = str;
-    }, 100);
 </script>
-
 </body>
 </html>
