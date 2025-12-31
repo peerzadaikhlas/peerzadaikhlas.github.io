@@ -3,178 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>root@github:~# ./deploy_2026</title>
+    <title>Peerzada OS v2.0 // GitHub-Hacker</title>
     <style>
         :root {
-            --term-green: #27c93f;
-            --term-red: #ff5f56;
-            --term-yellow: #ffbd2e;
-            --bg-color: #0c0c0c;
-            --text-color: #d1d1d1;
-            --cmd-color: #58a6ff;
+            --bg: #010409; --panel: #161b22; --border: #30363d;
+            --green: #238636; --text: #e6edf3; --accent: #2f81f7;
         }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Fira Code', 'Courier New', Courier, monospace;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
+        body, html {
+            margin: 0; padding: 0; height: 100%;
+            background: var(--bg); color: var(--text);
+            font-family: 'Segoe UI', Tahoma, sans-serif; overflow: hidden;
+            background-image: radial-gradient(#1b1f23 1px, transparent 1px);
+            background-size: 30px 30px;
         }
 
-        .terminal-window {
-            width: 90%;
-            max-width: 900px;
-            height: 80vh;
-            background: #161b22;
-            border-radius: 8px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-            border: 1px solid #30363d;
-            display: flex;
-            flex-direction: column;
+        /* --- DESKTOP --- */
+        #desktop { width: 100%; height: calc(100% - 50px); position: relative; }
+
+        .desktop-icon {
+            width: 80px; text-align: center; padding: 15px;
+            cursor: pointer; transition: 0.2s;
+        }
+        .desktop-icon:hover { background: rgba(255,255,255,0.05); border-radius: 8px; }
+        .desktop-icon img { width: 40px; display: block; margin: 0 auto 5px; }
+        .desktop-icon span { font-size: 12px; }
+
+        /* --- WINDOWS --- */
+        .window {
+            position: absolute; width: 500px; height: 350px;
+            background: var(--panel); border: 1px solid var(--border);
+            border-radius: 8px; box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            display: none; flex-direction: column; overflow: hidden;
+            z-index: 10;
         }
 
-        .top-bar {
-            background: #21262d;
-            padding: 10px;
-            display: flex;
-            gap: 8px;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
+        .win-header {
+            background: #21262d; padding: 10px 15px;
+            display: flex; justify-content: space-between; align-items: center;
+            cursor: move; border-bottom: 1px solid var(--border);
         }
 
-        .dot { width: 12px; height: 12px; border-radius: 50%; }
-        .red { background: var(--term-red); }
-        .yellow { background: var(--term-yellow); }
-        .green { background: var(--term-green); }
+        .win-controls { display: flex; gap: 8px; }
+        .win-dot { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; }
+        .dot-close { background: #ff5f56; }
+        .dot-min { background: #ffbd2e; }
 
-        .output-area {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            line-height: 1.5;
-            font-size: 14px;
+        .win-content { flex: 1; padding: 15px; overflow-y: auto; font-family: monospace; }
+
+        /* --- APPS --- */
+        #term-out { color: #39d353; font-size: 13px; white-space: pre-wrap; }
+        #term-in { background: transparent; border: none; color: white; width: 100%; outline: none; font-family: inherit; }
+
+        /* --- TASKBAR --- */
+        #taskbar {
+            height: 50px; background: rgba(22, 27, 34, 0.9);
+            backdrop-filter: blur(10px); border-top: 1px solid var(--border);
+            position: fixed; bottom: 0; width: 100%;
+            display: flex; align-items: center; padding: 0 20px; gap: 15px;
         }
 
-        .input-line {
-            display: flex;
-            padding: 10px 20px;
-            background: #0d1117;
-            border-bottom-left-radius: 8px;
-            border-bottom-right-radius: 8px;
+        .task-btn {
+            background: #30363d; border: 1px solid var(--border);
+            color: white; padding: 5px 12px; border-radius: 4px; cursor: pointer;
+            font-size: 13px; display: flex; align-items: center; gap: 8px;
         }
+        .task-btn:hover { background: #3d444d; }
 
-        .prompt { color: var(--term-green); margin-right: 10px; font-weight: bold; }
-        
-        input {
-            background: transparent;
-            border: none;
-            color: white;
-            flex: 1;
-            font-family: inherit;
-            font-size: 14px;
-            outline: none;
-        }
+        /* --- CLOCK --- */
+        #clock { margin-left: auto; font-weight: bold; font-family: monospace; color: var(--green); }
 
-        .blue-text { color: var(--cmd-color); }
-        .green-text { color: var(--term-green); }
-        .yellow-text { color: var(--term-yellow); }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 10px; }
+        .loading-bar { width: 0%; height: 10px; background: var(--green); margin-top: 10px; transition: 0.1s; }
     </style>
 </head>
 <body>
 
-<div class="terminal-window">
-    <div class="top-bar">
-        <div class="dot red"></div>
-        <div class="dot yellow"></div>
-        <div class="dot green"></div>
-        <div style="margin-left: auto; font-size: 12px; color: #8b949e;">bash — 80x24</div>
+<div id="desktop">
+    <div class="desktop-icon" onclick="openApp('terminal')">
+        <span>🐚</span><br><span>Terminal</span>
     </div>
-    <div class="output-area" id="output">Welcome to GitHub OS (v2026.0.1-LTS)
-Type 'help' to see available commands.
-    </div>
-    <div class="input-line">
-        <span class="prompt">peerzada@github:~$</span>
-        <input type="text" id="commandInput" autofocus spellcheck="false">
+    <div class="desktop-icon" onclick="openApp('zoology')">
+        <span>🔬</span><br><span>Zoology Lab</span>
     </div>
 </div>
 
+<div id="win-terminal" class="window" style="top: 50px; left: 50px;">
+    <div class="win-header">
+        <span>bash — peerzada@github</span>
+        <div class="win-controls">
+            <div class="win-dot dot-min" onclick="minimizeApp('terminal')"></div>
+            <div class="win-dot dot-close" onclick="closeApp('terminal')"></div>
+        </div>
+    </div>
+    <div class="win-content">
+        <div id="term-out">Welcome to GitHub OS. Type 'help' for commands.</div>
+        <div style="display:flex">
+            <span>$ </span><input type="text" id="term-in" autofocus>
+        </div>
+    </div>
+</div>
+
+<div id="win-zoology" class="window" style="top: 100px; left: 400px; width: 400px; height: 300px;">
+    <div class="win-header">
+        <span>Specimen Explorer</span>
+        <div class="win-controls">
+            <div class="win-dot dot-min" onclick="minimizeApp('zoology')"></div>
+            <div class="win-dot dot-close" onclick="closeApp('zoology')"></div>
+        </div>
+    </div>
+    <div class="win-content">
+        <h4 style="color:var(--accent)">Phylum: Chordata</h4>
+        <ul style="font-size: 12px;">
+            <li>Class: Mammalia</li>
+            <li>Status: Analyzing...</li>
+            <li>2026 Objective: Master Angiosperm Morphology</li>
+        </ul>
+        <div id="dna-anim" style="color:var(--green); font-size:10px;">ATGC...ATGC...ATGC</div>
+    </div>
+</div>
+
+<div id="taskbar">
+    <button class="task-btn" onclick="openApp('terminal')">💻 Terminal</button>
+    <button class="task-btn" onclick="openApp('zoology')">🔬 Lab</button>
+    <div id="clock">00:00:00</div>
+</div>
+
 <script>
-    const output = document.getElementById('output');
-    const input = document.getElementById('commandInput');
+    let zIndexCounter = 100;
 
-    const FILES = [
-        "goals_2026.txt",
-        "system_optimization.sh",
-        "happiness_config.json",
-        "zoology_notes.pdf",
-        "iot_firmware.bin"
-    ];
+    // --- Window Logic ---
+    function openApp(appId) {
+        const win = document.getElementById(`win-${appId}`);
+        win.style.display = 'flex';
+        win.style.zIndex = ++zIndexCounter;
+    }
 
-    const COMMANDS = {
-        'help': "Available commands: [ls, cat, neofetch, clear, sudo deploy, date, whoami, github]",
-        'ls': () => FILES.join("    "),
-        'whoami': "Peerzada Ikhlas: Developer | Content Writer | Tech Enthusiast",
-        'date': () => new Date().toString(),
-        'github': "Opening GitHub profile... (Simulated)",
-        'clear': () => { output.innerHTML = ""; return ""; },
-        'cat': (args) => args ? `Reading ${args}... \n[ERROR] Permission denied to view encrypted contents.` : "Usage: cat [filename]",
-        'neofetch': () => `
-<span class="green-text">       .---.</span>          <span class="blue-text">OS</span>: GitHub Linux 2026
-<span class="green-text">      /     \\</span>         <span class="blue-text">Host</span>: Peerzada-Mainframe
-<span class="green-text">      | () () |</span>       <span class="blue-text">Kernel</span>: 2026.1.1-generic
-<span class="green-text">       \\  ^  /</span>        <span class="blue-text">Uptime</span>: 365 days (Full Year)
-<span class="green-text">        |||||</span>         <span class="blue-text">Packages</span>: 2026 (happiness)
-<span class="green-text">        |||||</span>         <span class="blue-text">Shell</span>: bash 5.1
-        `
-    };
+    function closeApp(appId) {
+        document.getElementById(`win-${appId}`).style.display = 'none';
+    }
+
+    function minimizeApp(appId) {
+        document.getElementById(`win-${appId}`).style.display = 'none';
+    }
+
+    // --- Terminal Logic ---
+    const input = document.getElementById('term-in');
+    const output = document.getElementById('term-out');
 
     input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
-            const fullCmd = input.value.trim().toLowerCase();
-            const [cmd, ...args] = fullCmd.split(' ');
+            const cmd = input.value.trim().toLowerCase();
+            output.innerHTML += `\n$ ${input.value}`;
             
-            // Add prompt to output
-            output.innerHTML += `\n<span class="prompt">peerzada@github:~$</span> ${input.value}`;
-
-            if (fullCmd === 'sudo deploy') {
+            if (cmd === 'help') {
+                output.innerHTML += `\nAvailable: ls, neofetch, sudo deploy, clear, whoami`;
+            } else if (cmd === 'ls') {
+                output.innerHTML += `\n2025_archive/  zoology_notes.md  github_secrets.env`;
+            } else if (cmd === 'whoami') {
+                output.innerHTML += `\nUser: Peerzada Ikhlas | Role: Developer & Zoology Student`;
+            } else if (cmd === 'neofetch') {
+                output.innerHTML += `\nOS: GitHub Linux 2.0\nUptime: 365 Days\nTheme: Matrix-Green`;
+            } else if (cmd === 'sudo deploy') {
                 startDeployment();
-            } else if (COMMANDS[cmd]) {
-                const result = typeof COMMANDS[cmd] === 'function' ? COMMANDS[cmd](args[0]) : COMMANDS[cmd];
-                output.innerHTML += `\n${result}`;
-            } else if (fullCmd !== "") {
-                output.innerHTML += `\nbash: command not found: ${cmd}`;
+            } else if (cmd === 'clear') {
+                output.innerHTML = "Terminal Cleared.";
+            } else {
+                output.innerHTML += `\nCommand not found: ${cmd}`;
             }
 
             input.value = "";
-            output.scrollTop = output.scrollHeight;
+            output.parentElement.scrollTop = output.parentElement.scrollHeight;
         }
     });
 
     function startDeployment() {
+        output.innerHTML += `\n<span style="color:yellow">Initiating 2026 Deployment...</span>\n`;
         let progress = 0;
-        output.innerHTML += `\n<span class="yellow-text">Starting Production Deployment for 2026...</span>\n`;
         const interval = setInterval(() => {
             progress += 10;
-            output.innerHTML += `[${'#'.repeat(progress/10)}${'.'.repeat(10-progress/10)}] ${progress}%\n`;
-            output.scrollTop = output.scrollHeight;
+            output.innerHTML += `[${'#'.repeat(progress/10)}${'.'.repeat(10-progress/10)}] ${progress}% Done\n`;
             if (progress >= 100) {
                 clearInterval(interval);
-                output.innerHTML += `<span class="green-text">✔ 2026 SUCCESSFULLY MERGED INTO MAIN!</span>\n`;
-                output.innerHTML += `\n<span style="font-size: 20px;">🎉 HAPPY NEW YEAR! 🎉</span>`;
+                output.innerHTML += `\n<span style="color:#39d353">✔ 2026 DEPLOYMENT SUCCESSFUL. HAPPY NEW YEAR!</span>`;
             }
+            output.parentElement.scrollTop = output.parentElement.scrollHeight;
         }, 200);
     }
+
+    // --- System Clock ---
+    setInterval(() => {
+        const now = new Date();
+        document.getElementById('clock').innerText = now.toLocaleTimeString();
+    }, 1000);
+
+    // --- Zoology DNA Effect ---
+    setInterval(() => {
+        const dna = document.getElementById('dna-anim');
+        const chars = "ATGC-";
+        let str = "";
+        for(let i=0; i<20; i++) str += chars.charAt(Math.floor(Math.random()*chars.length));
+        dna.innerText = str;
+    }, 100);
 </script>
 
 </body>
