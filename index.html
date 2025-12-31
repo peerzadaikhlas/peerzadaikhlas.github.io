@@ -2,250 +2,85 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peerzada OS // Quantum 2026</title>
+    <title>Terminal OS v1.0</title>
     <style>
-        :root {
-            --bg: #0d1117; --panel: rgba(22, 27, 34, 0.8); --border: #30363d;
-            --green: #39d353; --text: #c9d1d9; --accent: #58a6ff;
-            --glass: blur(15px);
+        body {
+            background-color: #0a0a0a;
+            color: #00ff41;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
         }
-
-        /* --- THEMES --- */
-        .theme-cyber { --bg: #030303; --green: #00d4ff; --accent: #ff00ff; --border: #ff00ff; }
-        .theme-matrix { --bg: #000; --green: #00ff00; --accent: #008f11; --border: #00ff00; }
-
-        body, html {
-            margin: 0; padding: 0; height: 100%;
-            background: var(--bg); color: var(--text);
-            font-family: 'Segoe UI', system-ui, sans-serif; overflow: hidden;
-            transition: 0.5s;
+        #terminal {
+            padding: 20px;
+            flex-grow: 1;
+            overflow-y: auto;
+            white-space: pre-wrap;
         }
-
-        #desktop {
-            width: 100%; height: calc(100% - 60px);
-            padding: 20px; display: flex; flex-direction: column; flex-wrap: wrap; gap: 15px;
-            background-image: radial-gradient(var(--border) 1px, transparent 1px);
-            background-size: 40px 40px;
+        #input-line {
+            display: flex;
+            padding: 10px 20px;
+            background: #111;
+            border-top: 1px solid #333;
         }
-
-        /* --- DESKTOP WIDGET --- */
-        .widget {
-            position: absolute; right: 30px; top: 30px;
-            background: var(--panel); backdrop-filter: var(--glass);
-            border: 1px solid var(--border); padding: 20px; border-radius: 15px;
-            text-align: center; width: 200px;
+        input {
+            background: transparent;
+            border: none;
+            color: #00ff41;
+            outline: none;
+            flex-grow: 1;
+            font-family: inherit;
+            font-size: 1.1em;
         }
-
-        /* --- ICONS --- */
-        .icon {
-            width: 80px; display: flex; flex-direction: column; align-items: center;
-            cursor: pointer; padding: 10px; border-radius: 10px; transition: 0.3s;
-        }
-        .icon:hover { background: rgba(255,255,255,0.1); transform: scale(1.1); }
-        .icon-img { font-size: 35px; }
-        .icon-label { font-size: 11px; margin-top: 5px; font-weight: bold; }
-
-        /* --- WINDOWS --- */
-        .window {
-            position: absolute; width: 700px; height: 450px;
-            background: var(--panel); backdrop-filter: var(--glass);
-            border: 1px solid var(--border); border-radius: 12px;
-            display: none; flex-direction: column; box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-        }
-
-        .win-header {
-            padding: 12px 15px; background: rgba(255,255,255,0.05);
-            display: flex; justify-content: space-between; align-items: center;
-            cursor: move; border-bottom: 1px solid var(--border);
-        }
-
-        .win-body { flex: 1; padding: 0; overflow: hidden; display: flex; flex-direction: column; }
-        
-        iframe { width: 100%; height: 100%; border: none; background: white; }
-
-        /* --- TASKBAR --- */
-        #taskbar {
-            height: 60px; background: rgba(1, 4, 9, 0.9); border-top: 1px solid var(--border);
-            position: fixed; bottom: 0; width: 100%; display: flex; align-items: center;
-            padding: 0 20px; gap: 12px; z-index: 9999;
-        }
-
-        .start-btn { 
-            background: var(--green); color: black; border: none; 
-            padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer;
-        }
-
-        .dock-item {
-            font-size: 24px; cursor: pointer; transition: 0.2s; padding: 5px;
-        }
-        .dock-item:hover { transform: translateY(-10px); }
-
-        /* --- APPS --- */
-        #wiki-input { width: 80%; padding: 10px; background: #1b1f23; border: 1px solid var(--border); color: white; border-radius: 5px; }
-        #term-view { background: black; color: var(--green); flex: 1; padding: 15px; font-family: monospace; overflow-y: auto; }
+        .command { color: #fff; }
+        .error { color: #ff5555; }
+        .success { color: #55ff55; }
     </style>
 </head>
-<body id="body-main">
+<body>
 
-<div id="desktop">
-    <div class="icon" onclick="openApp('wiki')"><span class="icon-img">🌍</span><span class="icon-label">Wikipedia</span></div>
-    <div class="icon" onclick="openApp('editor')"><span class="icon-img">👨‍💻</span><span class="icon-label">IDE</span></div>
-    <div class="icon" onclick="openApp('terminal')"><span class="icon-img">🐚</span><span class="icon-label">Terminal</span></div>
-    <div class="icon" onclick="openApp('zoology')"><span class="icon-img">🦁</span><span class="icon-label">Zoo-Database</span></div>
-    <div class="icon" onclick="toggleTheme()"><span class="icon-img">🎨</span><span class="icon-label">Themes</span></div>
-
-    <div class="widget">
-        <div style="font-size: 12px; color: var(--green);">COUNTDOWN TO 2026</div>
-        <div id="timer" style="font-size: 22px; font-weight: bold; margin: 10px 0;">00:00:00</div>
-        <div style="font-size: 10px; color: var(--accent);">Status: Finalizing 2025</div>
-    </div>
+<div id="terminal">
+    <div>[SYSTEM READY] - TYPE 'HELP' TO SEE AVAILABLE TOOLS...</div>
 </div>
 
-<div id="win-wiki" class="window" style="top:50px; left:100px;">
-    <div class="win-header" onmousedown="dragWin(event, 'win-wiki')">
-        <span>Wikipedia Research Tool</span>
-        <button onclick="closeApp('wiki')" style="background:red; border:none; color:white; border-radius:3px;">X</button>
-    </div>
-    <div class="win-body" style="padding: 10px;">
-        <div style="display:flex; gap:10px; margin-bottom:10px;">
-            <input type="text" id="wiki-input" placeholder="Search Zoology, IoT, Networking...">
-            <button onclick="searchWiki()" class="start-btn">Search</button>
-        </div>
-        <div id="wiki-results" style="overflow-y:auto; flex:1; font-size:14px; background:white; color:black; padding:15px; border-radius:5px;">
-            Enter a topic to fetch data...
-        </div>
-    </div>
-</div>
-
-<div id="win-editor" class="window" style="top:100px; left:200px;">
-    <div class="win-header" onmousedown="dragWin(event, 'win-editor')">
-        <span>Quantum Code Editor</span>
-        <button onclick="closeApp('editor')" style="background:red; border:none; color:white; border-radius:3px;">X</button>
-    </div>
-    <div class="win-body">
-        <textarea id="code-area" style="flex:1; background:#1b1f23; color:var(--accent); padding:20px; border:none; outline:none; font-family:monospace;">
-// Peerzada Ikhlas v2026.0.1
-function deployNewYear() {
-    console.log("Welcome to 2026!");
-    return "SUCCESS";
-}
-        </textarea>
-    </div>
-</div>
-
-<div id="win-terminal" class="window" style="top:150px; left:300px;">
-    <div class="win-header" onmousedown="dragWin(event, 'win-terminal')">
-        <span>peerzada@mainframe:~</span>
-        <button onclick="closeApp('terminal')" style="background:red; border:none; color:white; border-radius:3px;">X</button>
-    </div>
-    <div class="win-body">
-        <div id="term-view">
-            > System Online. Type 'help' to start.<br>
-        </div>
-        <div style="display:flex; background:black; padding:5px 15px;">
-            <span style="color:var(--green)">$ </span>
-            <input type="text" id="term-input" style="background:transparent; border:none; color:white; outline:none; flex:1; font-family:monospace;">
-        </div>
-    </div>
-</div>
-
-<div id="taskbar">
-    <button class="start-btn" onclick="openApp('terminal')">START</button>
-    <div class="dock-item" onclick="openApp('wiki')">🌍</div>
-    <div class="dock-item" onclick="openApp('editor')">📝</div>
-    <div class="dock-item" onclick="openApp('terminal')">🐚</div>
-    <div style="margin-left: auto; text-align: right;">
-        <div id="sys-time" style="font-weight: bold; color: var(--green);">00:00:00</div>
-        <div id="sys-date" style="font-size: 10px; color: var(--accent);">31 DEC 2025</div>
-    </div>
+<div id="input-line">
+    <span>root@dummy-pc:~#&nbsp;</span>
+    <input type="text" id="commandInput" autofocus>
 </div>
 
 <script>
-    let zIdx = 1000;
+    const terminal = document.getElementById('terminal');
+    const input = document.getElementById('commandInput');
 
-    // --- Core Window Logic ---
-    function openApp(id) {
-        const win = document.getElementById('win-' + id);
-        win.style.display = 'flex';
-        win.style.zIndex = ++zIdx;
-    }
-    function closeApp(id) { document.getElementById('win-' + id).style.display = 'none'; }
+    const tools = {
+        'help': 'Available tools: nmap, sqlmap, airmon-ng, hash-crack, clear',
+        'nmap': 'Scanning target network... \n[FOUND] 192.168.1.1 (Gateway)\n[FOUND] 192.168.1.42 (Vulnerable-Node)',
+        'sqlmap': 'Checking for SQL Injection vulnerabilities... \n[STATUS] Database "user_db" detected. Extracting tables...',
+        'airmon-ng': 'Enabling monitor mode on wlan0... \n[SUCCESS] Monitor mode active on channel 6.',
+        'hash-crack': 'Brute-forcing MD5 hash: 5d41402abc4b2a76b9719d911017c592... \n[PASSWORD FOUND] "hello_world"',
+        'clear': 'CLEAR'
+    };
 
-    function dragWin(e, id) {
-        const win = document.getElementById(id);
-        win.style.zIndex = ++zIdx;
-        let ox = e.clientX - win.offsetLeft;
-        let oy = e.clientY - win.offsetTop;
-        function move(e) { win.style.left = (e.clientX - ox) + 'px'; win.style.top = (e.clientY - oy) + 'px'; }
-        function stop() { window.removeEventListener('mousemove', move); }
-        window.addEventListener('mousemove', move);
-        window.addEventListener('mouseup', stop);
-    }
-
-    // --- Wikipedia Search (Real Data Fetching) ---
-    async function searchWiki() {
-        const query = document.getElementById('wiki-input').value;
-        const resDiv = document.getElementById('wiki-results');
-        resDiv.innerHTML = "Fetching data from Wikipedia API...";
-        
-        try {
-            const response = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${query}`);
-            const data = await response.json();
-            if(data.extract) {
-                resDiv.innerHTML = `<h3>${data.title}</h3><p>${data.extract}</p><a href="${data.content_urls.desktop.page}" target="_blank">Read more...</a>`;
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            const fullCmd = input.value.toLowerCase().trim();
+            const response = tools[fullCmd] || "Command not found. Use 'help' for tool list.";
+            
+            if (fullCmd === 'clear') {
+                terminal.innerHTML = '';
             } else {
-                resDiv.innerHTML = "Topic not found. Try 'Zoology' or 'IoT'.";
+                const line = document.createElement('div');
+                line.innerHTML = `<span>root@dummy-pc:~# ${fullCmd}</span><br><span>${response}</span><br><br>`;
+                terminal.appendChild(line);
             }
-        } catch (e) {
-            resDiv.innerHTML = "Network Error.";
-        }
-    }
-
-    // --- Theme Switcher ---
-    let themes = ['', 'theme-cyber', 'theme-matrix'];
-    let currentTheme = 0;
-    function toggleTheme() {
-        currentTheme = (currentTheme + 1) % themes.length;
-        document.getElementById('body-main').className = themes[currentTheme];
-        document.getElementById('term-view').innerHTML += `<br>> Theme changed to: ${themes[currentTheme] || 'Default GitHub'}`;
-    }
-
-    // --- Terminal Logic ---
-    document.getElementById('term-input').addEventListener('keydown', (e) => {
-        if(e.key === 'Enter') {
-            const cmd = e.target.value;
-            const view = document.getElementById('term-view');
-            view.innerHTML += `<br><span style="color:white">$ ${cmd}</span>`;
             
-            if(cmd === 'help') view.innerHTML += `<br>Available: fetch-stats, deploy-2026, matrix-mode, clear`;
-            else if(cmd === 'deploy-2026') view.innerHTML += `<br><span style="color:yellow">Merging 2025 into 2026... Progress: 100% SUCCESS.</span>`;
-            else if(cmd === 'fetch-stats') view.innerHTML += `<br>User: Peerzada Ikhlas | Pincode: 192231 | Status: Expert`;
-            else if(cmd === 'clear') view.innerHTML = "> System Online.";
-            else view.innerHTML += `<br>Unknown command: ${cmd}`;
-            
-            e.target.value = "";
-            view.scrollTop = view.scrollHeight;
+            input.value = '';
+            terminal.scrollTop = terminal.scrollHeight;
         }
     });
-
-    // --- Live System Services ---
-    setInterval(() => {
-        const now = new Date();
-        document.getElementById('sys-time').innerText = now.toLocaleTimeString();
-        
-        const target = new Date('January 1, 2026 00:00:00');
-        const diff = target - now;
-        if(diff > 0) {
-            const h = String(Math.floor(diff/3600000)).padStart(2,'0');
-            const m = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
-            const s = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
-            document.getElementById('timer').innerText = `${h}:${m}:${s}`;
-        } else {
-            document.getElementById('timer').innerText = "HAPPY 2026!";
-            document.getElementById('timer').style.color = "gold";
-        }
-    }, 1000);
 </script>
 </body>
 </html>
