@@ -3,209 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mainframe // 2026_CORE</title>
+    <title>root@github:~# ./deploy_2026</title>
     <style>
         :root {
-            --neon-green: #39d353;
-            --neon-blue: #00d4ff;
-            --dark-bg: #030303;
-            --panel-bg: rgba(10, 10, 15, 0.9);
-            --border: #1f2328;
+            --term-green: #27c93f;
+            --term-red: #ff5f56;
+            --term-yellow: #ffbd2e;
+            --bg-color: #0c0c0c;
+            --text-color: #d1d1d1;
+            --cmd-color: #58a6ff;
         }
 
-        body, html {
-            margin: 0; padding: 0; height: 100%;
-            background: var(--dark-bg);
-            color: var(--neon-green);
-            font-family: 'Courier New', Courier, monospace;
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Fira Code', 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             overflow: hidden;
         }
 
-        /* --- 3D SKYLINE BACKGROUND --- */
-        .skyline-container {
-            position: absolute; top: 0; left: 0; width: 100%; height: 60%;
-            perspective: 1000px; z-index: 1;
-        }
-        .skyline {
-            display: flex; justify-content: center; align-items: flex-end;
-            height: 100%; transform: rotateX(45deg); gap: 5px;
-        }
-        .building {
-            width: 30px; background: linear-gradient(to top, var(--neon-green), transparent);
-            transition: 1s height ease-out; position: relative;
-        }
-        .building::after {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
-            background: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue);
+        .terminal-window {
+            width: 90%;
+            max-width: 900px;
+            height: 80vh;
+            background: #161b22;
+            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            border: 1px solid #30363d;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* --- OVERLAY INTERFACE --- */
-        .overlay {
-            position: relative; z-index: 10; height: 100vh;
-            display: grid; grid-template-rows: 80px 1fr 200px;
-            padding: 20px; box-sizing: border-box;
-            background: linear-gradient(180deg, transparent 50%, var(--dark-bg) 90%);
+        .top-bar {
+            background: #21262d;
+            padding: 10px;
+            display: flex;
+            gap: 8px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
         }
 
-        .header {
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 2px solid var(--neon-green); padding: 10px;
-            text-shadow: 0 0 10px var(--neon-green);
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .red { background: var(--term-red); }
+        .yellow { background: var(--term-yellow); }
+        .green { background: var(--term-green); }
+
+        .output-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            font-size: 14px;
         }
 
-        #countdown { font-size: 3rem; font-weight: bold; color: white; }
-
-        .content-grid { display: grid; grid-template-columns: 300px 1fr; gap: 20px; }
-
-        .sidebar {
-            background: var(--panel-bg); border: 1px solid var(--neon-green);
-            padding: 15px; border-radius: 5px;
+        .input-line {
+            display: flex;
+            padding: 10px 20px;
+            background: #0d1117;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
         }
 
-        .terminal {
-            background: black; border: 1px solid var(--border);
-            padding: 15px; font-size: 14px; overflow-y: auto;
-            box-shadow: inset 0 0 20px rgba(57, 211, 83, 0.1);
+        .prompt { color: var(--term-green); margin-right: 10px; font-weight: bold; }
+        
+        input {
+            background: transparent;
+            border: none;
+            color: white;
+            flex: 1;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
         }
 
-        .input-box {
-            background: var(--dark-bg); border: 1px solid var(--neon-blue);
-            color: white; padding: 15px; width: 100%; box-sizing: border-box;
-            margin-top: 10px; font-family: monospace; outline: none;
-        }
+        .blue-text { color: var(--cmd-color); }
+        .green-text { color: var(--term-green); }
+        .yellow-text { color: var(--term-yellow); }
 
-        /* --- ANIMATIONS --- */
-        .scanline {
-            width: 100%; height: 100%; position: absolute; top: 0; left: 0;
-            background: linear-gradient(to bottom, transparent 50%, rgba(57, 211, 83, 0.05) 51%);
-            background-size: 100% 4px; pointer-events: none; z-index: 100;
-        }
-
-        .glitch { animation: glitch 0.3s infinite alternate; }
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            100% { transform: translate(2px, -1px); text-shadow: -2px 0 red, 2px 0 blue; }
-        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-<div class="scanline"></div>
-
-<div class="skyline-container">
-    <div class="skyline" id="city"></div>
-</div>
-
-<div class="overlay">
-    <div class="header">
-        <div class="glitch">CORE_OS // v2026.INIT</div>
-        <div id="countdown">00:00:00</div>
-        <div>REGION: ASIA-SOUTH-1</div>
+<div class="terminal-window">
+    <div class="top-bar">
+        <div class="dot red"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+        <div style="margin-left: auto; font-size: 12px; color: #8b949e;">bash — 80x24</div>
     </div>
-
-    <div class="content-grid">
-        <div class="sidebar">
-            <h4 style="color: var(--neon-blue);">YEAR_STATS</h4>
-            <p>Ready: 98%</p>
-            <p>Uptime: 365 Days</p>
-            <p>Latency: 0ms</p>
-            <hr style="border-color: var(--border);">
-            <h4 style="color: var(--neon-blue);">ACTIVE_MODULES</h4>
-            <div id="moduleList" style="font-size: 12px; line-height: 1.8;">
-                [✔] Health.exe<br>
-                [✔] Coding.js<br>
-                [✔] Networking.api
-            </div>
-        </div>
-        <div class="terminal" id="term">
-            <div>> SYSTEM_BOOT_SEQUENCE_COMPLETE</div>
-            <div>> AWAITING_2026_OBJECTIVES...</div>
-        </div>
+    <div class="output-area" id="output">Welcome to GitHub OS (v2026.0.1-LTS)
+Type 'help' to see available commands.
     </div>
-
-    <div>
-        <input type="text" class="input-box" id="cmdInput" placeholder="INJECT GOAL INTO THE MAINFRAME..." onkeydown="if(event.key==='Enter') injectGoal()">
-        <p style="font-size: 10px; text-align: center; color: var(--neon-blue);">[PRESS ENTER TO EXECUTE COMMAND]</p>
+    <div class="input-line">
+        <span class="prompt">peerzada@github:~$</span>
+        <input type="text" id="commandInput" autofocus spellcheck="false">
     </div>
 </div>
 
 <script>
-    // 1. Generate 3D Skyline
-    const city = document.getElementById('city');
-    for(let i=0; i<40; i++) {
-        const b = document.createElement('div');
-        b.className = 'building';
-        b.style.height = Math.random() * 80 + '%';
-        city.appendChild(b);
-    }
+    const output = document.getElementById('output');
+    const input = document.getElementById('commandInput');
 
-    // 2. Countdown Timer
-    function updateClock() {
-        const now = new Date();
-        const target = new Date('January 1, 2026 00:00:00');
-        const diff = target - now;
-        
-        if (diff <= 0) {
-            document.getElementById('countdown').innerText = "2026 ACTIVE";
-            return;
+    const FILES = [
+        "goals_2026.txt",
+        "system_optimization.sh",
+        "happiness_config.json",
+        "zoology_notes.pdf",
+        "iot_firmware.bin"
+    ];
+
+    const COMMANDS = {
+        'help': "Available commands: [ls, cat, neofetch, clear, sudo deploy, date, whoami, github]",
+        'ls': () => FILES.join("    "),
+        'whoami': "Peerzada Ikhlas: Developer | Content Writer | Tech Enthusiast",
+        'date': () => new Date().toString(),
+        'github': "Opening GitHub profile... (Simulated)",
+        'clear': () => { output.innerHTML = ""; return ""; },
+        'cat': (args) => args ? `Reading ${args}... \n[ERROR] Permission denied to view encrypted contents.` : "Usage: cat [filename]",
+        'neofetch': () => `
+<span class="green-text">       .---.</span>          <span class="blue-text">OS</span>: GitHub Linux 2026
+<span class="green-text">      /     \\</span>         <span class="blue-text">Host</span>: Peerzada-Mainframe
+<span class="green-text">      | () () |</span>       <span class="blue-text">Kernel</span>: 2026.1.1-generic
+<span class="green-text">       \\  ^  /</span>        <span class="blue-text">Uptime</span>: 365 days (Full Year)
+<span class="green-text">        |||||</span>         <span class="blue-text">Packages</span>: 2026 (happiness)
+<span class="green-text">        |||||</span>         <span class="blue-text">Shell</span>: bash 5.1
+        `
+    };
+
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            const fullCmd = input.value.trim().toLowerCase();
+            const [cmd, ...args] = fullCmd.split(' ');
+            
+            // Add prompt to output
+            output.innerHTML += `\n<span class="prompt">peerzada@github:~$</span> ${input.value}`;
+
+            if (fullCmd === 'sudo deploy') {
+                startDeployment();
+            } else if (COMMANDS[cmd]) {
+                const result = typeof COMMANDS[cmd] === 'function' ? COMMANDS[cmd](args[0]) : COMMANDS[cmd];
+                output.innerHTML += `\n${result}`;
+            } else if (fullCmd !== "") {
+                output.innerHTML += `\nbash: command not found: ${cmd}`;
+            }
+
+            input.value = "";
+            output.scrollTop = output.scrollHeight;
         }
+    });
 
-        const h = String(Math.floor(diff/3600000)).padStart(2,'0');
-        const m = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
-        const s = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
-        document.getElementById('countdown').innerText = `${h}:${m}:${s}`;
+    function startDeployment() {
+        let progress = 0;
+        output.innerHTML += `\n<span class="yellow-text">Starting Production Deployment for 2026...</span>\n`;
+        const interval = setInterval(() => {
+            progress += 10;
+            output.innerHTML += `[${'#'.repeat(progress/10)}${'.'.repeat(10-progress/10)}] ${progress}%\n`;
+            output.scrollTop = output.scrollHeight;
+            if (progress >= 100) {
+                clearInterval(interval);
+                output.innerHTML += `<span class="green-text">✔ 2026 SUCCESSFULLY MERGED INTO MAIN!</span>\n`;
+                output.innerHTML += `\n<span style="font-size: 20px;">🎉 HAPPY NEW YEAR! 🎉</span>`;
+            }
+        }, 200);
     }
-    setInterval(updateClock, 1000);
-
-    // 3. Goal Injection Feature
-    function injectGoal() {
-        const input = document.getElementById('cmdInput');
-        const term = document.getElementById('term');
-        if(!input.value) return;
-
-        const val = input.value.toUpperCase();
-        
-        // Add to Terminal
-        const line = document.createElement('div');
-        line.innerHTML = `<span style="color:var(--neon-blue)">> INJECTING:</span> ${val} ... <span style="color:white">OK</span>`;
-        term.appendChild(line);
-        term.scrollTop = term.scrollHeight;
-
-        // Visual Effect: Make buildings grow
-        const buildings = document.querySelectorAll('.building');
-        buildings[Math.floor(Math.random()*buildings.length)].style.height = '100%';
-
-        // Add to Sidebar
-        const modules = document.getElementById('moduleList');
-        modules.innerHTML += `<br>[+] ${val}.cmd`;
-
-        input.value = "";
-        playSyncSound();
-    }
-
-    // 4. Synthesized Audio
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function playSyncSound() {
-        const osc = audioCtx.createOscillator();
-        const g = audioCtx.createGain();
-        osc.connect(g); g.connect(audioCtx.destination);
-        osc.frequency.setValueAtTime(200, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.2);
-        g.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        g.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.2);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.2);
-    }
-
-    // 5. Random System Log Activity
-    const sysLogs = ["Syncing contribution nodes...", "Updating git_history...", "Allocating brain_memory...", "Fetching 2026_assets..."];
-    setInterval(() => {
-        const term = document.getElementById('term');
-        const line = document.createElement('div');
-        line.innerText = `> ${sysLogs[Math.floor(Math.random()*sysLogs.length)]}`;
-        term.appendChild(line);
-        if(term.childNodes.length > 15) term.removeChild(term.firstChild);
-        term.scrollTop = term.scrollHeight;
-    }, 4000);
 </script>
+
 </body>
 </html>
