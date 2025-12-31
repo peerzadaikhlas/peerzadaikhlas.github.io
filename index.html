@@ -2,85 +2,310 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Terminal OS v1.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GHOST_SHELL v2.0</title>
     <style>
+        /* --- VISUALS & CRT EFFECT --- */
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
         body {
-            background-color: #0a0a0a;
-            color: #00ff41;
-            font-family: 'Courier New', Courier, monospace;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
+            background-color: #050505;
+            color: #0f0;
+            font-family: 'VT323', monospace;
+            font-size: 1.2rem;
             margin: 0;
             overflow: hidden;
-        }
-        #terminal {
-            padding: 20px;
-            flex-grow: 1;
-            overflow-y: auto;
-            white-space: pre-wrap;
-        }
-        #input-line {
+            height: 100vh;
             display: flex;
-            padding: 10px 20px;
-            background: #111;
-            border-top: 1px solid #333;
+            flex-direction: column;
+            text-shadow: 0 0 5px #0f0;
         }
+
+        /* CRT Scanline Overlay */
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        #terminal {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #0f0; border-radius: 5px; }
+
+        .input-line {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .prompt {
+            color: #0f0;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
         input {
             background: transparent;
             border: none;
-            color: #00ff41;
-            outline: none;
+            color: #fff;
+            font-family: 'VT323', monospace;
+            font-size: 1.2rem;
             flex-grow: 1;
-            font-family: inherit;
-            font-size: 1.1em;
+            outline: none;
+            caret-color: #0f0;
+            text-shadow: 0 0 5px #fff;
         }
-        .command { color: #fff; }
-        .error { color: #ff5555; }
-        .success { color: #55ff55; }
+
+        .output { margin-bottom: 5px; line-height: 1.4; white-space: pre-wrap; }
+        .error { color: #ff3333; text-shadow: 0 0 5px #ff3333; }
+        .info { color: #00ffff; }
+        .warn { color: #ffff00; }
+        .system { color: #555; font-style: italic;}
+
+        /* Matrix Canvas */
+        canvas {
+            position: absolute;
+            top: 0; left: 0;
+            z-index: 1;
+            opacity: 0.1;
+        }
     </style>
 </head>
 <body>
 
-<div id="terminal">
-    <div>[SYSTEM READY] - TYPE 'HELP' TO SEE AVAILABLE TOOLS...</div>
-</div>
+    <div class="scanlines"></div>
+    <canvas id="matrixCanvas"></canvas>
 
-<div id="input-line">
-    <span>root@dummy-pc:~#&nbsp;</span>
-    <input type="text" id="commandInput" autofocus>
-</div>
+    <div id="terminal" onclick="document.getElementById('cmd').focus()">
+        <div id="output-container"></div>
+        <div class="input-line" id="input-area" style="display:none;">
+            <span class="prompt">root@ghost:~/workspace$</span>
+            <input type="text" id="cmd" autocomplete="off" spellcheck="false">
+        </div>
+    </div>
 
 <script>
-    const terminal = document.getElementById('terminal');
-    const input = document.getElementById('commandInput');
-
-    const tools = {
-        'help': 'Available tools: nmap, sqlmap, airmon-ng, hash-crack, clear',
-        'nmap': 'Scanning target network... \n[FOUND] 192.168.1.1 (Gateway)\n[FOUND] 192.168.1.42 (Vulnerable-Node)',
-        'sqlmap': 'Checking for SQL Injection vulnerabilities... \n[STATUS] Database "user_db" detected. Extracting tables...',
-        'airmon-ng': 'Enabling monitor mode on wlan0... \n[SUCCESS] Monitor mode active on channel 6.',
-        'hash-crack': 'Brute-forcing MD5 hash: 5d41402abc4b2a76b9719d911017c592... \n[PASSWORD FOUND] "hello_world"',
-        'clear': 'CLEAR'
+    // --- CONFIGURATION ---
+    const fileSystem = {
+        'workspace': {
+            'readme.txt': 'Welcome to Ghost Shell v2.0.\nThis is a portfolio simulation.\nType "help" to see commands.',
+            'targets.txt': '192.168.1.55 (Vulnerable)\n10.0.0.3 (Secure)\n172.16.0.1 (Gateway)',
+            'secret.enc': '[ENCRYPTED] Use "decrypt" tool to view.'
+        },
+        'system': {
+            'kernel.log': 'Boot sequence complete. All systems nominal.',
+            'users': 'root, guest, admin'
+        }
     };
 
-    input.addEventListener('keydown', (e) => {
+    let currentDir = 'workspace';
+    const outputContainer = document.getElementById('output-container');
+    const inputArea = document.getElementById('input-area');
+    const cmdInput = document.getElementById('cmd');
+
+    // --- BOOT SEQUENCE ---
+    async function boot() {
+        const bootText = [
+            "GHOST_BIOS v2.1.0 release 12/2025",
+            "Checking Memory........ OK",
+            "Loading Kernel......... OK",
+            "Mounting /dev/sda1..... OK",
+            "Initializing Network... CONNECTED (1000Mbps)",
+            "Starting Ghost Shell..."
+        ];
+
+        for (let line of bootText) {
+            printLine(line, 'system');
+            await new Promise(r => setTimeout(r, 300));
+        }
+        
+        printLine("<br>----------------------------------------", 'info');
+        printLine(" WELCOME USER. SYSTEM READY.", 'info');
+        printLine(" Type 'help' for a list of commands.", 'info');
+        printLine("----------------------------------------<br>", 'info');
+        inputArea.style.display = 'flex';
+        cmdInput.focus();
+    }
+
+    // --- COMMAND HANDLING ---
+    cmdInput.addEventListener('keydown', async function(e) {
         if (e.key === 'Enter') {
-            const fullCmd = input.value.toLowerCase().trim();
-            const response = tools[fullCmd] || "Command not found. Use 'help' for tool list.";
+            const val = this.value.trim();
+            if(!val) return;
             
-            if (fullCmd === 'clear') {
-                terminal.innerHTML = '';
-            } else {
-                const line = document.createElement('div');
-                line.innerHTML = `<span>root@dummy-pc:~# ${fullCmd}</span><br><span>${response}</span><br><br>`;
-                terminal.appendChild(line);
-            }
+            // Print previous command
+            printLine(`root@ghost:~/${currentDir}$ ${val}`, 'prompt');
+            this.value = '';
+            this.disabled = true; // Disable input while processing
+
+            // Process Command
+            await processCommand(val.toLowerCase());
             
-            input.value = '';
-            terminal.scrollTop = terminal.scrollHeight;
+            this.disabled = false;
+            this.focus();
+            window.scrollTo(0, document.body.scrollHeight);
         }
     });
+
+    async function processCommand(cmd) {
+        const args = cmd.split(' ');
+        const main = args[0];
+
+        switch(main) {
+            case 'help':
+                printLine(`
+  AVAILABLE COMMANDS:
+  -------------------
+  ls          List files in current directory
+  cat [file]  Read contents of a file
+  clear       Clear the terminal screen
+  whoami      Display user information
+  date        Show system time
+  
+  HACKING TOOLS:
+  --------------
+  nmap [ip]   Scan a target for open ports
+  hydra       Brute force attack simulation
+  decrypt     Decrypt protected files
+  matrix      Toggle background visualizer
+                `, 'info');
+                break;
+
+            case 'clear':
+                outputContainer.innerHTML = '';
+                break;
+
+            case 'ls':
+                const files = Object.keys(fileSystem[currentDir] || {}).join('   ');
+                printLine(files || '(empty)', 'info');
+                break;
+
+            case 'cat':
+                if (!args[1]) { printLine("Usage: cat [filename]", 'error'); break; }
+                const content = fileSystem[currentDir][args[1]];
+                if (content) printLine(content);
+                else printLine(`Error: File '${args[1]}' not found.`, 'error');
+                break;
+
+            case 'nmap':
+                if (!args[1]) { printLine("Usage: nmap [target_ip]", 'error'); break; }
+                await simulateProcess("Scanning " + args[1], 5, "Port Scan");
+                printLine(`
+  PORT    STATE     SERVICE
+  21/tcp  OPEN      ftp
+  22/tcp  OPEN      ssh
+  80/tcp  OPEN      http
+  3306/tcp CLOSED   mysql
+  
+  Nmap done: 1 IP address (1 host up) scanned in 2.05 seconds
+                `);
+                break;
+
+            case 'hydra':
+                printLine("[*] Initiating brute force attack on target...", 'warn');
+                await simulateProcess("Cracking Password", 8, "Brute Force");
+                printLine("[+] SUCCESS! Password found: 'admin123'", 'info');
+                break;
+
+            case 'decrypt':
+                printLine("Enter decryption key:", 'warn');
+                // Simulate simple interaction
+                await new Promise(r => setTimeout(r, 1000));
+                printLine("Decryption algorithm running...", 'system');
+                await simulateProcess("Decrypting", 4, "AES-256");
+                printLine("Output: THE_FLAG_IS_{GH0ST_SH3LL}", 'info');
+                break;
+
+            case 'whoami':
+                printLine("User: root (uid=0)\nGroups: root, wheel, docker", 'info');
+                break;
+                
+            case 'matrix':
+                toggleMatrix();
+                printLine("Matrix visualizer toggled.", 'system');
+                break;
+
+            default:
+                printLine(`Command not found: ${main}`, 'error');
+        }
+    }
+
+    // --- HELPER FUNCTIONS ---
+    function printLine(text, type = '') {
+        const div = document.createElement('div');
+        div.className = `output ${type}`;
+        div.innerHTML = text;
+        outputContainer.appendChild(div);
+        document.getElementById('terminal').scrollTop = document.getElementById('terminal').scrollHeight;
+    }
+
+    async function simulateProcess(name, steps, type) {
+        const id = 'proc-' + Date.now();
+        const div = document.createElement('div');
+        div.id = id;
+        outputContainer.appendChild(div);
+
+        for (let i = 0; i <= 100; i += (100/steps)) {
+            document.getElementById(id).innerHTML = `[${type}] ${name}... ${Math.floor(i)}%`;
+            await new Promise(r => setTimeout(r, 300));
+        }
+        document.getElementById(id).innerHTML = `[${type}] ${name}... COMPLETED`;
+        document.getElementById(id).className = 'info';
+    }
+
+    // --- MATRIX EFFECT (CANVAS) ---
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('2d');
+    let matrixInterval;
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const chars = "0101010101ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const drops = Array(Math.floor(canvas.width / 20)).fill(1);
+
+    function drawMatrix() {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#0f0";
+        ctx.font = "15px monospace";
+
+        for (let i = 0; i < drops.length; i++) {
+            const text = chars[Math.floor(Math.random() * chars.length)];
+            ctx.fillText(text, i * 20, drops[i] * 20);
+            if (drops[i] * 20 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+            drops[i]++;
+        }
+    }
+
+    function toggleMatrix() {
+        if (matrixInterval) {
+            clearInterval(matrixInterval);
+            matrixInterval = null;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        } else {
+            matrixInterval = setInterval(drawMatrix, 50);
+        }
+    }
+
+    // Start Matrix by default
+    toggleMatrix();
+
+    // Start Boot
+    boot();
+
 </script>
 </body>
 </html>
