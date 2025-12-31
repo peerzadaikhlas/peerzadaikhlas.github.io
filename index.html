@@ -3,308 +3,314 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GHOST_SHELL v2.0</title>
+    <title>root@kali: ~</title>
     <style>
-        /* --- VISUALS & CRT EFFECT --- */
-        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap');
 
         body {
-            background-color: #050505;
-            color: #0f0;
-            font-family: 'VT323', monospace;
-            font-size: 1.2rem;
+            background-color: #1e1e1e; /* VS Code Dark Grey */
+            color: #d4d4d4;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
             margin: 0;
-            overflow: hidden;
+            padding: 10px;
             height: 100vh;
+            box-sizing: border-box;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            text-shadow: 0 0 5px #0f0;
         }
 
-        /* CRT Scanline Overlay */
-        .scanlines {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            background-size: 100% 2px, 3px 100%;
-            pointer-events: none;
-            z-index: 999;
-        }
-
-        #terminal {
+        #terminal-window {
             flex: 1;
-            padding: 20px;
             overflow-y: auto;
-            position: relative;
-            z-index: 10;
+            white-space: pre-wrap; /* Preserves formatting */
+            padding-bottom: 20px;
         }
 
-        /* Scrollbar styling */
+        /* Scrollbar Styling */
         ::-webkit-scrollbar { width: 10px; }
-        ::-webkit-scrollbar-track { background: #000; }
-        ::-webkit-scrollbar-thumb { background: #0f0; border-radius: 5px; }
+        ::-webkit-scrollbar-track { background: #1e1e1e; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
 
-        .input-line {
-            display: flex;
-            align-items: center;
-            margin-top: 10px;
-        }
+        /* Text Colors */
+        .prompt-user { color: #50fa7b; font-weight: bold; } /* Green */
+        .prompt-symbol { color: #ff79c6; } /* Pink */
+        .prompt-path { color: #8be9fd; font-weight: bold; } /* Cyan */
+        .cmd-text { color: #f8f8f2; }
+        
+        .output { margin-bottom: 8px; line-height: 1.5; color: #ccc; }
+        .error { color: #ff5555; }
+        .success { color: #50fa7b; }
+        .info { color: #8be9fd; }
+        .keyword { color: #bd93f9; } /* Purple */
 
-        .prompt {
-            color: #0f0;
-            margin-right: 10px;
-            font-weight: bold;
-        }
-
+        /* Input Area */
+        .input-line { display: flex; align-items: center; }
         input {
             background: transparent;
             border: none;
-            color: #fff;
-            font-family: 'VT323', monospace;
-            font-size: 1.2rem;
+            color: #f8f8f2;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
             flex-grow: 1;
             outline: none;
-            caret-color: #0f0;
-            text-shadow: 0 0 5px #fff;
+            margin-left: 5px;
         }
 
-        .output { margin-bottom: 5px; line-height: 1.4; white-space: pre-wrap; }
-        .error { color: #ff3333; text-shadow: 0 0 5px #ff3333; }
-        .info { color: #00ffff; }
-        .warn { color: #ffff00; }
-        .system { color: #555; font-style: italic;}
-
-        /* Matrix Canvas */
-        canvas {
-            position: absolute;
-            top: 0; left: 0;
-            z-index: 1;
-            opacity: 0.1;
+        /* Fake Cursor */
+        .cursor-block {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background-color: #ccc;
+            animation: blink 1s step-end infinite;
         }
+        @keyframes blink { 50% { opacity: 0; } }
+
     </style>
 </head>
 <body>
 
-    <div class="scanlines"></div>
-    <canvas id="matrixCanvas"></canvas>
-
-    <div id="terminal" onclick="document.getElementById('cmd').focus()">
-        <div id="output-container"></div>
-        <div class="input-line" id="input-area" style="display:none;">
-            <span class="prompt">root@ghost:~/workspace$</span>
-            <input type="text" id="cmd" autocomplete="off" spellcheck="false">
+    <div id="terminal-window" onclick="document.getElementById('cmd').focus()">
+        <div id="history"></div>
+        
+        <div class="input-line">
+            <div id="prompt-container">
+                </div>
+            <input type="text" id="cmd" autocomplete="off" spellcheck="false" autofocus>
         </div>
     </div>
 
 <script>
-    // --- CONFIGURATION ---
+    // --- SYSTEM CONFIG ---
+    const user = "visitor";
+    const host = "kali";
+    let currentPath = "~";
+    
+    // Command History Storage (for Up/Down arrows)
+    let commandHistory = [];
+    let historyIndex = -1;
+
+    // File System Simulation
     const fileSystem = {
-        'workspace': {
-            'readme.txt': 'Welcome to Ghost Shell v2.0.\nThis is a portfolio simulation.\nType "help" to see commands.',
-            'targets.txt': '192.168.1.55 (Vulnerable)\n10.0.0.3 (Secure)\n172.16.0.1 (Gateway)',
-            'secret.enc': '[ENCRYPTED] Use "decrypt" tool to view.'
+        "~": {
+            "projects": "dir",
+            "cv.pdf": "file",
+            "contact_info.txt": "file",
+            "todo.md": "file"
         },
-        'system': {
-            'kernel.log': 'Boot sequence complete. All systems nominal.',
-            'users': 'root, guest, admin'
+        "~/projects": {
+            "main.py": "file",
+            "scan_results.log": "file"
         }
     };
 
-    let currentDir = 'workspace';
-    const outputContainer = document.getElementById('output-container');
-    const inputArea = document.getElementById('input-area');
-    const cmdInput = document.getElementById('cmd');
+    const fileContents = {
+        "contact_info.txt": "Email: user@example.com\nLinkedIn: linkedin.com/in/user\nGitHub: github.com/user",
+        "todo.md": "- [x] Setup server\n- [ ] Patch vulnerabilities\n- [ ] Update documentation",
+        "cv.pdf": "[PDF Binary Data] - Cannot display in terminal. Use 'download cv.pdf'",
+        "scan_results.log": "Target: 192.168.1.1\nOpen Ports: 22, 80, 443\nVulnerabilities: None detected."
+    };
 
-    // --- BOOT SEQUENCE ---
-    async function boot() {
-        const bootText = [
-            "GHOST_BIOS v2.1.0 release 12/2025",
-            "Checking Memory........ OK",
-            "Loading Kernel......... OK",
-            "Mounting /dev/sda1..... OK",
-            "Initializing Network... CONNECTED (1000Mbps)",
-            "Starting Ghost Shell..."
-        ];
+    // DOM Elements
+    const terminal = document.getElementById('history');
+    const input = document.getElementById('cmd');
+    const promptContainer = document.getElementById('prompt-container');
 
-        for (let line of bootText) {
-            printLine(line, 'system');
-            await new Promise(r => setTimeout(r, 300));
-        }
-        
-        printLine("<br>----------------------------------------", 'info');
-        printLine(" WELCOME USER. SYSTEM READY.", 'info');
-        printLine(" Type 'help' for a list of commands.", 'info');
-        printLine("----------------------------------------<br>", 'info');
-        inputArea.style.display = 'flex';
-        cmdInput.focus();
+    // Generate Prompt String
+    function updatePrompt() {
+        promptContainer.innerHTML = `
+            <span class="prompt-symbol">┌──(</span>
+            <span class="prompt-user">${user}㉿${host}</span>
+            <span class="prompt-symbol">)-[</span>
+            <span class="prompt-path">${currentPath}</span>
+            <span class="prompt-symbol">]</span><br>
+            <span class="prompt-symbol">└─$</span>
+        `;
     }
+    updatePrompt();
 
-    // --- COMMAND HANDLING ---
-    cmdInput.addEventListener('keydown', async function(e) {
+    // Start with a clean welcome message
+    const date = new Date().toString();
+    printOutput(`Linux ${host} 6.6.9-amd64 #1 SMP PREEMPT_DYNAMIC Kali 2025.1 x86_64\nLast login: ${date} from 10.0.2.2`, 'system');
+
+    // --- EVENT LISTENERS ---
+    input.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') {
-            const val = this.value.trim();
-            if(!val) return;
-            
-            // Print previous command
-            printLine(`root@ghost:~/${currentDir}$ ${val}`, 'prompt');
-            this.value = '';
-            this.disabled = true; // Disable input while processing
+            const command = this.value;
+            if (command.trim() !== "") {
+                // Save to history
+                commandHistory.push(command);
+                historyIndex = commandHistory.length;
+                
+                // Print command to screen
+                const oldPrompt = promptContainer.innerHTML;
+                const cmdLine = document.createElement('div');
+                cmdLine.innerHTML = `<div class="input-line">${oldPrompt} <span class="cmd-text">${command}</span></div>`;
+                terminal.appendChild(cmdLine);
 
-            // Process Command
-            await processCommand(val.toLowerCase());
+                // Process
+                processCommand(command.trim());
+            } else {
+                // Just reprint prompt on empty enter
+                const oldPrompt = promptContainer.innerHTML;
+                const cmdLine = document.createElement('div');
+                cmdLine.innerHTML = `<div class="input-line">${oldPrompt}</div>`;
+                terminal.appendChild(cmdLine);
+            }
             
-            this.disabled = false;
-            this.focus();
-            window.scrollTo(0, document.body.scrollHeight);
+            // Clear input
+            this.value = '';
+            scrollToBottom();
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (historyIndex > 0) {
+                historyIndex--;
+                input.value = commandHistory[historyIndex];
+            }
+        } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (historyIndex < commandHistory.length - 1) {
+                historyIndex++;
+                input.value = commandHistory[historyIndex];
+            } else {
+                historyIndex = commandHistory.length;
+                input.value = '';
+            }
         }
     });
 
-    async function processCommand(cmd) {
-        const args = cmd.split(' ');
-        const main = args[0];
+    // --- CORE LOGIC ---
+    function processCommand(cmdRaw) {
+        const args = cmdRaw.split(' ');
+        const cmd = args[0].toLowerCase();
+        const arg1 = args[1];
 
-        switch(main) {
+        switch (cmd) {
             case 'help':
-                printLine(`
-  AVAILABLE COMMANDS:
-  -------------------
-  ls          List files in current directory
-  cat [file]  Read contents of a file
-  clear       Clear the terminal screen
-  whoami      Display user information
-  date        Show system time
-  
-  HACKING TOOLS:
-  --------------
-  nmap [ip]   Scan a target for open ports
-  hydra       Brute force attack simulation
-  decrypt     Decrypt protected files
-  matrix      Toggle background visualizer
-                `, 'info');
-                break;
+                printOutput(`
+    GNU bash, version 5.2.21(1)-release (x86_64-pc-linux-gnu)
+    These shell commands are defined internally. Type 'help' to see this list.
 
-            case 'clear':
-                outputContainer.innerHTML = '';
-                break;
-
-            case 'ls':
-                const files = Object.keys(fileSystem[currentDir] || {}).join('   ');
-                printLine(files || '(empty)', 'info');
-                break;
-
-            case 'cat':
-                if (!args[1]) { printLine("Usage: cat [filename]", 'error'); break; }
-                const content = fileSystem[currentDir][args[1]];
-                if (content) printLine(content);
-                else printLine(`Error: File '${args[1]}' not found.`, 'error');
-                break;
-
-            case 'nmap':
-                if (!args[1]) { printLine("Usage: nmap [target_ip]", 'error'); break; }
-                await simulateProcess("Scanning " + args[1], 5, "Port Scan");
-                printLine(`
-  PORT    STATE     SERVICE
-  21/tcp  OPEN      ftp
-  22/tcp  OPEN      ssh
-  80/tcp  OPEN      http
-  3306/tcp CLOSED   mysql
-  
-  Nmap done: 1 IP address (1 host up) scanned in 2.05 seconds
+    <span class="keyword">ls</span>       List directory contents
+    <span class="keyword">cd</span>       Change directory (e.g., 'cd projects' or 'cd ..')
+    <span class="keyword">cat</span>      Concatenate files to standard output
+    <span class="keyword">clear</span>    Clear the terminal screen
+    <span class="keyword">whoami</span>   Print effective userid
+    <span class="keyword">nmap</span>     Network exploration tool and security scanner
+    <span class="keyword">neofetch</span> System information tool
                 `);
                 break;
 
-            case 'hydra':
-                printLine("[*] Initiating brute force attack on target...", 'warn');
-                await simulateProcess("Cracking Password", 8, "Brute Force");
-                printLine("[+] SUCCESS! Password found: 'admin123'", 'info');
+            case 'clear':
+                terminal.innerHTML = '';
                 break;
 
-            case 'decrypt':
-                printLine("Enter decryption key:", 'warn');
-                // Simulate simple interaction
-                await new Promise(r => setTimeout(r, 1000));
-                printLine("Decryption algorithm running...", 'system');
-                await simulateProcess("Decrypting", 4, "AES-256");
-                printLine("Output: THE_FLAG_IS_{GH0ST_SH3LL}", 'info');
+            case 'ls':
+                const dirContent = fileSystem[currentPath];
+                let output = "";
+                for (const [key, value] of Object.entries(dirContent)) {
+                    if (value === 'dir') output += `<span class="prompt-path">${key}/</span>  `;
+                    else output += `<span class="success">${key}</span>  `;
+                }
+                printOutput(output);
+                break;
+
+            case 'cat':
+                if (!arg1) { printOutput("cat: missing operand", "error"); return; }
+                if (fileContents[arg1]) {
+                    printOutput(fileContents[arg1]);
+                } else {
+                    printOutput(`cat: ${arg1}: No such file or directory`, "error");
+                }
+                break;
+
+            case 'cd':
+                if (!arg1 || arg1 === "~") {
+                    currentPath = "~";
+                } else if (arg1 === "..") {
+                    currentPath = "~"; // Simple logic for demo
+                } else if (fileSystem["~"][arg1] === "dir") {
+                    currentPath = "~/projects";
+                } else {
+                    printOutput(`bash: cd: ${arg1}: No such file or directory`, "error");
+                }
+                updatePrompt();
                 break;
 
             case 'whoami':
-                printLine("User: root (uid=0)\nGroups: root, wheel, docker", 'info');
+                printOutput("visitor");
                 break;
-                
-            case 'matrix':
-                toggleMatrix();
-                printLine("Matrix visualizer toggled.", 'system');
+
+            case 'nmap':
+                 if (!arg1) { printOutput("nmap: missing target IP", "error"); return; }
+                 printOutput(`Starting Nmap 7.94 at ${new Date().toLocaleTimeString()}...`);
+                 setTimeout(() => {
+                     printOutput(`
+Nmap scan report for ${arg1}
+Host is up (0.00042s latency).
+Not shown: 998 closed ports
+PORT   STATE SERVICE
+22/tcp open  ssh
+80/tcp open  http
+
+Nmap done: 1 IP address (1 host up) scanned in 1.42 seconds
+                     `);
+                     scrollToBottom();
+                 }, 1500);
+                 break;
+            
+            case 'sudo':
+                 printOutput(`[sudo] password for ${user}:`, "info");
+                 // Simulation stops here to keep it simple, but adds realism
+                 setTimeout(() => {
+                    printOutput("Sorry, try again.", "error");
+                    scrollToBottom();
+                 }, 2000);
+                 break;
+
+            case 'neofetch':
+                printOutput(`
+       <span class="prompt-symbol">_,met$$$$$gg.</span>      <span class="prompt-user">user</span>@<span class="prompt-path">kali</span>
+    <span class="prompt-symbol">,g$$$$$$$$$$$$$$$P.</span>   ----------------
+  <span class="prompt-symbol">,g$$P"     """Y$$.".</span>    <span class="info">OS</span>: Kali GNU/Linux Rolling x86_64
+ <span class="prompt-symbol">,$$P'              \`$$$.</span> <span class="info">Host</span>: VirtualBox 1.2
+<span class="prompt-symbol">',$$P       ,ggs.     \`$$b:</span> <span class="info">Kernel</span>: 6.6.9-amd64
+<span class="prompt-symbol">\`d$$'     ,$P"'   .    $$$</span> <span class="info">Uptime</span>: 2 hours, 4 mins
+ <span class="prompt-symbol">$$P      d$'     ,    $$P</span> <span class="info">Shell</span>: bash 5.2.21
+ <span class="prompt-symbol">$$:      $$.   -    ,d$$'</span> <span class="info">Terminal</span>: /dev/pts/0
+ <span class="prompt-symbol">$$;      Y$b._   _,d$P'</span>  
+ <span class="prompt-symbol">Y$$.    \`.\`"Y$$$$P"'</span>    
+ <span class="prompt-symbol">\`$$b      "-.__</span>       
+  <span class="prompt-symbol">\`Y$$</span>
+   <span class="prompt-symbol">\`Y$$.</span>
+     <span class="prompt-symbol">\`$$b.</span>
+       <span class="prompt-symbol">\`Y$$b.</span>
+          <span class="prompt-symbol">\`"Y$b._</span>
+              <span class="prompt-symbol">\`"""</span>
+                `);
                 break;
 
             default:
-                printLine(`Command not found: ${main}`, 'error');
+                printOutput(`bash: ${cmd}: command not found`, "error");
         }
     }
 
     // --- HELPER FUNCTIONS ---
-    function printLine(text, type = '') {
+    function printOutput(text, type="standard") {
         const div = document.createElement('div');
         div.className = `output ${type}`;
         div.innerHTML = text;
-        outputContainer.appendChild(div);
-        document.getElementById('terminal').scrollTop = document.getElementById('terminal').scrollHeight;
+        terminal.appendChild(div);
+        scrollToBottom();
     }
 
-    async function simulateProcess(name, steps, type) {
-        const id = 'proc-' + Date.now();
-        const div = document.createElement('div');
-        div.id = id;
-        outputContainer.appendChild(div);
-
-        for (let i = 0; i <= 100; i += (100/steps)) {
-            document.getElementById(id).innerHTML = `[${type}] ${name}... ${Math.floor(i)}%`;
-            await new Promise(r => setTimeout(r, 300));
-        }
-        document.getElementById(id).innerHTML = `[${type}] ${name}... COMPLETED`;
-        document.getElementById(id).className = 'info';
+    function scrollToBottom() {
+        const window = document.getElementById('terminal-window');
+        window.scrollTop = window.scrollHeight;
     }
-
-    // --- MATRIX EFFECT (CANVAS) ---
-    const canvas = document.getElementById('matrixCanvas');
-    const ctx = canvas.getContext('2d');
-    let matrixInterval;
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const chars = "0101010101ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const drops = Array(Math.floor(canvas.width / 20)).fill(1);
-
-    function drawMatrix() {
-        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "#0f0";
-        ctx.font = "15px monospace";
-
-        for (let i = 0; i < drops.length; i++) {
-            const text = chars[Math.floor(Math.random() * chars.length)];
-            ctx.fillText(text, i * 20, drops[i] * 20);
-            if (drops[i] * 20 > canvas.height && Math.random() > 0.975) drops[i] = 0;
-            drops[i]++;
-        }
-    }
-
-    function toggleMatrix() {
-        if (matrixInterval) {
-            clearInterval(matrixInterval);
-            matrixInterval = null;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        } else {
-            matrixInterval = setInterval(drawMatrix, 50);
-        }
-    }
-
-    // Start Matrix by default
-    toggleMatrix();
-
-    // Start Boot
-    boot();
 
 </script>
 </body>
