@@ -3,161 +3,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub // System Deploy 2026</title>
+    <title>Main Branch // Deploying 2026</title>
     <style>
         :root {
-            --gh-green-1: #0e4429; --gh-green-2: #006d32; --gh-green-3: #26a641; --gh-green-4: #39d353;
-            --gh-dark: #0d1117; --gh-border: #30363d; --gh-gray: #b1bac4;
+            --bg: #0d1117;
+            --card: #161b22;
+            --border: #30363d;
+            --text: #c9d1d9;
+            --green: #39d353;
+            --green-dim: #0e4429;
+            --gray: #8b949e;
         }
 
         body {
-            background-color: var(--gh-dark);
-            color: white;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            margin: 0; overflow: hidden; height: 100vh;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        .dashboard {
-            width: 850px; background: #161b22; border: 1px solid var(--gh-border);
-            border-radius: 12px; padding: 25px; box-shadow: 0 10px 50px rgba(0,0,0,0.8);
-            position: relative; z-index: 10;
+        /* Background Matrix Effect */
+        canvas#matrix {
+            position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.15;
         }
 
-        /* --- FEATURE: MOCK CONTRIBUTION GRAPH --- */
+        .container {
+            width: 90%;
+            max-width: 900px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            position: relative;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        #countdown {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: var(--green);
+            text-align: center;
+            margin: 20px 0;
+            text-shadow: 0 0 10px rgba(57, 211, 83, 0.3);
+        }
+
+        /* --- Contribution Heatmap --- */
+        .heatmap-container {
+            background: #010409;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
         .heatmap {
-            display: grid; grid-template-columns: repeat(20, 14px);
-            grid-gap: 4px; margin: 20px 0; justify-content: center;
-        }
-        .cell { width: 14px; height: 14px; background: #21262d; border-radius: 2px; transition: 0.3s; }
-        .cell.active { background: var(--gh-green-4); box-shadow: 0 0 8px var(--gh-green-4); }
-
-        /* --- FEATURE: PROGRESS BAR --- */
-        .progress-container { margin: 15px 0; font-size: 0.8rem; color: var(--gh-gray); }
-        .progress-bar-bg { background: #21262d; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 5px; }
-        #progressFill { width: 0%; height: 100%; background: var(--gh-green-4); transition: 1s ease-out; }
-
-        .log-window {
-            background: #010409; height: 100px; padding: 10px; font-family: monospace;
-            font-size: 0.8rem; overflow-y: auto; color: #7d8590; border: 1px solid var(--gh-border);
+            display: grid;
+            grid-template-columns: repeat(26, 1fr);
+            gap: 4px;
         }
 
-        .input-area { display: flex; gap: 10px; margin: 20px 0; }
-        input { flex: 1; background: #0d1117; border: 1px solid var(--gh-border); color: white; padding: 10px; border-radius: 6px; }
-        .btn { background: #238636; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-        .btn:hover { background: #2ea043; }
-        
-        #countdown { font-size: 3rem; font-weight: 800; color: var(--gh-green-4); text-align: center; margin: 10px 0; }
+        .square {
+            aspect-ratio: 1/1;
+            background: #21262d;
+            border-radius: 2px;
+            transition: 0.2s;
+        }
+
+        .square.active { background: var(--green); box-shadow: 0 0 5px var(--green); }
+
+        /* --- Terminal Log --- */
+        #log {
+            background: #010409;
+            height: 120px;
+            font-family: 'SFMono-Regular', Consolas, monospace;
+            font-size: 13px;
+            padding: 15px;
+            overflow-y: auto;
+            color: var(--gray);
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .log-success { color: var(--green); }
+        .log-cmd { color: #58a6ff; }
+
+        /* --- Input Area --- */
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        input {
+            flex: 1;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: white;
+            padding: 12px;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--green); }
+
+        .btn {
+            background-color: #238636;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn:hover { background-color: #2ea043; transform: translateY(-1px); }
+        .btn-deploy { width: 100%; font-size: 1.1rem; margin-top: 10px; }
+
+        /* --- Stats Bar --- */
+        .stats-bar {
+            font-size: 12px;
+            color: var(--gray);
+            display: flex;
+            justify-content: space-between;
+        }
     </style>
 </head>
 <body>
 
-<div class="dashboard">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-        <h3 style="margin:0">✨ 2026 Production Environment</h3>
-        <span id="goalCount" style="font-size: 0.8rem; color: var(--gh-gray);">0 Goals Committed</span>
+<canvas id="matrix"></canvas>
+
+<div class="container">
+    <div class="header">
+        <h2 style="margin:0">Branch: <span style="color:var(--green)">release/v2026.0</span></h2>
+        <div id="status">🟡 Syncing...</div>
     </div>
 
     <div id="countdown">00:00:00</div>
 
-    <div class="heatmap" id="heatmap"></div>
-
-    <div class="progress-container">
-        <span>Year Readiness Score: <span id="percentText">0%</span></span>
-        <div class="progress-bar-bg"><div id="progressFill"></div></div>
+    <div class="heatmap-container">
+        <div style="font-size:12px; color:var(--gray); margin-bottom:8px;">2025 Contributions (Year in Review)</div>
+        <div class="heatmap" id="heatmap"></div>
     </div>
 
-    <div class="log-window" id="logs">> System ready. Awaiting 2026 deployment instructions...</div>
-
-    <div class="input-area">
-        <input type="text" id="goalInput" placeholder="New Resolution..." onkeypress="playKey()">
-        <button class="btn" onclick="commitGoal()">COMMIT</button>
+    <div id="log">
+        <div>> System initialized...</div>
+        <div>> Preparing 2026 migration...</div>
     </div>
 
-    <button class="btn" style="width:100%; padding: 15px;" onclick="deployAll()">DEPLOY 2026.SH</button>
+    <div class="input-group">
+        <input type="text" id="goalInput" placeholder="Enter a 2026 goal (e.g., Build an IoT project)...">
+        <button class="btn" onclick="commitGoal()">Commit</button>
+    </div>
+
+    <button class="btn btn-deploy" onclick="forceDeploy()">FORCE PUSH TO 2026</button>
+
+    <div class="stats-bar" style="margin-top:20px;">
+        <span id="goalTally">0 Goals Staged</span>
+        <span>Uptime: 100%</span>
+    </div>
 </div>
 
 <script>
-    // --- Setup Heatmap Cells ---
-    const heatmap = document.getElementById('heatmap');
-    for(let i=0; i<100; i++) {
-        const cell = document.createElement('div');
-        cell.className = 'cell';
-        heatmap.appendChild(cell);
+    // --- 1. Persistent Data & Init ---
+    let goals = JSON.parse(localStorage.getItem('gh_goals') || "[]");
+    const logEl = document.getElementById('log');
+    const heatmapEl = document.getElementById('heatmap');
+    
+    function init() {
+        // Build Heatmap (182 squares for visual half-year)
+        for(let i=0; i<182; i++) {
+            const div = document.createElement('div');
+            div.className = 'square';
+            if (Math.random() > 0.8) div.classList.add('active'); // Random history
+            heatmapEl.appendChild(div);
+        }
+        updateTally();
+        goals.forEach(g => writeLog(`Restored staged goal: ${g}`, 'log-success'));
     }
 
-    // --- Sound Effects (Synthesized) ---
+    // --- 2. Countdown Logic ---
+    function updateClock() {
+        const now = new Date();
+        const nextYear = new Date('January 1, 2026 00:00:00').getTime();
+        const diff = nextYear - now;
+
+        if (diff <= 0) {
+            document.getElementById('countdown').innerHTML = "HAPPY 2026!";
+            document.getElementById('status').innerHTML = "🟢 PRODUCTION LIVE";
+            return;
+        }
+
+        const h = Math.floor(diff / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+        
+        document.getElementById('countdown').innerText = 
+            `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        
+        if(h === 0 && m === 0 && s < 10) {
+            document.getElementById('countdown').style.color = "#f85149"; // Red alert last 10s
+        }
+    }
+    setInterval(updateClock, 1000);
+
+    // --- 3. Feature: Commit Goals ---
+    function commitGoal() {
+        const input = document.getElementById('goalInput');
+        const val = input.value.trim();
+        if(!val) return;
+
+        goals.push(val);
+        localStorage.setItem('gh_goals', JSON.stringify(goals));
+        
+        writeLog(`git commit -m "Add goal: ${val}"`, 'log-cmd');
+        writeLog(`[main ${Math.random().toString(36).substring(7)}] ${val}`, 'log-success');
+        
+        // Light up a square
+        const squares = document.querySelectorAll('.square');
+        squares[Math.floor(Math.random()*squares.length)].classList.add('active');
+        
+        input.value = "";
+        updateTally();
+        playBeep(440); 
+    }
+
+    function updateTally() {
+        document.getElementById('goalTally').innerText = `${goals.length} Goals Staged`;
+    }
+
+    // --- 4. Feature: Deployment ---
+    function forceDeploy() {
+        writeLog("git push origin main --force", "log-cmd");
+        writeLog("Enumerating objects: 2026, done.");
+        writeLog("Writing objects: 100% (2026/2026), done.");
+        writeLog("Deployment successful.", "log-success");
+        
+        playBeep(880);
+
+        // Visual Explosion (Heatmap Flash)
+        const squares = document.querySelectorAll('.square');
+        squares.forEach((s, i) => {
+            setTimeout(() => s.classList.add('active'), i * 5);
+        });
+        
+        setTimeout(() => alert("🚀 2026 Environment Deployed! Welcome to the New Year, Peerzada."), 1000);
+    }
+
+    function writeLog(text, className = "") {
+        const entry = document.createElement('div');
+        entry.className = className;
+        entry.innerText = `> ${text}`;
+        logEl.appendChild(entry);
+        logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    // --- 5. Audio Synthesis ---
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function playKey() {
+    function playBeep(freq) {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.type = 'sine'; osc.frequency.setValueAtTime(150 + Math.random()*50, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.1);
         osc.start(); osc.stop(audioCtx.currentTime + 0.1);
     }
 
-    function playSuccess() {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.frequency.setValueAtTime(523, audioCtx.currentTime); // C5
-        osc.frequency.exponentialRampToValueAtTime(1046, audioCtx.currentTime + 0.5); // C6
-        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.5);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.5);
+    // --- 6. Matrix Background Canvas ---
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const columns = canvas.width / 20;
+    const drops = Array(Math.floor(columns)).fill(1);
+
+    function drawMatrix() {
+        ctx.fillStyle = "rgba(13, 17, 23, 0.05)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#238636";
+        ctx.font = "15px monospace";
+        drops.forEach((y, i) => {
+            const text = String.fromCharCode(Math.floor(Math.random() * 128));
+            ctx.fillText(text, i * 20, y * 20);
+            if (y * 20 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+            drops[i]++;
+        });
     }
+    setInterval(drawMatrix, 50);
 
-    // --- Core Logic ---
-    let goals = 0;
-    function commitGoal() {
-        const input = document.getElementById('goalInput');
-        if(!input.value) return;
-        
-        goals++;
-        const log = document.getElementById('logs');
-        log.innerHTML += `<div>> [STAGED] ${input.value}</div>`;
-        log.scrollTop = log.scrollHeight;
-
-        // Activate a random heatmap cell
-        const cells = document.querySelectorAll('.cell');
-        cells[Math.floor(Math.random()*cells.length)].classList.add('active');
-
-        // Update Progress
-        const percent = Math.min(goals * 10, 100);
-        document.getElementById('progressFill').style.width = percent + '%';
-        document.getElementById('percentText').innerText = percent + '%';
-        document.getElementById('goalCount').innerText = `${goals} Goals Committed`;
-        
-        input.value = "";
-        playSuccess();
-    }
-
-    function deployAll() {
-        const log = document.getElementById('logs');
-        log.innerHTML += `<div style="color:var(--gh-green-4)">> git push origin main --force</div>`;
-        log.innerHTML += `<div style="color:white">> Pushing to 2026 production servers...</div>`;
-        
-        let i = 0;
-        const interval = setInterval(() => {
-            document.querySelectorAll('.cell')[i]?.classList.add('active');
-            i++;
-            if(i > 100) clearInterval(interval);
-        }, 20);
-
-        setTimeout(() => alert("🚀 2026 IS LIVE! Happy Coding!"), 1500);
-    }
-
-    // --- Countdown ---
-    setInterval(() => {
-        const diff = new Date('January 1, 2026 00:00:00') - new Date();
-        if (diff <= 0) { document.getElementById('countdown').innerText = "HAPPY NEW YEAR!"; return; }
-        const h = String(Math.floor(diff/3600000)).padStart(2,'0');
-        const m = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
-        const s = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
-        document.getElementById('countdown').innerText = `${h}:${m}:${s}`;
-    }, 1000);
+    init();
 </script>
 </body>
 </html>
