@@ -3,233 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub // Deploy 2026</title>
+    <title>GitHub // System Deploy 2026</title>
     <style>
         :root {
-            --gh-green-L4: #39d353;
-            --gh-green-L2: #0e4429;
-            --gh-dark: #0d1117;
-            --gh-border: #30363d;
-            --gh-gray: #b1bac4;
+            --gh-green-1: #0e4429; --gh-green-2: #006d32; --gh-green-3: #26a641; --gh-green-4: #39d353;
+            --gh-dark: #0d1117; --gh-border: #30363d; --gh-gray: #b1bac4;
         }
 
         body {
             background-color: var(--gh-dark);
             color: white;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            margin: 0;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            margin: 0; overflow: hidden; height: 100vh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
-
-        canvas { position: absolute; top: 0; left: 0; z-index: -1; }
 
         .dashboard {
-            width: 90%;
-            max-width: 800px;
-            background: rgba(22, 27, 34, 0.95);
-            border: 1px solid var(--gh-border);
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
-            position: relative;
+            width: 850px; background: #161b22; border: 1px solid var(--gh-border);
+            border-radius: 12px; padding: 25px; box-shadow: 0 10px 50px rgba(0,0,0,0.8);
+            position: relative; z-index: 10;
         }
 
-        .header { border-bottom: 1px solid var(--gh-border); padding-bottom: 1rem; margin-bottom: 1.5rem; }
-        
-        #countdown {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 3.5rem;
-            color: var(--gh-green-L4);
-            text-shadow: 0 0 15px rgba(57, 211, 83, 0.4);
+        /* --- FEATURE: MOCK CONTRIBUTION GRAPH --- */
+        .heatmap {
+            display: grid; grid-template-columns: repeat(20, 14px);
+            grid-gap: 4px; margin: 20px 0; justify-content: center;
         }
+        .cell { width: 14px; height: 14px; background: #21262d; border-radius: 2px; transition: 0.3s; }
+        .cell.active { background: var(--gh-green-4); box-shadow: 0 0 8px var(--gh-green-4); }
 
-        /* Feature: Deployment Log */
+        /* --- FEATURE: PROGRESS BAR --- */
+        .progress-container { margin: 15px 0; font-size: 0.8rem; color: var(--gh-gray); }
+        .progress-bar-bg { background: #21262d; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 5px; }
+        #progressFill { width: 0%; height: 100%; background: var(--gh-green-4); transition: 1s ease-out; }
+
         .log-window {
-            background: #010409;
-            border-radius: 6px;
-            padding: 15px;
-            height: 120px;
-            overflow-y: hidden;
-            font-family: monospace;
-            font-size: 0.85rem;
-            color: var(--gh-gray);
-            margin: 20px 0;
-            text-align: left;
+            background: #010409; height: 100px; padding: 10px; font-family: monospace;
+            font-size: 0.8rem; overflow-y: auto; color: #7d8590; border: 1px solid var(--gh-border);
         }
 
-        .log-entry { margin-bottom: 4px; border-left: 2px solid var(--gh-green-L2); padding-left: 8px; }
-
-        /* Feature: Resolution Committer */
-        .input-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        input {
-            flex-grow: 1;
-            background: #0d1117;
-            border: 1px solid var(--gh-border);
-            color: white;
-            padding: 10px;
-            border-radius: 6px;
-        }
-
-        .btn {
-            background-color: #238636;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .btn:hover { background-color: #2ea043; }
-
-        .particle {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            border-radius: 2px;
-            pointer-events: none;
-        }
+        .input-area { display: flex; gap: 10px; margin: 20px 0; }
+        input { flex: 1; background: #0d1117; border: 1px solid var(--gh-border); color: white; padding: 10px; border-radius: 6px; }
+        .btn { background: #238636; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .btn:hover { background: #2ea043; }
+        
+        #countdown { font-size: 3rem; font-weight: 800; color: var(--gh-green-4); text-align: center; margin: 10px 0; }
     </style>
 </head>
 <body>
 
-    <canvas id="matrix"></canvas>
-
-    <div class="dashboard">
-        <div class="header">
-            <h2 style="margin:0">🚀 Production Deployment: <span style="color:var(--gh-gray)">v2026.0.1</span></h2>
-        </div>
-
-        <div id="countdown">00:00:00</div>
-
-        <div class="log-window" id="logWindow">
-            <div class="log-entry">> Initializing environment...</div>
-            <div class="log-entry">> Fetching 2026.tar.gz...</div>
-        </div>
-
-        <div class="input-group">
-            <input type="text" id="resolutionInput" placeholder="Enter a 2026 goal (e.g., Learn Rust)...">
-            <button class="btn" onclick="commitGoal()">Commit Goal</button>
-        </div>
-
-        <div style="margin-top: 25px;">
-            <button class="btn" style="width: 100%; font-size: 1.1rem;" onclick="triggerDeployment()">
-                FORCE PUSH TO 2026
-            </button>
-        </div>
+<div class="dashboard">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="margin:0">✨ 2026 Production Environment</h3>
+        <span id="goalCount" style="font-size: 0.8rem; color: var(--gh-gray);">0 Goals Committed</span>
     </div>
 
-    <script>
-        // --- Matrix Background ---
-        const canvas = document.getElementById('matrix');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+    <div id="countdown">00:00:00</div>
 
-        const charSet = "010110GITHUB";
-        const drops = Array(Math.floor(canvas.width/16)).fill(1);
+    <div class="heatmap" id="heatmap"></div>
 
-        function drawMatrix() {
-            ctx.fillStyle = "rgba(13, 17, 23, 0.1)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#163a21"; 
-            ctx.font = "15px monospace";
-            drops.forEach((y, i) => {
-                const text = charSet[Math.floor(Math.random() * charSet.length)];
-                ctx.fillText(text, i * 16, y * 16);
-                if (y * 16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
-                drops[i]++;
-            });
-        }
-        setInterval(drawMatrix, 50);
+    <div class="progress-container">
+        <span>Year Readiness Score: <span id="percentText">0%</span></span>
+        <div class="progress-bar-bg"><div id="progressFill"></div></div>
+    </div>
 
-        // --- Log Updates ---
-        const logs = [
-            "Setting up job...", "Checking out 2025 code base...", 
-            "Running migrations...", "Removing 'procrastination' dependency...",
-            "Installing 'health_and_wellness'...", "Optimizing sleep_cycles...",
-            "Compiling happiness...", "Applying 2026 security patches..."
-        ];
-        let logIdx = 0;
-        function addLog() {
-            const win = document.getElementById('logWindow');
-            const entry = document.createElement('div');
-            entry.className = 'log-entry';
-            entry.innerText = `> ${logs[logIdx % logs.length]}`;
-            win.appendChild(entry);
-            win.scrollTop = win.scrollHeight;
-            logIdx++;
-        }
-        setInterval(addLog, 3000);
+    <div class="log-window" id="logs">> System ready. Awaiting 2026 deployment instructions...</div>
 
-        // --- Countdown ---
-        function updateClock() {
-            const now = new Date();
-            const target = new Date('January 1, 2026 00:00:00');
-            const diff = target - now;
-            
-            if (diff <= 0) {
-                document.getElementById('countdown').innerText = "HAPPY NEW YEAR!";
-                return;
-            }
-            const h = String(Math.floor(diff/3600000)).padStart(2,'0');
-            const m = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
-            const s = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
-            document.getElementById('countdown').innerText = `${h}:${m}:${s}`;
-        }
-        setInterval(updateClock, 1000);
+    <div class="input-area">
+        <input type="text" id="goalInput" placeholder="New Resolution..." onkeypress="playKey()">
+        <button class="btn" onclick="commitGoal()">COMMIT</button>
+    </div>
 
-        // --- Feature: Contribution Square Fireworks ---
-        function triggerDeployment() {
-            const colors = ['#0e4429', '#006d32', '#26a641', '#39d353'];
-            for(let i=0; i<50; i++) {
-                const p = document.createElement('div');
-                p.className = 'particle';
-                p.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
-                p.style.left = '50%';
-                p.style.top = '50%';
-                document.body.appendChild(p);
-                
-                const angle = Math.random() * Math.PI * 2;
-                const velocity = Math.random() * 15 + 5;
-                let x = 0, y = 0;
-                
-                const move = setInterval(() => {
-                    x += Math.cos(angle) * velocity;
-                    y += Math.sin(angle) * velocity;
-                    p.style.transform = `translate(${x}px, ${y}px) rotate(${x}deg)`;
-                    p.style.opacity = p.style.opacity ? p.style.opacity - 0.02 : 1;
-                    if(p.style.opacity <= 0) {
-                        clearInterval(move);
-                        p.remove();
-                    }
-                }, 16);
-            }
-        }
+    <button class="btn" style="width:100%; padding: 15px;" onclick="deployAll()">DEPLOY 2026.SH</button>
+</div>
 
-        // --- Feature: Resolution Committer ---
-        function commitGoal() {
-            const input = document.getElementById('resolutionInput');
-            if(!input.value) return;
-            
-            const goals = JSON.parse(localStorage.getItem('2026_goals') || "[]");
-            goals.push(input.value);
-            localStorage.setItem('2026_goals', JSON.stringify(goals));
-            
-            const win = document.getElementById('logWindow');
-            win.innerHTML += `<div class="log-entry" style="color:var(--gh-green-L4)">[COMMIT] Added: "${input.value}"</div>`;
-            input.value = "";
-            win.scrollTop = win.scrollHeight;
-        }
-    </script>
+<script>
+    // --- Setup Heatmap Cells ---
+    const heatmap = document.getElementById('heatmap');
+    for(let i=0; i<100; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        heatmap.appendChild(cell);
+    }
+
+    // --- Sound Effects (Synthesized) ---
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playKey() {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.type = 'sine'; osc.frequency.setValueAtTime(150 + Math.random()*50, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+    }
+
+    function playSuccess() {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.frequency.setValueAtTime(523, audioCtx.currentTime); // C5
+        osc.frequency.exponentialRampToValueAtTime(1046, audioCtx.currentTime + 0.5); // C6
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.5);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.5);
+    }
+
+    // --- Core Logic ---
+    let goals = 0;
+    function commitGoal() {
+        const input = document.getElementById('goalInput');
+        if(!input.value) return;
+        
+        goals++;
+        const log = document.getElementById('logs');
+        log.innerHTML += `<div>> [STAGED] ${input.value}</div>`;
+        log.scrollTop = log.scrollHeight;
+
+        // Activate a random heatmap cell
+        const cells = document.querySelectorAll('.cell');
+        cells[Math.floor(Math.random()*cells.length)].classList.add('active');
+
+        // Update Progress
+        const percent = Math.min(goals * 10, 100);
+        document.getElementById('progressFill').style.width = percent + '%';
+        document.getElementById('percentText').innerText = percent + '%';
+        document.getElementById('goalCount').innerText = `${goals} Goals Committed`;
+        
+        input.value = "";
+        playSuccess();
+    }
+
+    function deployAll() {
+        const log = document.getElementById('logs');
+        log.innerHTML += `<div style="color:var(--gh-green-4)">> git push origin main --force</div>`;
+        log.innerHTML += `<div style="color:white">> Pushing to 2026 production servers...</div>`;
+        
+        let i = 0;
+        const interval = setInterval(() => {
+            document.querySelectorAll('.cell')[i]?.classList.add('active');
+            i++;
+            if(i > 100) clearInterval(interval);
+        }, 20);
+
+        setTimeout(() => alert("🚀 2026 IS LIVE! Happy Coding!"), 1500);
+    }
+
+    // --- Countdown ---
+    setInterval(() => {
+        const diff = new Date('January 1, 2026 00:00:00') - new Date();
+        if (diff <= 0) { document.getElementById('countdown').innerText = "HAPPY NEW YEAR!"; return; }
+        const h = String(Math.floor(diff/3600000)).padStart(2,'0');
+        const m = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+        const s = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+        document.getElementById('countdown').innerText = `${h}:${m}:${s}`;
+    }, 1000);
+</script>
 </body>
 </html>
