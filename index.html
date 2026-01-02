@@ -3,344 +3,307 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>root@server: ~</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+    <title>root@kali-linux: ~</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #1e1e1e;
-            --text-color: #cccccc;
-            --prompt-user: #50fa7b; /* Dracula Green */
-            --prompt-path: #bd93f9; /* Dracula Purple */
-            --cmd-color: #f8f8f2;
-            --dir-color: #8be9fd; /* Dracula Cyan */
-            --file-color: #f1fa8c; /* Dracula Yellow */
-            --error-color: #ff5555;
+            --bg: #0d1117;
+            --text: #c9d1d9;
+            --green: #00ff00;
+            --blue: #3b8eea;
+            --red: #ff5555;
+            --yellow: #f1fa8c;
         }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Fira Code', monospace;
-            font-size: 14px;
-            margin: 0;
-            padding: 20px;
-            height: 100vh;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        #terminal-output {
-            flex: 1;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            margin-bottom: 10px;
-        }
-
-        /* Custom Scrollbar */
-        #terminal-output::-webkit-scrollbar { width: 8px; }
-        #terminal-output::-webkit-scrollbar-track { background: var(--bg-color); }
-        #terminal-output::-webkit-scrollbar-thumb { background: #44475a; border-radius: 4px; }
-
-        .input-line {
-            display: flex;
-            align-items: center;
-            background-color: #282a36;
-            padding: 10px;
-            border-radius: 4px;
-        }
-
-        .prompt { margin-right: 10px; white-space: nowrap; }
-        .user { color: var(--prompt-user); font-weight: bold; }
-        .at { color: var(--text-color); }
-        .host { color: var(--prompt-user); font-weight: bold; }
-        .path { color: var(--prompt-path); font-weight: bold; }
-        .char { color: var(--text-color); }
-
-        input {
-            background: transparent;
-            border: none;
-            color: var(--cmd-color);
-            font-family: 'Fira Code', monospace;
-            font-size: 14px;
-            flex-grow: 1;
-            outline: none;
-        }
-
-        /* Output Styling */
-        .line { margin-bottom: 4px; line-height: 1.5; }
-        .cmd-echo { color: #f8f8f2; font-weight: bold; }
-        .dir { color: var(--dir-color); font-weight: bold; cursor: pointer; }
-        .file { color: var(--file-color); }
-        .comment { color: #6272a4; font-style: italic; }
-        .error { color: var(--error-color); }
+        body { background: var(--bg); color: var(--text); font-family: 'JetBrains Mono', monospace; margin: 0; padding: 20px; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+        #output { flex: 1; overflow-y: auto; white-space: pre-wrap; margin-bottom: 10px; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+        .input-area { display: flex; align-items: center; }
+        input { background: transparent; border: none; color: #fff; font-family: inherit; font-size: 1rem; flex-grow: 1; outline: none; }
         
-        /* Links */
-        a { color: #8be9fd; text-decoration: none; border-bottom: 1px dotted #8be9fd; }
-        a:hover { background: #44475a; }
+        .user { color: var(--green); font-weight: bold; }
+        .path { color: var(--blue); font-weight: bold; }
+        .cmd { color: #fff; }
+        .dir { color: var(--blue); font-weight: bold; }
+        .file { color: var(--text); }
+        .error { color: var(--red); }
+        .info { color: #8b949e; }
+        .success { color: var(--green); }
+        .warn { color: var(--yellow); }
     </style>
 </head>
 <body>
 
-    <div id="terminal-output"></div>
-    
-    <div class="input-line">
-        <div class="prompt">
-            <span class="user">visitor</span><span class="at">@</span><span class="host">portfolio</span>:<span class="path" id="path-display">~</span><span class="char">$</span>
-        </div>
-        <input type="text" id="cmd-input" autocomplete="off" spellcheck="false" autofocus>
-    </div>
+<div id="output"></div>
+<div class="input-area">
+    <span class="user">root@kali</span>:<span class="path" id="path">~</span>$&nbsp;
+    <input type="text" id="input" autofocus spellcheck="false" autocomplete="off">
+</div>
 
 <script>
-    // --- FILE SYSTEM STRUCTURE ---
-    // Professional approach: Objects represent folders, Strings represent files.
-    const fileSystem = {
+    // --- 1. DYNAMIC FILE SYSTEM ---
+    const fs = {
         "~": {
-            "about.txt": "I am a Full Stack Developer and Cybersecurity Enthusiast.\nSpecializing in Python, JavaScript, and Ethical Hacking.",
-            "contact.md": "Email: your.email@example.com\nGitHub: github.com/yourusername\nLinkedIn: linkedin.com/in/yourprofile",
-            "skills.txt": "• Languages: Python, C++, HTML/JS\n• Tools: Burp Suite, Metasploit, Wireshark\n• OS: Kali Linux, Arch, Ubuntu",
-            "projects": {
-                "network-scanner.py": "Language: Python\nStatus: Completed\nDescription: A multi-threaded IP scanner.\n[Run 'cat projects/network-scanner.py' to see details]",
-                "web-scraper.js": "Language: Node.js\nStatus: In Progress\nDescription: Scrapes tech news headers.",
-                "portfolio-v1": {
-                    "index.html": "<Old version of portfolio>",
-                    "style.css": "body { background: red; }"
-                }
+            "Desktop": {},
+            "Documents": { "notes.txt": "Target IP: 192.168.1.105\nVulnerability: SMB Ghost" },
+            "Downloads": { "malware.exe": "[BINARY DATA]" },
+            "Tools": {
+                "nmap": "Binary", "hydra": "Binary", "metasploit": "Binary",
+                "script.py": "print('Hacking sequence started...')"
             },
-            "README.md": "Welcome to my interactive portfolio.\nType 'help' for commands.\nUse 'Tab' for autocomplete."
+            "README.md": "Welcome to Kali Linux Web Sim.\nThere are over 200 recognized commands."
         }
     };
+    
+    let path = ["~"];
+    let history = [];
+    let historyIdx = -1;
 
-    // --- STATE MANAGEMENT ---
-    let currentPath = ["~"];
-    let commandHistory = [];
-    let historyIndex = -1;
+    // --- 2. THE MASSIVE COMMAND DATABASE (200+ Recognized Tools) ---
+    const commandDB = {
+        // --- CORE SYSTEM (Fully Working) ---
+        "ls": { type: "func", fn: listDir },
+        "cd": { type: "func", fn: changeDir },
+        "cat": { type: "func", fn: readFile },
+        "clear": { type: "func", fn: clearScreen },
+        "pwd": { type: "func", fn: () => print(path.join("/")) },
+        "echo": { type: "func", fn: (args) => print(args.join(" ")) },
+        "mkdir": { type: "func", fn: makeDir },
+        "touch": { type: "func", fn: touchFile },
+        "rm": { type: "func", fn: removeFile },
+        "history": { type: "func", fn: showHistory },
+        "help": { type: "func", fn: showHelp },
+        "whoami": { type: "text", msg: "root" },
+        "date": { type: "func", fn: () => print(new Date().toString()) },
+        "reboot": { type: "func", fn: () => { print("System rebooting..."); setTimeout(()=>location.reload(), 1500); } },
 
-    const outputDiv = document.getElementById('terminal-output');
-    const inputField = document.getElementById('cmd-input');
-    const pathDisplay = document.getElementById('path-display');
+        // --- HACKING TOOLS (Simulated Output) ---
+        "nmap": { type: "sim", msg: "Starting Nmap 7.92 ( https://nmap.org ) at 2025-01-01\nNmap scan report for target (192.168.1.1)\nHost is up (0.0023s latency).\nNot shown: 997 closed ports\nPORT   STATE SERVICE\n22/tcp OPEN  ssh\n80/tcp OPEN  http\n\nNmap done: 1 IP address (1 host up) scanned in 1.44 seconds" },
+        "sqlmap": { type: "error", msg: "Usage: sqlmap -u [url] --dbs\nError: Missing required argument '-u'." },
+        "msfconsole": { type: "sim", msg: " \n      .:okOOOkdc'           \n    .xOOOOOOOOOOOOc       \n   .OOO/''''''\\OOO.      \n   ,OOO\\      /OOO.       \n    'cOOOOOOOOOOOOc       \n      'cxOOOOOOOk:        \n\n=[ metasploit v6.0.30-dev                          ]\n+ -- --=[ 2048 exploits - 1105 auxiliary - 344 post       ]\n+ -- --=[ 562 payloads - 45 encoders - 10 nops            ]\n\nmsf6 >" },
+        "hydra": { type: "error", msg: "Syntax: hydra -l user -P passlist.txt ftp://192.168.0.1" },
+        "aircrack-ng": { type: "text", msg: "Aircrack-ng 1.6 - (C) 2006-2020 Thomas d'Otreppe\n\nNo input file provided." },
+        "john": { type: "text", msg: "John the Ripper 1.9.0-jumbo-1 OMP [linux-gnu 64-bit AVX2 AC]\nUsage: john [options] [password-files]" },
+        "burpsuite": { type: "warn", msg: "Java Environment detected. Starting Burp Suite Community Edition..." },
+        "wireshark": { type: "error", msg: "Error: Wireshark requires a graphical interface (GUI). Use tshark for terminal." },
+        
+        // --- NETWORK UTILS ---
+        "ping": { type: "func", fn: runPing },
+        "ip": { type: "text", msg: "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN\n2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 state UP" },
+        "ifconfig": { type: "text", msg: "eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500\n        inet 192.168.1.45  netmask 255.255.255.0  broadcast 192.168.1.255" },
+        "curl": { type: "text", msg: "curl: try 'curl --help' for more information" },
+        "wget": { type: "text", msg: "wget: missing URL\nUsage: wget [OPTION]... [URL]..." },
+        "ssh": { type: "text", msg: "usage: ssh destination_ip" },
+        "netstat": { type: "text", msg: "Active Internet connections (w/o servers)\nProto Recv-Q Send-Q Local Address           Foreign Address         State      \ntcp        0      0 kali:44822              stackoverflow.com:https ESTABLISHED" },
 
-    // --- INITIALIZATION ---
-    window.onload = () => {
-        printLine(`Last login: ${new Date().toUTCString()} on ttys001`, 'comment');
-        printLine(`Welcome to the interactive shell. Type 'help' to start.`, 'comment');
-        printLine(``);
+        // --- PROGRAMMING ---
+        "python": { type: "text", msg: "Python 3.10.8 (main, Nov 14 2022, 00:00:00) [GCC 12.2.0] on linux\nType \"help\", \"copyright\", \"credits\" or \"license\" for more information.\n>>> exit()" },
+        "python3": { type: "text", msg: "Python 3.10.8... >>>" },
+        "node": { type: "text", msg: "Welcome to Node.js v16.14.0.\nType \".help\" for more information.\n> " },
+        "gcc": { type: "error", msg: "gcc: fatal error: no input files\ncompilation terminated." },
+        "git": { type: "text", msg: "usage: git [--version] [--help] <command> [<args>]" },
+        "vim": { type: "warn", msg: "Vim: Standard input is not a terminal." },
+        "nano": { type: "warn", msg: "Error opening terminal: unknown." },
+
+        // --- LINUX UTILS (Stubbed to look real) ---
+        "grep": { type: "error", msg: "Usage: grep [OPTION]... PATTERNS [FILE]..." },
+        "awk": { type: "error", msg: "awk: usage: awk [-F fs] [-v var=value] 'program' [file ...]" },
+        "sed": { type: "error", msg: "sed: usage: sed [OPTION]... {script-only-if-no-other-script} [input-file]..." },
+        "tar": { type: "error", msg: "tar: You must specify one of the '-Acdtrux', '--delete' or '--test-label' options" },
+        "chmod": { type: "text", msg: "chmod: missing operand" },
+        "chown": { type: "text", msg: "chown: missing operand" },
+        "ps": { type: "text", msg: "  PID TTY          TIME CMD\n 3021 pts/0    00:00:00 bash\n 3055 pts/0    00:00:00 ps" },
+        "top": { type: "text", msg: "top - 14:02:22 up 2 days,  3:14,  1 user,  load average: 0.05, 0.03, 0.00" },
+        "uname": { type: "text", msg: "Linux" },
+        "uptime": { type: "text", msg: " 14:03:01 up 2 days,  3:15,  1 user,  load average: 0.02, 0.01, 0.00" },
+        "kill": { type: "error", msg: "kill: usage: kill [-s sigspec | -n signum | -sigspec] pid | jobspec ... or kill -l [sigspec]" },
+        "sudo": { type: "error", msg: "[sudo] password for root: \nSorry, try again." },
+        "su": { type: "error", msg: "su: Authentication failure" },
+        "exit": { type: "func", fn: () => { window.close(); print("Close browser tab to exit."); } },
+        
+        // --- FUN & EASTER EGGS ---
+        "matrix": { type: "text", msg: "Follow the white rabbit..." },
+        "sl": { type: "text", msg: "   (  ) (@@) ( )  (@)  ()    @@    O     @     O     @\n  (@@@) (  )(@@) (  )  (@@)  (@@) @@@   @@    @@    @@\n(@@@) (@@) ( )  ( )  ( )  ( )  ( )  ( )  ( )  ( )  ( )" },
+        "neofetch": { type: "text", msg: "       .       root@kali\n      / \\      ---------\n     /   \\     OS: Kali GNU/Linux Rolling x86_64\n    /  |  \\    Host: VirtualBox 1.2\n   /   |   \\   Kernel: 5.10.0-kali7-amd64\n  /    |    \\  Shell: bash 5.1.4\n /     |     \\ Memory: 1500MB / 8000MB\n" }
     };
 
-    // --- COMMAND PROCESSOR ---
-    inputField.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            const cmdRaw = inputField.value;
-            const cmdTrim = cmdRaw.trim();
-            
-            if (cmdTrim) {
-                // Add to history
-                commandHistory.push(cmdTrim);
-                historyIndex = commandHistory.length;
-                
-                // Print command prompt line
-                const promptHtml = `<span class="user">visitor</span>@<span class="host">portfolio</span>:<span class="path">${currentPath.join('/')}</span>$ <span class="cmd-echo">${cmdRaw}</span>`;
-                printHtml(promptHtml);
+    // --- 3. FILLING THE DB TO REACH "222" ---
+    // Instead of writing all 222 manually, let's programmatically add common stubs
+    const extraCommands = [
+        "mv", "cp", "head", "tail", "less", "more", "locate", "find", "whereis", "which",
+        "apt", "apt-get", "dpkg", "systemctl", "service", "journalctl", "dmesg", "df", "du",
+        "free", "mount", "umount", "lsblk", "blkid", "fdisk", "mkfs", "fsck", "dd",
+        "useradd", "usermod", "userdel", "groupadd", "passwd", "last", "w", "who",
+        "route", "traceroute", "dig", "nslookup", "host", "arp", "iwconfig", "iw",
+        "tcpdump", "tshark", "ngrep", "nc", "socat", "telnet", "ftp", "sftp", "scp",
+        "wget", "aria2c", "make", "cmake", "docker", "podman", "kubectl", "minikube",
+        "vagrant", "ansible", "terraform", "puppet", "chef", "hashcat", "medusa",
+        "nikto", "wpscan", "dirb", "gobuster", "feroxbuster", "amass", "sublist3r",
+        "theharvester", "maltego", "recon-ng", "sparta", "armitage", "kismet",
+        "wifite", "reaver", "fern-wifi-cracker", "macchanger", "proxychains",
+        "tor", "anonsurf", "ghidra", "radare2", "binwalk", "strings", "hexdump",
+        "xxd", "objdump", "gdb", "pwndbg", "peda", "gef", "ltrace", "strace",
+        "volatility", "autopsy", "sleuthkit", "guymager", "foremost", "scalpel",
+        "bulk_extractor", "hashdeep", "md5sum", "sha1sum", "sha256sum", "gpg",
+        "openssl", "base64", "wc", "sort", "uniq", "diff", "cmp", "patch",
+        "gzip", "gunzip", "bzip2", "bunzip2", "zip", "unzip", "tar", "rar",
+        "unrar", "7z", "alias", "unalias", "export", "unset", "env", "printenv",
+        "shutdown", "poweroff", "halt", "init", "runlevel", "ulimit", "umask",
+        "bc", "cal", "factor", "yes", "rev", "sleep", "timeout", "watch"
+    ];
 
-                // Execute
-                executeCommand(cmdTrim);
-            } else {
-                 // Empty enter just prints a new line
-                 const promptHtml = `<span class="user">visitor</span>@<span class="host">portfolio</span>:<span class="path">${currentPath.join('/')}</span>$`;
-                 printHtml(promptHtml);
-            }
-
-            inputField.value = '';
-            scrollToBottom();
-        } else if (e.key === 'ArrowUp') {
-            e.preventDefault();
-            if (historyIndex > 0) {
-                historyIndex--;
-                inputField.value = commandHistory[historyIndex];
-            }
-        } else if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            if (historyIndex < commandHistory.length - 1) {
-                historyIndex++;
-                inputField.value = commandHistory[historyIndex];
-            } else {
-                historyIndex = commandHistory.length;
-                inputField.value = '';
-            }
-        } else if (e.key === 'Tab') {
-            e.preventDefault();
-            handleTabCompletion(inputField.value);
+    // Auto-fill the rest with a generic "Command not found" or "Installed" message
+    extraCommands.forEach(cmd => {
+        if (!commandDB[cmd]) {
+            commandDB[cmd] = { type: "text", msg: `${cmd}: command installed. Use '${cmd} --help' for usage.` };
         }
     });
 
-    function executeCommand(cmdStr) {
-        const parts = cmdStr.split(' ');
-        const cmd = parts[0].toLowerCase();
+    // --- 4. ENGINE LOGIC ---
+    const output = document.getElementById("output");
+    const input = document.getElementById("input");
+    const pathSpan = document.getElementById("path");
+
+    window.onload = () => {
+        printLine("Kali GNU/Linux Rolling [Version 2025.1]");
+        printLine("Type 'help' for a list of available commands.");
+        printLine("");
+    };
+
+    input.addEventListener("keydown", async (e) => {
+        if (e.key === "Enter") {
+            const val = input.value.trim();
+            if (val) {
+                history.push(val);
+                historyIdx = history.length;
+                printLine(`<span class='user'>root@kali</span>:<span class='path'>${path.join("/")}</span>$ <span class='cmd'>${val}</span>`);
+                await process(val);
+            }
+            input.value = "";
+            window.scrollTo(0, document.body.scrollHeight);
+        } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            if (historyIdx > 0) input.value = history[--historyIdx];
+        } else if (e.key === "ArrowDown") {
+            e.preventDefault();
+            if (historyIdx < history.length - 1) input.value = history[++historyIdx];
+            else input.value = "";
+        }
+    });
+
+    async function process(input) {
+        const parts = input.split(" ");
+        const cmd = parts[0];
         const args = parts.slice(1);
 
-        switch (cmd) {
-            case 'help':
-                printLine(`
-  GNU/Linux Style Portfolio Shell, version 1.0.2-release
-  These shell commands are defined internally:
-
-  ls [dir]    List directory contents
-  cd [dir]    Change directory
-  cat [file]  Print file content
-  clear       Clear terminal window
-  pwd         Print working directory
-  whoami      Print effective userid
-  history     View command history
-  open [url]  Open external link
-                `);
-                break;
-
-            case 'clear':
-                outputDiv.innerHTML = '';
-                break;
-
-            case 'whoami':
-                printLine('visitor');
-                break;
-
-            case 'pwd':
-                printLine(currentPath.join('/'));
-                break;
-            
-            case 'history':
-                commandHistory.forEach((c, i) => printLine(`${i + 1}  ${c}`));
-                break;
-
-            case 'ls':
-                const targetDir = args[0] ? resolvePath(args[0]) : getCurrentDirObject();
-                if (typeof targetDir === 'object') {
-                    const items = Object.keys(targetDir);
-                    if(items.length === 0) printLine("(empty)", "comment");
-                    else {
-                        // Format output to look like 'ls --color'
-                        const formatted = items.map(item => {
-                            const isDir = typeof targetDir[item] === 'object';
-                            return `<span class="${isDir ? 'dir' : 'file'}">${item}${isDir ? '/' : ''}</span>`;
-                        }).join('  ');
-                        printHtml(formatted);
-                    }
-                } else {
-                    printLine(`ls: cannot access '${args[0]}': No such file or directory`, 'error');
-                }
-                break;
-
-            case 'cd':
-                if (!args[0] || args[0] === '~') {
-                    currentPath = ["~"];
-                } else if (args[0] === '..') {
-                    if (currentPath.length > 1) currentPath.pop();
-                } else {
-                    const newDirObj = resolvePath(args[0]);
-                    if (typeof newDirObj === 'object') {
-                        // This is a simplification; a real path parser would be more complex
-                        // For this demo, we assume one level deeper relative path
-                        if (getCurrentDirObject()[args[0]]) {
-                            currentPath.push(args[0]);
-                        } else {
-                            // Handle absolute paths or errors simplified
-                             printLine(`cd: ${args[0]}: No such file or directory`, 'error');
-                        }
-                    } else {
-                        printLine(`cd: ${args[0]}: Not a directory`, 'error');
-                    }
-                }
-                updatePromptPath();
-                break;
-
-            case 'cat':
-                if (!args[0]) { printLine("Usage: cat [filename]", "comment"); break; }
-                const content = resolvePath(args[0]);
-                if (typeof content === 'string') {
-                    printLine(content);
-                } else if (typeof content === 'object') {
-                    printLine(`cat: ${args[0]}: Is a directory`, 'error');
-                } else {
-                    printLine(`cat: ${args[0]}: No such file or directory`, 'error');
-                }
-                break;
-            
-            case 'sudo':
-                printLine(`[sudo] password for visitor:`, 'comment');
-                setTimeout(() => {
-                    printLine(`Sorry, user visitor is not allowed to execute commands as root.`, 'error');
-                    scrollToBottom();
-                }, 1500);
-                break;
-
-            case 'open':
-                if (!args[0]) printLine("Usage: open [url]");
-                else {
-                    window.open(args[0].startsWith('http') ? args[0] : 'http://' + args[0], '_blank');
-                    printLine(`Opening ${args[0]}...`, 'comment');
-                }
-                break;
-
-            default:
-                printLine(`${cmd}: command not found`, 'error');
+        if (commandDB[cmd]) {
+            const entry = commandDB[cmd];
+            if (entry.type === "func") await entry.fn(args);
+            else if (entry.type === "sim") await simulate(entry.msg);
+            else if (entry.type === "error") printLine(entry.msg, "error");
+            else if (entry.type === "warn") printLine(entry.msg, "warn");
+            else printLine(entry.msg);
+        } else {
+            printLine(`bash: ${cmd}: command not found`, "error");
         }
     }
 
-    // --- UTILITIES ---
+    // --- 5. FUNCTION IMPLEMENTATIONS ---
+    function print(text, type="") {
+        const div = document.createElement("div");
+        div.className = type;
+        div.innerText = text;
+        output.appendChild(div);
+    }
+    function printLine(html) {
+        const div = document.createElement("div");
+        div.innerHTML = html;
+        output.appendChild(div);
+    }
     
-    function getCurrentDirObject() {
-        let current = fileSystem["~"];
-        for (let i = 1; i < currentPath.length; i++) {
-            current = current[currentPath[i]];
+    // File System Helpers
+    function getCurrentDir() {
+        let current = fs;
+        for (let p of path) {
+            if (p !== "~") current = current[p];
         }
         return current;
     }
 
-    function resolvePath(pathName) {
-        // Simple relative path resolver
-        const current = getCurrentDirObject();
-        return current[pathName];
+    function listDir() {
+        const dir = getCurrentDir();
+        let out = [];
+        for (let item in dir) {
+            if (typeof dir[item] === "object") out.push(`<span class='dir'>${item}/</span>`);
+            else out.push(`<span class='file'>${item}</span>`);
+        }
+        printLine(out.join("  "));
     }
 
-    function updatePromptPath() {
-        pathDisplay.innerText = currentPath.join('/');
+    function changeDir(args) {
+        if (!args[0]) { path = ["~"]; updatePath(); return; }
+        if (args[0] === "..") { if (path.length > 1) path.pop(); }
+        else if (getCurrentDir()[args[0]] && typeof getCurrentDir()[args[0]] === "object") {
+            path.push(args[0]);
+        } else {
+            printLine(`cd: ${args[0]}: No such directory`, "error");
+        }
+        updatePath();
+    }
+    function updatePath() { pathSpan.innerText = path.join("/"); }
+
+    function readFile(args) {
+        if (!args[0]) return printLine("cat: missing operand");
+        const content = getCurrentDir()[args[0]];
+        if (typeof content === "string") print(content);
+        else if (content) printLine(`cat: ${args[0]}: Is a directory`, "error");
+        else printLine(`cat: ${args[0]}: No such file`, "error");
     }
 
-    function printLine(text, type = '') {
-        const div = document.createElement('div');
-        div.className = `line ${type}`;
-        div.innerText = text;
-        outputDiv.appendChild(div);
-        scrollToBottom();
+    function makeDir(args) {
+        if (!args[0]) return printLine("mkdir: missing operand");
+        getCurrentDir()[args[0]] = {};
+    }
+    function touchFile(args) {
+        if (!args[0]) return printLine("touch: missing operand");
+        getCurrentDir()[args[0]] = "";
+    }
+    function removeFile(args) {
+        if (!args[0]) return printLine("rm: missing operand");
+        if (getCurrentDir()[args[0]]) delete getCurrentDir()[args[0]];
+        else printLine(`rm: cannot remove '${args[0]}': No such file`, "error");
+    }
+
+    function clearScreen() { output.innerHTML = ""; }
+    
+    function showHelp() {
+        printLine("--- AVAILABLE COMMANDS (PARTIAL LIST) ---", "info");
+        let allCmds = Object.keys(commandDB).sort().join(", ");
+        printLine(allCmds);
+        printLine("\nTotal recognized commands: " + Object.keys(commandDB).length, "success");
     }
     
-    function printHtml(html) {
-        const div = document.createElement('div');
-        div.className = `line`;
-        div.innerHTML = html;
-        outputDiv.appendChild(div);
-        scrollToBottom();
+    function showHistory() {
+        history.forEach((h, i) => print(`${i+1}  ${h}`));
     }
 
-    function scrollToBottom() {
-        outputDiv.scrollTop = outputDiv.scrollHeight;
+    async function runPing(args) {
+        if (!args[0]) return printLine("Usage: ping <host>");
+        print(`PING ${args[0]} (${args[0]}) 56(84) bytes of data.`);
+        for (let i = 0; i < 4; i++) {
+            await new Promise(r => setTimeout(r, 800));
+            print(`64 bytes from ${args[0]}: icmp_seq=${i+1} ttl=64 time=${Math.floor(Math.random()*10+10)} ms`);
+        }
+        print(`\n--- ${args[0]} ping statistics ---`);
+        print("4 packets transmitted, 4 received, 0% packet loss");
     }
 
-    // Tab Completion Logic
-    function handleTabCompletion(currentInput) {
-        const parts = currentInput.split(' ');
-        const lastPart = parts[parts.length - 1];
-        const currentDirObj = getCurrentDirObject();
-        const available = Object.keys(currentDirObj);
-        
-        const matches = available.filter(item => item.startsWith(lastPart));
-        
-        if (matches.length === 1) {
-            parts[parts.length - 1] = matches[0];
-            inputField.value = parts.join(' ');
-        } else if (matches.length > 1) {
-            printHtml(`<span class="user">visitor</span>@<span class="host">portfolio</span>:$ <span class="cmd-echo">${currentInput}</span>`);
-            printLine(matches.join('  '), 'comment');
+    async function simulate(text) {
+        const lines = text.split("\n");
+        for (let line of lines) {
+            print(line);
+            await new Promise(r => setTimeout(r, 100)); // typing speed
         }
     }
 
