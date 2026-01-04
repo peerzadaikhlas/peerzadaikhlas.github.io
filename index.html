@@ -1,312 +1,2474 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>root@kali-linux: ~</title>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <title>Peerzada Ikhlas - Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
         :root {
-            --bg: #0d1117;
-            --text: #c9d1d9;
-            --green: #00ff00;
-            --blue: #3b8eea;
-            --red: #ff5555;
-            --yellow: #f1fa8c;
+            /* These will be animated by JS/CSS Keyframes */
+            --bg-base: #dfe5f3;
+            --bg-soft: #edf2ff;
+            --bg-gray: #cfd5e2;
+            --bg-dark-main: #050712;
+
+            /* NEW ACCENT COLORS: Magenta and Violet */
+            --accent-main: #FF5EA5; /* Vibrant Magenta */
+            --accent-secondary: #A55EFF; /* Electric Violet */
+
+            --text-dark: #111827;
+            --text-muted-dark: #4b5563;
+            --text-light: #f9fafb;
+            --text-muted-light: #e5e7eb;
+
+            /* Updated borders/shadows using new accents */
+            --border-soft-main: rgba(255, 94, 165, 0.45);
+            --border-soft-secondary: rgba(165, 94, 255, 0.45);
+            --border-soft-gray: rgba(15, 23, 42, 0.08);
+
+            --glass-light: rgba(255, 255, 255, 0.86);
+            --glass-dark: rgba(15, 23, 42, 0.86);
+
+            --shadow-neon-soft: 0 0 18px rgba(255, 94, 165, 0.38),
+                                0 0 28px rgba(165, 94, 255, 0.28);
+
+            --transition-fast: 0.2s ease;
+            --transition-med: 0.45s ease;
         }
-        body { background: var(--bg); color: var(--text); font-family: 'JetBrains Mono', monospace; margin: 0; padding: 20px; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
-        #output { flex: 1; overflow-y: auto; white-space: pre-wrap; margin-bottom: 10px; }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
-        .input-area { display: flex; align-items: center; }
-        input { background: transparent; border: none; color: #fff; font-family: inherit; font-size: 1rem; flex-grow: 1; outline: none; }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: var(--text-dark);
+            background: var(--bg-base);
+            overflow-x: hidden;
+             filter: hue-rotate(0deg);
+             transition: filter 20s linear infinite;
+        }
+
+        body.dark {
+            color: var(--text-light);
+            background: var(--bg-dark-main);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* BACKGROUND LAYERS (SOFT NEON ANIMATION) */
+        @keyframes colorCycle {
+            0% { --accent-main: #FF5EA5; --accent-secondary: #A55EFF; } /* Magenta/Violet */
+            25% { --accent-main: #5EFFD6; --accent-secondary: #5EAAFF; } /* Teal/Blue */
+            50% { --accent-main: #FFD65E; --accent-secondary: #FF8F5E; } /* Yellow/Orange */
+            75% { --accent-main: #A55EFF; --accent-secondary: #FF5EA5; } /* Violet/Magenta */
+            100% { --accent-main: #FF5EA5; --accent-secondary: #A55EFF; } /* Back to start */
+        }
+
+        .bg-layer {
+            position: fixed;
+            inset: -80px;
+            z-index: -3;
+            pointer-events: none;
+            background:
+                radial-gradient(circle at 0% 0%, rgba(255, 94, 165, 0.26), transparent 55%), /* Magenta */
+                radial-gradient(circle at 100% 0%, rgba(165, 94, 255, 0.22), transparent 55%), /* Violet */
+                radial-gradient(circle at 100% 100%, rgba(169, 181, 220, 0.3), transparent 55%),
+                radial-gradient(circle at 0% 100%, rgba(151, 174, 216, 0.27), transparent 55%),
+                linear-gradient(135deg, var(--bg-base), var(--bg-soft));
+            animation: bgFloat 18s ease-in-out infinite alternate, colorCycle 20s linear infinite;
+            filter: saturate(0.95);
+        }
+
+        body.dark .bg-layer {
+            background:
+                radial-gradient(circle at 0% 0%, rgba(255, 94, 165, 0.33), transparent 55%), /* Magenta */
+                radial-gradient(circle at 100% 0%, rgba(165, 94, 255, 0.26), transparent 55%), /* Violet */
+                radial-gradient(circle at 50% 100%, rgba(62, 83, 141, 0.45), transparent 55%),
+                linear-gradient(135deg, #050712, #050812);
+            filter: saturate(1.05);
+            animation: bgFloat 18s ease-in-out infinite alternate, colorCycle 20s linear infinite;
+        }
+
+        @keyframes bgFloat {
+            0% { transform: translate3d(0, 0, 0) scale(1); }
+            50% { transform: translate3d(-10px, 8px, 0) scale(1.03); }
+            100% { transform: translate3d(10px, -8px, 0) scale(1.02); }
+        }
+
+        .bg-watermark {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.06;
+        }
+
+        .watermark-text {
+            font-size: clamp(2.3rem, 7vw, 4rem);
+            letter-spacing: 0.45em;
+            text-transform: uppercase;
+            color: #7b8193;
+            text-align: center;
+            transform: rotate(-18deg);
+            border-top: 1px solid rgba(255, 94, 165, 0.5); /* Magenta */
+            border-bottom: 1px solid rgba(165, 94, 255, 0.45); /* Violet */
+            padding: 0.6rem 2.8rem;
+            backdrop-filter: blur(10px);
+        }
+
+        body.dark .watermark-text {
+            color: #4b5263;
+        }
+
+        body.dark .heart-core {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            box-shadow: 0 0 22px rgba(255, 94, 165, 0.7); /* Magenta Shadow */
+        }
+
+        @keyframes heartBeat {
+            0% { transform: rotate(-45deg) scale(0.95); opacity: 0.7; }
+            35% { transform: rotate(-45deg) scale(1.05); opacity: 1; }
+            70% { transform: rotate(-45deg) scale(0.97); opacity: 0.85; }
+            100% { transform: rotate(-45deg) scale(0.95); opacity: 0.7; }
+        }
+
+        .page-wrap {
+            max-width: 1150px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 1.2rem 1rem 3.3rem;
+        }
+
+        @media (min-width: 768px) {
+            .page-wrap { padding-inline: 1.4rem; }
+        }
+
+        /* HEADER */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            backdrop-filter: blur(18px);
+            background: linear-gradient(
+                to bottom,
+                rgba(248, 250, 255, 0.95),
+                rgba(248, 250, 255, 0.9),
+                transparent
+            );
+            border-bottom: 1px solid rgba(15, 23, 42, 0.04);
+        }
+
+        body.dark header {
+            background: linear-gradient(
+                to bottom,
+                rgba(6, 9, 20, 0.96),
+                rgba(6, 9, 20, 0.86),
+                transparent
+            );
+            border-bottom-color: rgba(255, 94, 165, 0.28); /* Magenta */
+        }
+
+        .header-inner {
+            max-width: 1150px;
+            margin: 0 auto;
+            padding: 0.6rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .header-inner { padding-inline: 1.4rem; }
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+        }
+
+        .brand-main {
+            font-weight: 700;
+            letter-spacing: 0.11em;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+        }
+
+        .brand-tagline {
+            font-size: 0.7rem;
+            opacity: 0.78;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        .brand-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 999px;
+            background:
+                radial-gradient(circle at 30% 20%, #fff, transparent 60%),
+                linear-gradient(135deg, var(--accent-main), var(--accent-secondary));
+            box-shadow: 0 0 12px rgba(255, 94, 165, 0.7); /* Magenta Shadow */
+            animation: brandPulse 1.8s infinite, colorCycle 20s linear infinite; /* Added colorCycle */
+        }
+
+        @keyframes brandPulse {
+            0% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.9; }
+        }
+
+        .nav-group {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        /* THEME TOGGLE */
+        .theme-toggle {
+            width: 46px;
+            height: 22px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.8);
+            position: relative;
+            cursor: pointer;
+            padding: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+        }
+
+        body.dark .theme-toggle {
+            border-color: rgba(191, 219, 254, 0.9);
+        }
+
+        .theme-toggle span {
+            flex: 1;
+            text-align: center;
+            opacity: 0.65;
+        }
+
+        .theme-toggle-thumb {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 18px;
+            height: 18px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--accent-main), var(--accent-secondary));
+            box-shadow: var(--shadow-neon-soft);
+            transition: transform var(--transition-fast);
+            animation: colorCycle 20s linear infinite; /* Added colorCycle */
+        }
+
+        body.dark .theme-toggle-thumb {
+            transform: translateX(22px);
+        }
+
+        /* HAMBURGER */
+        .hamburger {
+            width: 36px;
+            height: 30px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        body.dark .hamburger {
+            border-color: rgba(191, 219, 254, 0.9);
+        }
+
+        .hamburger span {
+            position: relative;
+            width: 16px;
+            height: 1.7px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--accent-main), var(--accent-secondary));
+        }
+
+        .hamburger span::before,
+        .hamburger span::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            width: 16px;
+            height: 1.7px;
+            border-radius: 999px;
+            background: inherit;
+        }
+
+        .hamburger span::before { transform: translateY(-5px); }
+        .hamburger span::after { transform: translateY(5px); }
+
+        .hamburger.active span::before { transform: rotate(45deg); }
+        .hamburger.active span::after { transform: rotate(-45deg); }
+
+        .hamburger-menu {
+            position: absolute;
+            right: 1rem;
+            top: 54px;
+            min-width: 190px;
+            border-radius: 16px;
+            padding: 0.35rem 0.25rem;
+            backdrop-filter: blur(18px);
+            background: rgba(248, 250, 255, 0.97);
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            box-shadow: 0 18px 36px rgba(15, 23, 42, 0.12);
+            list-style: none;
+            transform-origin: top right;
+            transform: scale(0.94) translateY(-6px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition-med), transform var(--transition-med);
+        }
+
+        body.dark .hamburger-menu {
+            background: rgba(15, 23, 42, 0.96);
+            border-color: var(--border-soft-main); /* Magenta Border */
+            box-shadow: var(--shadow-neon-soft);
+        }
+
+        .hamburger-menu.open {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1) translateY(2px);
+        }
+
+        .hamburger-menu li { border-radius: 12px; margin: 2px 0; overflow: hidden; }
+
+        .hamburger-menu button {
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 0.55rem 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: inherit;
+            font-size: 0.86rem;
+            cursor: pointer;
+            gap: 0.6rem;
+            transition: background var(--transition-fast);
+        }
+        /* NEW: Menu Item Hover State */
+        .hamburger-menu button:hover {
+            background: rgba(255, 94, 165, 0.12); /* Magenta tint */
+        }
         
-        .user { color: var(--green); font-weight: bold; }
-        .path { color: var(--blue); font-weight: bold; }
-        .cmd { color: #fff; }
-        .dir { color: var(--blue); font-weight: bold; }
-        .file { color: var(--text); }
-        .error { color: var(--red); }
-        .info { color: #8b949e; }
-        .success { color: var(--green); }
-        .warn { color: var(--yellow); }
+        body.dark .hamburger-menu button:hover {
+            background: rgba(255, 94, 165, 0.2); /* Stronger Magenta tint for dark mode */
+        }
+
+        .hamburger-menu button span:first-child {
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-weight: 500;
+            font-size: 0.75rem;
+        }
+
+        .hamburger-menu button span:last-child {
+            font-size: 0.8rem;
+            opacity: 0.75;
+        }
+
+        main { flex: 1; }
+
+        /* CARDS */
+        section { margin-top: 2.8rem; }
+
+        .section-card {
+            border-radius: 20px;
+            padding: 1.2rem 1.1rem 1.3rem;
+            background: var(--glass-light);
+            backdrop-filter: blur(18px);
+            border: 1px solid var(--border-soft-gray);
+            box-shadow: 0 16px 30px rgba(15, 23, 42, 0.16);
+            color: var(--text-dark);
+        }
+
+        body.dark .section-card {
+            background: var(--glass-dark);
+            border-color: var(--border-soft-main); /* Magenta Border */
+            box-shadow: var(--shadow-neon-soft);
+            color: var(--text-light);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-title {
+            font-size: 0.88rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            opacity: 0.95;
+        }
+
+        .section-subtitle {
+            font-size: 0.83rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 640px) {
+            .section-header { flex-direction: column; align-items: flex-start; }
+        }
+
+        /* HERO */
+        .hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.9fr);
+            gap: 1.8rem;
+            align-items: center;
+            padding-top: 1.9rem;
+        }
+
+        @media (max-width: 860px) {
+            .hero { grid-template-columns: 1fr; padding-top: 1.6rem; }
+        }
+
+        .hero-card {
+            border-radius: 20px;
+            padding: 1.2rem 1.1rem 1.3rem;
+            background: var(--glass-light);
+            border: 1px solid var(--border-soft-gray);
+            box-shadow: 0 18px 34px rgba(15, 23, 42, 0.16);
+            color: var(--text-dark);
+        }
+
+        body.dark .hero-card {
+            background: var(--glass-dark);
+            border-color: var(--border-soft-main); /* Magenta Border */
+            box-shadow: var(--shadow-neon-soft);
+            color: var(--text-light);
+        }
+
+        .hero-kicker {
+            font-size: 0.74rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            opacity: 0.78;
+            margin-bottom: 0.55rem;
+        }
+
+        .hero-heading {
+            font-size: clamp(1.8rem, 3vw + 1rem, 2.6rem);
+            line-height: 1.12;
+            margin-bottom: 0.7rem;
+        }
+
+        .hero-heading span {
+            background: linear-gradient(120deg, var(--accent-main), var(--accent-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        body.dark .hero-heading span {
+            text-shadow: 0 0 14px rgba(255, 94, 165, 0.5); /* Magenta Shadow */
+        }
+
+        .hero-sub {
+            font-size: 0.93rem;
+            opacity: 0.9;
+            max-width: 34rem;
+            margin-bottom: 0.9rem;
+        }
+
+        .hero-location {
+            font-size: 0.79rem;
+            opacity: 0.83;
+            margin-bottom: 1.05rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .hero-location-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--accent-main); /* Magenta */
+        }
+
+        .hero-highlight-strip {
+            display: inline-flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.4rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.75);
+            margin-bottom: 1rem;
+            font-size: 0.77rem;
+            background: rgba(248, 250, 255, 0.9);
+        }
+
+        body.dark .hero-highlight-strip {
+            border-color: rgba(191, 219, 254, 0.9);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        /* UPDATED: Pulse Dot */
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: linear-gradient(45deg, var(--accent-main), var(--accent-secondary));
+            position: relative;
+        }
+
+        .pulse-dot::after {
+            content: "";
+            position: absolute;
+            inset: -4px;
+            border-radius: inherit;
+            border: 2px solid var(--accent-secondary);
+            opacity: 0.6;
+            animation: pulse 1.6s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.7); opacity: 0.9; }
+            50% { opacity: 0.4; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.85rem;
+        }
+
+        .btn-primary,
+        .btn-ghost {
+            border-radius: 999px;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.88rem;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            font-weight: 600;
+            transition: transform var(--transition-fast),
+                box-shadow var(--transition-fast),
+                background var(--transition-fast),
+                color var(--transition-fast),
+                border-color var(--transition-fast);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-main), var(--accent-secondary));
+            color: #050711;
+            box-shadow: 0 14px 24px rgba(255, 94, 165, 0.35); /* Magenta Shadow */
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px) scale(1.01);
+            box-shadow: 0 16px 28px rgba(255, 94, 165, 0.45); /* Magenta Shadow */
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.8);
+        }
+
+        body.dark .btn-ghost {
+            border-color: rgba(191, 219, 254, 0.9);
+        }
+
+        .btn-ghost:hover {
+            background: rgba(255, 94, 165, 0.12); /* Magenta tint */
+            transform: translateY(-1px);
+            box-shadow: 0 10px 20px rgba(255, 94, 165, 0.25); /* Magenta Shadow */
+        }
+
+        .hero-meta-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.8rem;
+            margin-top: 1.4rem;
+            font-size: 0.77rem;
+        }
+
+        .hero-meta-row span.label {
+            opacity: 0.8;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        .hero-socials {
+            display: inline-flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* ICON PILL + INLINE SVG ICONS */
+        .icon-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.26rem 0.75rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.8);
+            font-size: 0.78rem;
+            cursor: pointer;
+            opacity: 0.95;
+            transition: background var(--transition-fast),
+                transform var(--transition-fast),
+                box-shadow var(--transition-fast),
+                border-color var(--transition-fast),
+                color var(--transition-fast);
+        }
+
+        body.dark .icon-pill { border-color: rgba(191, 219, 254, 0.9); }
+
+        .icon-svg {
+            width: 18px;
+            height: 18px;
+            display: inline-flex;
+            transition: stroke var(--transition-fast), filter var(--transition-fast);
+        }
+        
+        /* NEW: Dynamic Icon Fill on Hover */
+        .icon-pill:hover .icon-svg,
+        .social-card-mini:hover .icon-svg {
+            stroke: var(--accent-main);
+            filter: drop-shadow(0 0 2px rgba(255, 94, 165, 0.7));
+        }
+
+        .icon-pill:hover {
+            background: rgba(255, 94, 165, 0.08); /* Magenta tint */
+            box-shadow: 0 10px 20px rgba(255, 94, 165, 0.18); /* Magenta Shadow */
+            transform: translateY(-1px);
+        }
+
+        /* CIRCULAR PHOTO */
+        .hero-photo-card {
+            justify-self: center;
+            display: flex;
+            justify-content: center;
+        }
+
+        .glass-shell {
+            border-radius: 18px;
+            padding: 0.7rem;
+            background: var(--glass-light);
+            border: 1px solid var(--border-soft-gray);
+            box-shadow: 0 16px 30px rgba(15, 23, 42, 0.18);
+            max-width:  100%;
+            width: 100%;
+            color: var(--text-dark);
+        }
+
+        body.dark .glass-shell {
+            background: var(--glass-dark);
+            border-color: var(--border-soft-main); /* Magenta Border */
+            box-shadow: var(--shadow-neon-soft);
+            color: var(--text-light);
+        }
+
+        .glass-inner {
+            position: relative;
+            border-radius: 16px;
+            padding: 0.7rem 0.7rem 0.8rem;
+            text-align: center;
+        }
+
+        .photo-circle {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 0.6rem auto;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid rgba(255, 94, 165, 0.75); /* Magenta Border */
+            box-shadow: 0 0 18px rgba(255, 94, 165, 0.4); /* Magenta Shadow */
+        }
+
+        .photo-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1.02);
+            transition: transform 0.8s ease-out, filter 0.8s ease-out;
+        }
+
+        .glass-shell:hover img {
+            transform: scale(1.07);
+            filter: saturate(1.08);
+        }
+
+        .card-footer {
+            font-size: 0.78rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            align-items: center;
+        }
+
+        .card-name {
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-size: 0.78rem;
+        }
+
+        .card-role {
+            opacity: 0.85;
+            font-size: 0.76rem;
+        }
+
+        .card-status-pill {
+            border-radius: 999px;
+            padding: 0.33rem 0.65rem;
+            background: rgba(248, 250, 255, 0.96);
+            border: 1px solid rgba(148, 163, 184, 0.8);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.7rem;
+            margin-top: 0.15rem;
+        }
+
+        body.dark .card-status-pill {
+            background: rgba(15, 23, 42, 0.96);
+            border-color: rgba(191, 219, 254, 0.9);
+        }
+
+        .card-status-pill .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: var(--accent-secondary); /* Violet */
+        }
+
+        /* ABOUT */
+        .about-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.3fr);
+            gap: 1.4rem;
+        }
+
+        @media (max-width: 900px) {
+            .about-grid { grid-template-columns: 1fr; }
+        }
+
+        .about-text {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            opacity: 0.95;
+        }
+
+        .about-text strong { font-weight: 600; }
+
+        .tags-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 0.8rem;
+        }
+
+        .tag {
+            border-radius: 999px;
+            padding: 0.22rem 0.55rem;
+            border: 1px dashed rgba(148, 163, 184, 0.85);
+            font-size: 0.73rem;
+            opacity: 0.95;
+        }
+
+        body.dark .tag { border-color: rgba(191, 219, 254, 0.9); }
+
+        .highlight-card {
+            border-radius: 16px;
+            padding: 0.85rem 0.95rem;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(16px);
+            font-size: 0.82rem;
+        }
+
+        body.dark .highlight-card {
+            background: rgba(7, 11, 26, 0.85);
+            border-color: var(--border-soft-main); /* Magenta Border */
+        }
+
+        .highlight-inner { position: relative; }
+
+        .highlight-heading {
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-size: 0.75rem;
+            opacity: 0.9;
+            margin-bottom: 0.35rem;
+        }
+
+        .highlight-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.4rem 0.6rem;
+            margin-top: 0.4rem;
+        }
+
+        .badge {
+            border-radius: 999px;
+            padding: 0.25rem 0.55rem;
+            background: rgba(252, 253, 255, 0.95);
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            font-size: 0.72rem;
+        }
+
+        body.dark .badge {
+            background: rgba(8, 11, 24, 0.95);
+            border-color: rgba(180, 200, 240, 0.8);
+        }
+
+        /* slider */
+        .slider-wrap { margin-top: 1rem; }
+
+        .slider-track {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            padding: 0.6rem 0.7rem;
+        }
+
+        body.dark .slider-track {
+            border-color: rgba(180, 200, 240, 0.8);
+        }
+
+        .slide {
+            display: none;
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        .slide.active {
+            display: block;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(6px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .slider-controls {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.35rem;
+            margin-top: 0.35rem;
+        }
+
+        .dot-btn {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            border: none;
+            background: rgba(140, 155, 185, 0.85);
+            cursor: pointer;
+            transition: transform var(--transition-fast),
+                background var(--transition-fast),
+                box-shadow var(--transition-fast);
+        }
+
+        body.dark .dot-btn { background: rgba(180, 200, 240, 0.8); }
+
+        .dot-btn.active {
+            background: linear-gradient(135deg, var(--accent-main), var(--accent-secondary));
+            box-shadow: var(--shadow-neon-soft);
+            transform: scale(1.25);
+        }
+
+        /* EDU */
+        .two-col-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr);
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 900px) {
+            .two-col-grid { grid-template-columns: 1fr; }
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 1.1rem;
+        }
+
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 0.35rem;
+            top: 0.15rem;
+            bottom: 0.15rem;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--accent-main), var(--accent-secondary));
+            opacity: 0.5;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 0.9rem;
+            padding-left: 0.55rem;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -0.05rem;
+            top: 0.3rem;
+            width: 9px;
+            height: 9px;
+            border-radius: 999px;
+            background: var(--accent-main); /* Magenta */
+        }
+
+        .timeline-title { font-size: 0.86rem; font-weight: 600; }
+        .timeline-meta { font-size: 0.78rem; opacity: 0.78; }
+        .timeline-status { font-size: 0.72rem; opacity: 0.8; margin-top: 0.15rem; }
+
+        .pill-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+            margin-top: 0.35rem;
+        }
+
+        .pill-small {
+            border-radius: 999px;
+            padding: 0.16rem 0.5rem;
+            font-size: 0.7rem;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            opacity: 0.9;
+        }
+
+        body.dark .pill-small { border-color: rgba(180, 200, 240, 0.8); }
+
+        .cert-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+            font-size: 0.84rem;
+        }
+
+        .cert-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 0.6rem;
+            padding: 0.45rem 0.6rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        body.dark .cert-item {
+            background: rgba(9, 12, 26, 0.95);
+        }
+
+        .cert-title { font-weight: 500; }
+        .cert-meta { font-size: 0.74rem; opacity: 0.75; text-align: right; }
+
+        /* PROJECTS GRID WITH HOVER POPUPS & FLIP */
+        .three-card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        @media (max-width: 960px) {
+            .three-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 640px) {
+            .three-card-grid { grid-template-columns: 1fr; }
+        }
+
+        .mini-card {
+            position: relative;
+            border-radius: 15px;
+            padding: 0.8rem 0.85rem;
+            background: rgba(255, 255, 255, 0.74);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            font-size: 0.82rem;
+            overflow: hidden;
+            transition: transform var(--transition-fast),
+                box-shadow var(--transition-fast),
+                border-color var(--transition-fast),
+                background var(--transition-fast);
+            
+            /* NEW: 3D Flip Styles */
+            perspective: 1000px;
+            cursor: pointer;
+            height: 100%; 
+            min-height: 150px; /* Ensure a minimum height for the flip effect */
+        }
+
+        body.dark .mini-card {
+            background: rgba(8, 11, 24, 0.9);
+            border-color: rgba(255, 94, 165, 0.28); /* Magenta Border */
+        }
+
+        .mini-card-front, .mini-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            border-radius: inherit;
+            padding: inherit;
+            left: 0;
+            top: 0;
+            background: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .mini-card-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, rgba(255, 94, 165, 0.1), rgba(165, 94, 255, 0.1));
+            border: 1px solid var(--accent-main);
+            color: var(--text-dark);
+            justify-content: center;
+        }
+        body.dark .mini-card-back {
+            background: linear-gradient(135deg, rgba(255, 94, 165, 0.25), rgba(165, 94, 255, 0.2));
+            color: var(--text-light);
+        }
+
+        .mini-card.flipped .mini-card-front {
+            transform: rotateY(-180deg);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .mini-card.flipped .mini-card-back {
+            transform: rotateY(0deg);
+            opacity: 1;
+        }
+
+
+        .mini-title { font-size: 0.84rem; font-weight: 600; margin-bottom: 0.2rem; }
+        .mini-meta { font-size: 0.75rem; opacity: 0.8; margin-bottom: 0.35rem; }
+        .mini-body { font-size: 0.8rem; opacity: 0.92; }
+
+        .mini-popup {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top, rgba(255, 255, 255, 0.9), transparent 70%);
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;
+            padding: 0.55rem 0.7rem;
+            font-size: 0.75rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition-fast);
+        }
+
+        body.dark .mini-popup {
+            background: radial-gradient(circle at top, rgba(5, 7, 16, 0.9), transparent 70%);
+        }
+
+        .mini-card:hover:not(.flipped) {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 26px rgba(0, 0, 0, 0.18);
+            border-color: rgba(255, 94, 165, 0.45); /* Magenta Border */
+        }
+        
+        .mini-card.flipped:hover {
+             transform: none; /* No movement when flipped */
+        }
+
+        body.dark .mini-card:hover {
+            box-shadow: var(--shadow-neon-soft);
+        }
+
+        .mini-card:hover .mini-popup {
+            opacity: 1;
+        }
+        .mini-card.flipped .mini-popup {
+             opacity: 0; /* Hide the popup when flipped */
+        }
+
+        /* SOCIAL CARDS */
+        .social-card-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.9rem;
+        }
+
+        @media (max-width: 960px) {
+            .social-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 640px) {
+            .social-card-grid { grid-template-columns: 1fr; }
+        }
+
+        .social-card-mini {
+            position: relative;
+            border-radius: 15px;
+            padding: 0.75rem 0.8rem;
+            background: rgba(255, 255, 255, 0.74);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            overflow: hidden;
+            transition: transform var(--transition-fast),
+                box-shadow var(--transition-fast),
+                border-color var(--transition-fast),
+                background var(--transition-fast);
+        }
+
+        body.dark .social-card-mini {
+            background: rgba(8, 11, 24, 0.9);
+            border-color: rgba(255, 94, 165, 0.28); /* Magenta Border */
+        }
+
+        .social-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .social-card-name { font-size: 0.82rem; font-weight: 600; }
+        .social-card-handle { font-size: 0.76rem; opacity: 0.8; }
+        .social-card-body { font-size: 0.78rem; opacity: 0.9; }
+
+        .social-card-footer {
+            margin-top: 0.3rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .social-mini-btn {
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.8);
+            padding: 0.2rem 0.6rem;
+            font-size: 0.72rem;
+            background: transparent;
+            color: inherit;
+            cursor: pointer;
+            transition: background var(--transition-fast), transform var(--transition-fast);
+        }
+
+        body.dark .social-mini-btn { border-color: rgba(191, 219, 254, 0.9); }
+
+        .social-mini-btn:hover {
+            background: rgba(255, 94, 165, 0.16); /* Magenta tint */
+            transform: translateY(-1px);
+        }
+
+        .social-popup {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top, rgba(255, 255, 255, 0.9), transparent 70%);
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;
+            padding: 0.5rem 0.7rem;
+            font-size: 0.75rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition-fast);
+        }
+
+        body.dark .social-popup {
+            background: radial-gradient(circle at top, rgba(5, 7, 16, 0.9), transparent 70%);
+        }
+
+        .social-card-mini:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 26px rgba(0, 0, 0, 0.18);
+            border-color: rgba(255, 94, 165, 0.45); /* Magenta Border */
+        }
+
+        body.dark .social-card-mini:hover {
+            box-shadow: var(--shadow-neon-soft);
+        }
+
+        .social-card-mini:hover .social-popup {
+            opacity: 1;
+        }
+
+        /* CONTACT */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.25fr) minmax(0, 1.1fr);
+            gap: 1.4rem;
+        }
+
+        @media (max-width: 900px) {
+            .contact-grid { grid-template-columns: 1fr; }
+        }
+
+        .contact-card {
+            border-radius: 16px;
+            padding: 1rem 1rem 1.1rem;
+            background: rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(18px);
+            font-size: 0.86rem;
+        }
+
+        body.dark .contact-card {
+            background: rgba(8, 11, 24, 0.9);
+            border-color: rgba(255, 94, 165, 0.3); /* Magenta Border */
+        }
+
+        .contact-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.85rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .contact-label {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+        }
+
+        .contact-value { font-size: 0.85rem; }
+
+        .contact-actions {
+            margin-top: 0.75rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.65rem;
+        }
+
+        .contact-actions button {
+            border-radius: 999px;
+            padding: 0.4rem 0.85rem;
+            border: 1px solid rgba(148, 163, 184, 0.8);
+            background: transparent;
+            color: inherit;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: background var(--transition-fast),
+                transform var(--transition-fast),
+                box-shadow var(--transition-fast),
+                border-color var(--transition-fast);
+        }
+
+        body.dark .contact-actions button { border-color: rgba(191, 219, 254, 0.9); }
+
+        .contact-actions button:hover {
+            background: rgba(255, 94, 165, 0.16); /* Magenta tint */
+            box-shadow: 0 10px 20px rgba(255, 94, 165, 0.22); /* Magenta Shadow */
+            transform: translateY(-1px);
+        }
+
+        .status-strip {
+            margin-top: 0.8rem;
+            font-size: 0.78rem;
+            opacity: 0.85;
+        }
+
+        /* LET'S TALK */
+        .talk-form {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.9rem 1rem;
+        }
+
+        @media (max-width: 640px) {
+            .talk-form { grid-template-columns: 1fr; }
+        }
+
+        .field-block {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            font-size: 0.8rem;
+        }
+
+        .field-label { opacity: 0.85; }
+
+        .field-input,
+        .field-textarea {
+            border-radius: 9px;
+            border: 1px solid rgba(148, 163, 184, 0.8);
+            background: rgba(255, 255, 255, 0.95);
+            color: inherit;
+            padding: 0.42rem 0.55rem;
+            font: inherit;
+            font-size: 0.85rem;
+            outline: none;
+            transition: border var(--transition-fast),
+                box-shadow var(--transition-fast),
+                background var(--transition-fast);
+        }
+
+        .field-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        body.dark .field-input,
+        body.dark .field-textarea {
+            background: rgba(7, 10, 22, 0.95);
+            border-color: rgba(191, 219, 254, 0.9);
+        }
+
+        .field-input:focus,
+        .field-textarea:focus {
+            border-color: var(--accent-main); /* Magenta Focus */
+            box-shadow: 0 0 14px rgba(255, 94, 165, 0.5); /* Magenta Shadow */
+        }
+
+        .talk-footer {
+            margin-top: 0.9rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        footer {
+            margin-top: 3rem;
+            font-size: 0.75rem;
+            opacity: 0.85;
+            text-align: center;
+        }
+
+        /* MODAL */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 3, 10, 0.75);
+            backdrop-filter: blur(16px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition-med);
+            z-index: 80;
+        }
+
+        .modal-backdrop.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            max-width: 360px;
+            width: 100%;
+            border-radius: 16px;
+            padding: 1rem 1rem 0.95rem;
+            background: #0a0f1f;
+            border: 1px solid rgba(255, 94, 165, 0.6); /* Magenta Border */
+            box-shadow: var(--shadow-neon-soft);
+            color: #f5f7ff;
+            transform: translateY(8px) scale(0.96);
+            opacity: 0;
+            transition: opacity var(--transition-med),
+                transform var(--transition-med);
+        }
+
+        .modal-backdrop.show .modal {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-title {
+            font-size: 0.9rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 0.35rem;
+        }
+
+        .modal-body {
+            font-size: 0.84rem;
+            opacity: 0.92;
+            margin-bottom: 0.8rem;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+
+        .modal-footer button {
+            border-radius: 999px;
+            padding: 0.35rem 0.75rem;
+            font-size: 0.75rem;
+            border: 1px solid rgba(191, 219, 254, 0.9);
+            background: transparent;
+            color: inherit;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .modal-footer .primary {
+            background: linear-gradient(135deg, var(--accent-main), var(--accent-secondary));
+            color: #050711;
+            border: none;
+        }
+
+      
+
+        /* FADE-IN (Updated for JS Scroll Triggering) */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(14px);
+            transition: opacity 0.65s ease-out, transform 0.65s ease-out;
+        }
+
+        .fade-in-up.animated {
+             animation: fadeUp 0.65s ease-out forwards;
+        }
+
+        .delay-1.animated { animation-delay: 0.1s; }
+        .delay-2.animated { animation-delay: 0.2s; }
+        .delay-3.animated { animation-delay: 0.3s; }
+        .delay-4.animated { animation-delay: 0.4s; }
+
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .hero { gap: 1.4rem; }
+            .header-inner { padding-inline: 1rem; }
+            .page-wrap { padding-inline: 1rem; }
+        }
     </style>
 </head>
-<body>
+<body class="light">
+<div class="bg-layer"></div>
+<div class="bg-watermark">
+    <div class="watermark-text">PEER KHLAS</div>
+</div>
+<div class="bg-heart">
+    <div class="heart-core"></div>
+</div>
 
-<div id="output"></div>
-<div class="input-area">
-    <span class="user">root@kali</span>:<span class="path" id="path">~</span>$&nbsp;
-    <input type="text" id="input" autofocus spellcheck="false" autocomplete="off">
+<header>
+    <div class="header-inner">
+        <div class="brand">
+            <div>
+                <div class="brand-main">PEERZADA IKHLAS</div>
+                <div class="brand-tagline">HARDWARE • NETWORKING • IOT</div>
+            </div>
+            <div class="brand-dot"></div>
+        </div>
+
+        <div class="nav-group">
+            <div class="theme-toggle" id="themeToggle">
+                <span>L</span><span>D</span>
+                <div class="theme-toggle-thumb"></div>
+            </div>
+            <div class="hamburger" id="hamburgerBtn" aria-label="Open navigation" aria-expanded="false">
+                <span></span>
+            </div>
+
+            <ul class="hamburger-menu" id="hamburgerMenu">
+                <li><button data-scroll="#hero"><span>Home</span><span>Intro</span></button></li>
+                <li><button data-scroll="#about"><span>About</span><span>Profile</span></button></li>
+                <li><button data-scroll="#edu"><span>Education</span><span>Journey</span></button></li>
+                <li><button data-scroll="#projects"><span>Projects</span><span>Work</span></button></li>
+                <li><button data-scroll="#social"><span>Social</span><span>Cards</span></button></li>
+                <li><button data-scroll="#contact"><span>Contact</span><span>Reach out</span></button></li>
+                <li><button data-scroll="#talk"><span>Let’s talk</span><span>Message</span></button></li>
+                <li><button id="downloadResumeBtn"><span>Resume</span><span>PDF</span></button></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<div class="page-wrap">
+    <main>
+        <section class="hero" id="hero">
+            <div class="hero-card hero-text fade-in-up">
+                <div class="hero-kicker">CURIOUS TECH-DRIVEN LEARNER</div>
+                <h1 class="hero-heading">
+                    I’m <span>Peerzada Ikhlas</span>, a tech‑savvy fresher exploring hardware, networking, and IoT.
+                </h1>
+                <p class="hero-sub">
+                    I enjoy understanding systems from the inside — from computer hardware and networking
+                    to microcontroller‑based projects like Arduino. I’m combining my studies in Political Science
+                    and Computer Hardware &amp; Networking with real, practical experiments.
+                </p>
+
+                <div class="hero-location">
+                    <span class="hero-location-dot"></span>
+                    <span>Bijbehara, Jammu &amp; Kashmir · India</span>
+                </div>
+
+                <div class="hero-highlight-strip">
+                    <div class="pulse-dot"></div>
+                    <div>Motivated, detail‑oriented, and always exploring DIY tech and IoT innovations.</div>
+                </div>
+
+                <div class="hero-actions">
+                    <button class="btn-primary" id="lockedResumeBtn">
+                        <span>View resume</span>
+                    </button>
+                    <button class="btn-ghost" id="contactPopupBtn">
+                        <span>Quick contact</span>
+                    </button>
+                </div>
+
+                <div class="hero-meta-row">
+                    <span class="label">SOCIAL</span>
+                    <div class="hero-socials">
+                        <button class="icon-pill" data-contact="twitter">
+                            <span class="icon-svg">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 4l16 16M20 4L4 20" />
+                                </svg>
+                            </span>
+                            <span>X</span>
+                        </button>
+                        <button class="icon-pill" data-contact="instagram">
+                            <span class="icon-svg">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                                    <rect x="4" y="4" width="16" height="16" rx="4"></rect>
+                                    <circle cx="12" cy="12" r="3.5"></circle>
+                                    <circle cx="17" cy="7" r="0.9" fill="currentColor"></circle>
+                                </svg>
+                            </span>
+                            <span>Instagram</span>
+                        </button>
+                        <button class="icon-pill" data-contact="facebook">
+                            <span class="icon-svg">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                    <path d="M14 8h2V4h-2a4 4 0 0 0-4 4v2H8v4h2v6h4v-6h2l1-4h-3V8a1 1 0 0 1 1-1z" />
+                                </svg>
+                            </span>
+                            <span>Facebook</span>
+                        </button>
+                        <button class="icon-pill" data-contact="snapchat">
+                            <span class="icon-svg">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M8 9a4 4 0 0 1 8 0v4c0 1.6-1.1 3.3-2.9 3.8L12 18l-1.1-0.2A4 4 0 0 1 8 13V9z"/>
+                                    <path d="M6 17c1.2.4 1.6 1.6 3.3 1.6 1.2 0 1.7-.6 2.7-.6s1.5.6 2.7.6c1.7 0 2.1-1.2 3.3-1.6" />
+                                </svg>
+                            </span>
+                            <span>Snapchat</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-photo-card fade-in-up delay-1">
+                <div class="glass-shell">
+                    <div class="glass-inner">
+                        <div class="photo-circle">
+                            <img src="profile.jpg" alt="Peerzada Ikhlas portrait" />
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-name">PEERZADA IKHLAS</div>
+                            <div class="card-role">Computer Hardware • Networking • IoT</div>
+                            <div class="card-status-pill">
+                                <div class="dot"></div>
+                                <div>Open to opportunities</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="fade-in-up delay-2">
+            <div class="section-card">
+                <div class="section-header">
+                    <div class="section-title">ABOUT</div>
+                    <div class="section-subtitle">
+                        A short story of where I am and what I’m building.
+                    </div>
+                </div>
+
+                <div class="about-grid">
+                    <div class="about-text">
+                        <p>
+                            I’m Peerzada Ikhlas, a motivated fresher with a foundation in
+                            <strong>computer hardware, networking, and IoT technologies</strong>.
+                            I like working with machines, cables, sensors, and code — and understanding how
+                            they connect to solve real problems.
+                        </p>
+                        <p style="margin-top:0.6rem;">
+                            I’m pursuing a <strong>B.A in Political Science</strong> from IGNOU and an
+                            <strong>ITI in Computer Hardware &amp; Networking</strong> at Government ITI Anantnag.
+                            I’ve completed an <strong>ITI in Stenography</strong> and a
+                            <strong>Certificate in Computer Applications, Business Accounting &amp; Multilingual DTP</strong> from NIELIT.
+                        </p>
+                        <p style="margin-top:0.6rem;">
+                            Most of my free time goes into <strong>surfing the internet</strong>,
+                            learning about <strong>new technologies</strong>, building <strong>DIY tech projects</strong>, and
+                            experimenting with <strong>IoT ideas</strong>. I like learning by doing, not just by reading.
+                        </p>
+
+                        <div class="tags-row">
+                            <span class="tag">Tech‑savvy fresher</span>
+                            <span class="tag">Hardware troubleshooting</span>
+                            <span class="tag">Networking basics</span>
+                            <span class="tag">Arduino &amp; IoT</span>
+                            <span class="tag">Digital literacy</span>
+                            <span class="tag">Continuous learner</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="highlight-card">
+                            <div class="highlight-inner">
+                                <div class="highlight-heading">CORE TECH SKILLS</div>
+                                <div class="highlight-grid">
+                                    <div class="badge">Computer hardware</div>
+                                    <div class="badge">Troubleshooting &amp; maintenance</div>
+                                    <div class="badge">LAN &amp; routers</div>
+                                    <div class="badge">Wi‑Fi &amp; IoT devices</div>
+                                    <div class="badge">Windows &amp; basic Linux</div>
+                                    <div class="badge">MS Office &amp; docs</div>
+                                    <div class="badge">Arduino &amp; sensors</div>
+                                    <div class="badge">Basic programming</div>
+                                </div>
+
+                                <div class="slider-wrap">
+                                    <div class="slider-track">
+                                        <div class="slide active">
+                                            I’m comfortable diagnosing hardware issues, assembling systems,
+                                            and handling basic networking tasks involving LAN, routers, and Wi‑Fi.
+                                        </div>
+                                        <div class="slide">
+                                            My certifications in <strong>Computer Applications, Business Accounting &amp; Multilingual DTP</strong>
+                                            and <strong>Stenography</strong> give me strong documentation and typing skills.
+                                        </div>
+                                        <div class="slide">
+                                            I enjoy working on small IoT and Arduino projects, especially those that connect
+                                            sensors, automation, and real‑world problem solving.
+                                        </div>
+                                    </div>
+                                    <div class="slider-controls">
+                                        <button class="dot-btn active" data-slide="0"></button>
+                                        <button class="dot-btn" data-slide="1"></button>
+                                        <button class="dot-btn" data-slide="2"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="edu" class="fade-in-up delay-3">
+            <div class="section-card">
+                <div class="section-header">
+                    <div class="section-title">EDUCATION &amp; CERTIFICATIONS</div>
+                    <div class="section-subtitle">
+                        A structured journey combining academics, training, and digital skills.
+                    </div>
+                </div>
+
+                <div class="two-col-grid">
+                    <div>
+                        <div class="highlight-heading" style="margin-bottom:0.5rem;">EDUCATION TIMELINE</div>
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-title">B.A (Political Science)</div>
+                                <div class="timeline-meta">Indira Gandhi National Open University (IGNOU)</div>
+                                <div class="timeline-status">Status: Pursuing</div>
+                                <div class="pill-row">
+                                    <span class="pill-small">Critical thinking</span>
+                                    <span class="pill-small">Understanding systems</span>
+                                </div>
+                            </div>
+
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-title">ITI – Computer Hardware &amp; Networking</div>
+                                <div class="timeline-meta">Government ITI Anantnag</div>
+                                <div class="timeline-status">Status: Pursuing</div>
+                                <div class="pill-row">
+                                    <span class="pill-small">Hardware setup</span>
+                                    <span class="pill-small">Networking basics</span>
+                                </div>
+                            </div>
+
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-title">ITI – Stenography</div>
+                                <div class="timeline-meta">Government ITI Anantnag</div>
+                                <div class="timeline-status">Status: Completed</div>
+                                <div class="pill-row">
+                                    <span class="pill-small">Typing</span>
+                                    <span class="pill-small">Note‑taking</span>
+                                </div>
+                            </div>
+
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-title">Higher Secondary (12th Class)</div>
+                                <div class="timeline-meta">
+                                    Govt. Boys Model Higher Secondary School, Bijbehara
+                                </div>
+                                <div class="timeline-status">Status: Completed</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="highlight-heading" style="margin-bottom:0.5rem;">CERTIFICATIONS</div>
+                        <div class="cert-list">
+                            <div class="cert-item">
+                                <div class="cert-title">Computer Applications, Business Accounting &amp; Multilingual DTP</div>
+                                <div class="cert-meta">NIELIT · Completed</div>
+                            </div>
+                            <div class="cert-item">
+                                <div class="cert-title">ITI – Stenography</div>
+                                <div class="cert-meta">Govt. ITI Anantnag · Completed</div>
+                            </div>
+                            <div class="cert-item">
+                                <div class="cert-title">ITI – Computer Hardware &amp; Networking</div>
+                                <div class="cert-meta">Govt. ITI Anantnag · Pursuing</div>
+                            </div>
+                            <div class="cert-item">
+                                <div class="cert-title">Digital literacy &amp; Internet usage</div>
+                                <div class="cert-meta">Self‑driven learning</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="fade-in-up delay-4">
+            <div class="section-card">
+                <div class="section-header">
+                    <div class="section-title">PROJECTS &amp; INTERESTS</div>
+                    <div class="section-subtitle">
+                        Hands‑on work, practice, and what I enjoy exploring. (Click cards for details)
+                    </div>
+                </div>
+
+                <div class="three-card-grid">
+                    <div class="mini-card" onclick="this.classList.toggle('flipped');">
+                        <div class="mini-card-front">
+                            <div class="mini-title">Distance Detector Using Arduino UNO</div>
+                            <div class="mini-meta">Hardware &amp; IoT · Ultrasonic sensor</div>
+                            <div class="mini-body">
+                                Designed and programmed a working distance‑measurement device using an ultrasonic sensor
+                                and Arduino UNO. It taught me how hardware, sensor data, and code come together.
+                            </div>
+                            <div class="mini-popup">
+                                A simple concept that shows how small components can become smart tools.
+                            </div>
+                        </div>
+                        <div class="mini-card-back">
+                            <div class="mini-title" style="color:var(--accent-main);">DETAIL: DISTANCE DETECTOR</div>
+                            <p style="font-size: 0.8rem; margin-top: 0.4rem;">
+                                **Focus:** Microcontroller interaction & data processing.
+                                **Outcome:** Successfully measured distance up to 400cm with a 1cm error margin.
+                                **Skills:** C/C++ programming for Arduino, sensor calibration.
+                            </p>
+                            <div style="font-size: 0.75rem; margin-top: 0.7rem; opacity: 0.7;">Click to close.</div>
+                        </div>
+                    </div>
+
+                    <div class="mini-card" onclick="this.classList.toggle('flipped');">
+                         <div class="mini-card-front">
+                            <div class="mini-title">IoT &amp; Small Electronic Projects</div>
+                            <div class="mini-meta">DIY projects · Circuits &amp; automation</div>
+                            <div class="mini-body">
+                                Worked on mini‑projects involving sensors, simple circuits, and basic automation.
+                                I enjoy experimenting with small ideas that could grow into bigger solutions.
+                            </div>
+                            <div class="mini-popup">
+                                Tiny circuits, real curiosity — learning from each small build.
+                            </div>
+                         </div>
+                         <div class="mini-card-back">
+                            <div class="mini-title" style="color:var(--accent-main);">DETAIL: IOT EXPERIMENTS</div>
+                            <p style="font-size: 0.8rem; margin-top: 0.4rem;">
+                                **Focus:** Connecting simple sensors (temp/light) to microcontrollers.
+                                **Outcome:** Built basic environment monitors and simple light controls.
+                                **Skills:** Breadboarding, basic circuit design, component testing.
+                            </p>
+                            <div style="font-size: 0.75rem; margin-top: 0.7rem; opacity: 0.7;">Click to close.</div>
+                        </div>
+                    </div>
+
+                    <div class="mini-card" onclick="this.classList.toggle('flipped');">
+                        <div class="mini-card-front">
+                            <div class="mini-title">Hardware &amp; System Setup Practice</div>
+                            <div class="mini-meta">Hands‑on · Troubleshooting &amp; OS</div>
+                            <div class="mini-body">
+                                Practice tasks with assembling systems, checking components, installing operating systems,
+                                and setting up essential software to make machines ready to use.
+                            </div>
+                            <div class="mini-popup">
+                                Every working PC started as loose parts on a table.
+                            </div>
+                        </div>
+                        <div class="mini-card-back">
+                            <div class="mini-title" style="color:var(--accent-main);">DETAIL: SYSTEM WORKFLOW</div>
+                            <p style="font-size: 0.8rem; margin-top: 0.4rem;">
+                                **Focus:** End-to-end system preparation.
+                                **Outcome:** Able to diagnose boot errors, optimize BIOS settings, and configure drives.
+                                **Skills:** PC assembly, OS installation (Windows/Linux dual boot), driver management.
+                            </p>
+                            <div style="font-size: 0.75rem; margin-top: 0.7rem; opacity: 0.7;">Click to close.</div>
+                        </div>
+                    </div>
+
+                    <div class="mini-card" onclick="this.classList.toggle('flipped');">
+                        <div class="mini-card-front">
+                            <div class="mini-title">Internet &amp; Tech Exploration</div>
+                            <div class="mini-meta">Hobby · Continuous learning</div>
+                            <div class="mini-body">
+                                I use the internet as my learning space — from tutorials and forums
+                                to documentation and videos about hardware, networking, and IoT.
+                            </div>
+                            <div class="mini-popup">
+                                Curiosity + internet = infinite learning path.
+                            </div>
+                        </div>
+                        <div class="mini-card-back">
+                            <div class="mini-title" style="color:var(--accent-main);">DETAIL: EXPLORATION METHOD</div>
+                            <p style="font-size: 0.8rem; margin-top: 0.4rem;">
+                                **Focus:** Self-directed learning and resource management.
+                                **Outcome:** Strong familiarity with tech forums, educational platforms, and technical documentation.
+                                **Skills:** Digital research, resource filtering, technical reading comprehension.
+                            </p>
+                            <div style="font-size: 0.75rem; margin-top: 0.7rem; opacity: 0.7;">Click to close.</div>
+                        </div>
+                    </div>
+
+                    <div class="mini-card" onclick="this.classList.toggle('flipped');">
+                        <div class="mini-card-front">
+                            <div class="mini-title">Documentation &amp; Typing</div>
+                            <div class="mini-meta">Stenography · MS Office</div>
+                            <div class="mini-body">
+                                With a stenography background and computer application skills,
+                                I can handle structured note‑taking, documentation, and typed reports clearly.
+                            </div>
+                            <div class="mini-popup">
+                                Clean documents make technical work easier to share and understand.
+                            </div>
+                        </div>
+                        <div class="mini-card-back">
+                            <div class="mini-title" style="color:var(--accent-main);">DETAIL: ADMINISTRATIVE SKILLS</div>
+                            <p style="font-size: 0.8rem; margin-top: 0.4rem;">
+                                **Focus:** Efficiency and accuracy in communication.
+                                **Outcome:** Certified proficiency in Stenography and advanced Microsoft Office suite usage.
+                                **Skills:** High-speed typing, professional formatting, data organization (Excel/Sheets).
+                            </p>
+                            <div style="font-size: 0.75rem; margin-top: 0.7rem; opacity: 0.7;">Click to close.</div>
+                        </div>
+                    </div>
+
+                    <div class="mini-card" onclick="this.classList.toggle('flipped');">
+                        <div class="mini-card-front">
+                            <div class="mini-title">Future Direction</div>
+                            <div class="mini-meta">Growth · Career path</div>
+                            <div class="mini-body">
+                                I want to grow in roles related to computer hardware support, networking,
+                                and possibly IoT‑based solutions — while staying open to new technologies.
+                            </div>
+                            <div class="mini-popup">
+                                Step by step, project by project, I’m building my own path.
+                            </div>
+                        </div>
+                        <div class="mini-card-back">
+                            <div class="mini-title" style="color:var(--accent-main);">DETAIL: CAREER VISION</div>
+                            <p style="font-size: 0.8rem; margin-top: 0.4rem;">
+                                **Short-term:** Secure an entry-level role focusing on technical support or help desk.
+                                **Long-term:** Specialize in embedded systems or network security certification (e.g., CCNA).
+                                **Goal:** Become a trusted professional bridging hardware and connectivity.
+                            </p>
+                            <div style="font-size: 0.75rem; margin-top: 0.7rem; opacity: 0.7;">Click to close.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="social" class="fade-in-up delay-4" style="margin-top:3rem;">
+            <div class="section-card">
+                <div class="section-header">
+                    <div class="section-title">SOCIAL PRESENCE</div>
+                    <div class="section-subtitle">
+                        Card‑based view of where you can find me online.
+                    </div>
+                </div>
+
+                <div class="social-card-grid">
+                    <div class="social-card-mini">
+                        <div class="social-card-header">
+                            <span class="icon-svg">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 4l16 16M20 4L4 20" />
+                                </svg>
+                            </span>
+                            <div>
+                                <div class="social-card-name">X (Twitter)</div>
+                                <div class="social-card-handle">@PATRIOT_SPIRIT0</div>
+                            </div>
+                        </div>
+                        <div class="social-card-body">
+                            I share thoughts, ideas, and sometimes tech‑related content here.
+                        </div>
+                        <div class="social-card-footer">
+                            <button class="social-mini-btn" data-contact="twitter">Open card</button>
+                        </div>
+                        <div class="social-popup">
+                            Best for short updates, opinions, and quick tech thoughts.
+                        </div>
+                    </div>
+
+                    <div class="social-card-mini">
+                        <div class="social-card-header">
+                            <span class="icon-svg">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                                    <rect x="4" y="4" width="16" height="16" rx="4"></rect>
+                                    <circle cx="12" cy="12" r="3.5"></circle>
+                                    <circle cx="17" cy="7" r="0.9" fill="currentColor"></circle>
+                                </svg>
+                            </span>
+                            <div>
+                                <div class="social-card-name">Instagram</div>
+                                <div class="social-card-handle">@ayanovaic</div>
+                            </div>
+                        </div>
+                        <div class="social-card-body">
+                            A more visual side of me — moments, interests, and everyday life.
+                        </div>
+                        <div class="social-card-footer">
+                            <button class="social-mini-btn" data-contact="instagram">Open card</button>
+                        </div>
+                        <div class="social-popup">
+                            Where you see more than just text — a bit of my world.
+                        </div>
+                    </div>
+
+                    <div class="social-card-mini">
+                        <div class="social-card-header">
+                            <span class="icon-svg">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                    <path d="M14 8h2V4h-2a4 4 0 0 0-4 4v2H8v4h2v6h4v-6h2l1-4h-3V8a1 1 0 0 1 1-1z" />
+                                </svg>
+                            </span>
+                            <div>
+                                <div class="social-card-name">Facebook</div>
+                            </div>
+                        </div>
+                        <div class="social-card-body">
+                            A place for connections, updates, and staying in touch with people I know.
+                        </div>
+                        <div class="social-card-footer">
+                            <button class="social-mini-btn" data-contact="facebook">Open card</button>
+                        </div>
+                        <div class="social-popup">
+                            More personal and familiar — friends, family, and updates.
+                        </div>
+                    </div>
+
+                    <div class="social-card-mini">
+                        <div class="social-card-header">
+                            <span class="icon-svg">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M8 9a4 4 0 0 1 8 0v4c0 1.6-1.1 3.3-2.9 3.8L12 18l-1.1-0.2A4 4 0 0 1 8 13V9z"/>
+                                    <path d="M6 17c1.2.4 1.6 1.6 3.3 1.6 1.2 0 1.7-.6 2.7-.6s1.5.6 2.7.6c1.7 0 2.1-1.2 3.3-1.6" />
+                                </svg>
+                            </span>
+                            <div>
+                                <div class="social-card-name">Snapchat</div>
+                                <div class="social-card-handle">ion.ayan</div>
+                            </div>
+                        </div>
+                        <div class="social-card-body">
+                            Quick snaps, real‑time moments, and informal conversations.
+                        </div>
+                        <div class="social-card-footer">
+                            <button class="social-mini-btn" data-contact="snapchat">Open card</button>
+                        </div>
+                        <div class="social-popup">
+                            Best for fast, short, and casual interactions.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="fade-in-up delay-4" style="margin-top:3rem;">
+            <div class="section-card">
+                <div class="section-header">
+                    <div class="section-title">CONTACT</div>
+                    <div class="section-subtitle">
+                        WhatsApp &amp; Gmail — unlocked only with the password.
+                    </div>
+                </div>
+
+                <div class="contact-grid">
+                    <div class="contact-card">
+                        <div class="contact-row">
+                            <div>
+                                <div class="contact-label">WHATSAPP</div>
+                                <div class="contact-value">Tap the icon to start a chat.</div>
+                            </div>
+                        </div>
+                        <div class="contact-row">
+                            <div>
+                                <div class="contact-label">GMAIL</div>
+                                <div class="contact-value">Tap the icon to send an email.</div>
+                            </div>
+                        </div>
+
+                        <div class="contact-actions">
+                            <button data-contact="whatsapp">
+                                <span class="icon-svg">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                                        <path d="M5 19l1.2-3.4A7 7 0 1 1 19 12a7 7 0 0 1-9.8 6.2L5 19z"/>
+                                        <path d="M10.5 8.8c-.2-.4-.3-.4-.6-.4h-.4c-.2 0-.4.1-.5.3-.1.2-.7.6-.7 1.5 0 .9.7 1.8.8 1.9.1.2 1.5 2.4 3.7 3.3 1.8.7 2.2.6 2.6.5.4-.1 1.3-.5 1.4-1s.2-.9.1-1c-.1-.2-.2-.2-.5-.3l-1.4-.7c-.2-.1-.4-.1-.5.1l-.4.5c-.1.1-.2.1-.4 0-.2-.1-.9-.3-1.7-1.1-.6-.5-1-1.2-1.1-1.4-.1-.2 0-.3.1-.4l.3-.3c.1-.1.1-.2.2-.3l-.7-1.3z"/>
+                                    </svg>
+                                </span>
+                                <span>WhatsApp</span>
+                            </button>
+                            <button data-contact="email">
+                                <span class="icon-svg">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                                        <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                                        <path d="M4 7l8 6 8-6" />
+                                    </svg>
+                                </span>
+                                <span>Gmail</span>
+                            </button>
+                        </div>
+
+                        <div class="status-strip">
+                            Contact details are protected by a simple password. Once unlocked, icons
+                            open pre‑filled messages so it’s easy to say hello.
+                        </div>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-label">HOW I LIKE TO CONNECT</div>
+                        <div class="contact-value" style="margin-top:0.35rem;">
+                            Clear, simple messages that explain who you are, what you need, and how I can help.
+                            Whether it’s about projects, internships, collaboration, or a tech discussion — I appreciate context.
+                        </div>
+                        <div class="status-strip" style="margin-top:0.9rem;">
+                            For quick and casual conversations, WhatsApp works best. For detailed or formal communication,
+                            email is a better fit.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="talk" class="fade-in-up delay-4" style="margin-top:3rem;">
+            <div class="section-card">
+                <div class="section-header">
+                    <div class="section-title">LET’S TALK</div>
+                    <div class="section-subtitle">
+                        Share your name, contact, and message — I’ll take it from there.
+                    </div>
+                </div>
+
+                <div class="talk-form">
+                    <div class="field-block">
+                        <label class="field-label" for="talkName">Name</label>
+                        <input class="field-input" id="talkName" placeholder="Your name" />
+                    </div>
+                    <div class="field-block">
+                        <label class="field-label" for="talkContact">Contact</label>
+                        <input class="field-input" id="talkContact" placeholder="Email, WhatsApp, or social handle" />
+                    </div>
+                    <div class="field-block" style="grid-column:1/-1;">
+                        <label class="field-label" for="talkMessage">Message</label>
+                        <textarea class="field-textarea" id="talkMessage" placeholder="What would you like to talk about?"></textarea>
+                    </div>
+                </div>
+
+                <div class="talk-footer">
+                    <button class="btn-primary" id="connectNowBtn">
+                        <span>Connect now</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        © <span id="yearSpan"></span> Peerzada Ikhlas · Built in light neon magenta and violet with Forever Knights energy.
+    </footer>
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal">
+        <div class="modal-title" id="modalTitle">QUICK CONTACT</div>
+        <div class="modal-body" id="modalBody">
+            ...
+        </div>
+        <div class="modal-footer" id="modalFooter">
+            <button id="modalCloseBtn">Close</button>
+        </div>
+    </div>
 </div>
 
 <script>
-    // --- 1. DYNAMIC FILE SYSTEM ---
-    const fs = {
-        "~": {
-            "Desktop": {},
-            "Documents": { "notes.txt": "Target IP: 192.168.1.105\nVulnerability: SMB Ghost" },
-            "Downloads": { "malware.exe": "[BINARY DATA]" },
-            "Tools": {
-                "nmap": "Binary", "hydra": "Binary", "metasploit": "Binary",
-                "script.py": "print('Hacking sequence started...')"
-            },
-            "README.md": "Welcome to Kali Linux Web Sim.\nThere are over 200 recognized commands."
-        }
-    };
-    
-    let path = ["~"];
-    let history = [];
-    let historyIdx = -1;
+    var contactUnlocked = false; // Initial state
 
-    // --- 2. THE MASSIVE COMMAND DATABASE (200+ Recognized Tools) ---
-    const commandDB = {
-        // --- CORE SYSTEM (Fully Working) ---
-        "ls": { type: "func", fn: listDir },
-        "cd": { type: "func", fn: changeDir },
-        "cat": { type: "func", fn: readFile },
-        "clear": { type: "func", fn: clearScreen },
-        "pwd": { type: "func", fn: () => print(path.join("/")) },
-        "echo": { type: "func", fn: (args) => print(args.join(" ")) },
-        "mkdir": { type: "func", fn: makeDir },
-        "touch": { type: "func", fn: touchFile },
-        "rm": { type: "func", fn: removeFile },
-        "history": { type: "func", fn: showHistory },
-        "help": { type: "func", fn: showHelp },
-        "whoami": { type: "text", msg: "root" },
-        "date": { type: "func", fn: () => print(new Date().toString()) },
-        "reboot": { type: "func", fn: () => { print("System rebooting..."); setTimeout(()=>location.reload(), 1500); } },
+    // --- NEW: Password System Function ---
+    function askForPassword(actionText, successCallback) {
+        openModal(
+            actionText + " ACCESS",
+            '<div style="margin-bottom: 0.8rem;">Enter the security code to unlock contact details and the resume PDF.</div>' +
+            '<input type="password" id="passwordInput" placeholder="Enter code" style="' +
+            'width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid #A55EFF; ' +
+            'background: rgba(255, 255, 255, 0.9); color: #050711; font-size: 0.9rem; margin-top: 0.2rem;' +
+            '"/>' +
+            '<div id="passwordError" style="color: #FF5EA5; font-size: 0.75rem; margin-top: 0.5rem; height: 1.1rem;"></div>',
+            [
+                { label: "Cancel", onClick: function () { modalBackdrop.classList.remove("show"); } },
+                {
+                    label: actionText,
+                    primary: true,
+                    onClick: function () {
+                        var input = document.getElementById("passwordInput");
+                        var errorDiv = document.getElementById("passwordError");
+                        // --- SET YOUR CODE HERE ---
+                        var correctCode = "1234"; 
 
-        // --- HACKING TOOLS (Simulated Output) ---
-        "nmap": { type: "sim", msg: "Starting Nmap 7.92 ( https://nmap.org ) at 2025-01-01\nNmap scan report for target (192.168.1.1)\nHost is up (0.0023s latency).\nNot shown: 997 closed ports\nPORT   STATE SERVICE\n22/tcp OPEN  ssh\n80/tcp OPEN  http\n\nNmap done: 1 IP address (1 host up) scanned in 1.44 seconds" },
-        "sqlmap": { type: "error", msg: "Usage: sqlmap -u [url] --dbs\nError: Missing required argument '-u'." },
-        "msfconsole": { type: "sim", msg: " \n      .:okOOOkdc'           \n    .xOOOOOOOOOOOOc       \n   .OOO/''''''\\OOO.      \n   ,OOO\\      /OOO.       \n    'cOOOOOOOOOOOOc       \n      'cxOOOOOOOk:        \n\n=[ metasploit v6.0.30-dev                          ]\n+ -- --=[ 2048 exploits - 1105 auxiliary - 344 post       ]\n+ -- --=[ 562 payloads - 45 encoders - 10 nops            ]\n\nmsf6 >" },
-        "hydra": { type: "error", msg: "Syntax: hydra -l user -P passlist.txt ftp://192.168.0.1" },
-        "aircrack-ng": { type: "text", msg: "Aircrack-ng 1.6 - (C) 2006-2020 Thomas d'Otreppe\n\nNo input file provided." },
-        "john": { type: "text", msg: "John the Ripper 1.9.0-jumbo-1 OMP [linux-gnu 64-bit AVX2 AC]\nUsage: john [options] [password-files]" },
-        "burpsuite": { type: "warn", msg: "Java Environment detected. Starting Burp Suite Community Edition..." },
-        "wireshark": { type: "error", msg: "Error: Wireshark requires a graphical interface (GUI). Use tshark for terminal." },
-        
-        // --- NETWORK UTILS ---
-        "ping": { type: "func", fn: runPing },
-        "ip": { type: "text", msg: "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN\n2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 state UP" },
-        "ifconfig": { type: "text", msg: "eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500\n        inet 192.168.1.45  netmask 255.255.255.0  broadcast 192.168.1.255" },
-        "curl": { type: "text", msg: "curl: try 'curl --help' for more information" },
-        "wget": { type: "text", msg: "wget: missing URL\nUsage: wget [OPTION]... [URL]..." },
-        "ssh": { type: "text", msg: "usage: ssh destination_ip" },
-        "netstat": { type: "text", msg: "Active Internet connections (w/o servers)\nProto Recv-Q Send-Q Local Address           Foreign Address         State      \ntcp        0      0 kali:44822              stackoverflow.com:https ESTABLISHED" },
+                        if (input.value === correctCode) {
+                            contactUnlocked = true;
+                            modalBackdrop.classList.remove("show");
+                            successCallback();
+                        } else {
+                            errorDiv.textContent = "Incorrect code. Try '1234' for this demo.";
+                            input.value = "";
+                            input.focus();
+                        }
+                    }
+                }
+            ]
+        );
+        // Focus the input field when the modal is shown
+        setTimeout(function() {
+            document.getElementById("passwordInput").focus();
+        }, 100);
+    }
+    // --- END NEW: Password System Function ---
 
-        // --- PROGRAMMING ---
-        "python": { type: "text", msg: "Python 3.10.8 (main, Nov 14 2022, 00:00:00) [GCC 12.2.0] on linux\nType \"help\", \"copyright\", \"credits\" or \"license\" for more information.\n>>> exit()" },
-        "python3": { type: "text", msg: "Python 3.10.8... >>>" },
-        "node": { type: "text", msg: "Welcome to Node.js v16.14.0.\nType \".help\" for more information.\n> " },
-        "gcc": { type: "error", msg: "gcc: fatal error: no input files\ncompilation terminated." },
-        "git": { type: "text", msg: "usage: git [--version] [--help] <command> [<args>]" },
-        "vim": { type: "warn", msg: "Vim: Standard input is not a terminal." },
-        "nano": { type: "warn", msg: "Error opening terminal: unknown." },
 
-        // --- LINUX UTILS (Stubbed to look real) ---
-        "grep": { type: "error", msg: "Usage: grep [OPTION]... PATTERNS [FILE]..." },
-        "awk": { type: "error", msg: "awk: usage: awk [-F fs] [-v var=value] 'program' [file ...]" },
-        "sed": { type: "error", msg: "sed: usage: sed [OPTION]... {script-only-if-no-other-script} [input-file]..." },
-        "tar": { type: "error", msg: "tar: You must specify one of the '-Acdtrux', '--delete' or '--test-label' options" },
-        "chmod": { type: "text", msg: "chmod: missing operand" },
-        "chown": { type: "text", msg: "chown: missing operand" },
-        "ps": { type: "text", msg: "  PID TTY          TIME CMD\n 3021 pts/0    00:00:00 bash\n 3055 pts/0    00:00:00 ps" },
-        "top": { type: "text", msg: "top - 14:02:22 up 2 days,  3:14,  1 user,  load average: 0.05, 0.03, 0.00" },
-        "uname": { type: "text", msg: "Linux" },
-        "uptime": { type: "text", msg: " 14:03:01 up 2 days,  3:15,  1 user,  load average: 0.02, 0.01, 0.00" },
-        "kill": { type: "error", msg: "kill: usage: kill [-s sigspec | -n signum | -sigspec] pid | jobspec ... or kill -l [sigspec]" },
-        "sudo": { type: "error", msg: "[sudo] password for root: \nSorry, try again." },
-        "su": { type: "error", msg: "su: Authentication failure" },
-        "exit": { type: "func", fn: () => { window.close(); print("Close browser tab to exit."); } },
-        
-        // --- FUN & EASTER EGGS ---
-        "matrix": { type: "text", msg: "Follow the white rabbit..." },
-        "sl": { type: "text", msg: "   (  ) (@@) ( )  (@)  ()    @@    O     @     O     @\n  (@@@) (  )(@@) (  )  (@@)  (@@) @@@   @@    @@    @@\n(@@@) (@@) ( )  ( )  ( )  ( )  ( )  ( )  ( )  ( )  ( )" },
-        "neofetch": { type: "text", msg: "       .       root@kali\n      / \\      ---------\n     /   \\     OS: Kali GNU/Linux Rolling x86_64\n    /  |  \\    Host: VirtualBox 1.2\n   /   |   \\   Kernel: 5.10.0-kali7-amd64\n  /    |    \\  Shell: bash 5.1.4\n /     |     \\ Memory: 1500MB / 8000MB\n" }
-    };
+    // Smooth scroll
+    document.querySelectorAll("[data-scroll]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+            var target = document.querySelector(btn.getAttribute("data-scroll"));
+            if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+            hamburgerMenu.classList.remove("open");
+            hamburgerBtn.classList.remove("active");
+        });
+    });
 
-    // --- 3. FILLING THE DB TO REACH "222" ---
-    // Instead of writing all 222 manually, let's programmatically add common stubs
-    const extraCommands = [
-        "mv", "cp", "head", "tail", "less", "more", "locate", "find", "whereis", "which",
-        "apt", "apt-get", "dpkg", "systemctl", "service", "journalctl", "dmesg", "df", "du",
-        "free", "mount", "umount", "lsblk", "blkid", "fdisk", "mkfs", "fsck", "dd",
-        "useradd", "usermod", "userdel", "groupadd", "passwd", "last", "w", "who",
-        "route", "traceroute", "dig", "nslookup", "host", "arp", "iwconfig", "iw",
-        "tcpdump", "tshark", "ngrep", "nc", "socat", "telnet", "ftp", "sftp", "scp",
-        "wget", "aria2c", "make", "cmake", "docker", "podman", "kubectl", "minikube",
-        "vagrant", "ansible", "terraform", "puppet", "chef", "hashcat", "medusa",
-        "nikto", "wpscan", "dirb", "gobuster", "feroxbuster", "amass", "sublist3r",
-        "theharvester", "maltego", "recon-ng", "sparta", "armitage", "kismet",
-        "wifite", "reaver", "fern-wifi-cracker", "macchanger", "proxychains",
-        "tor", "anonsurf", "ghidra", "radare2", "binwalk", "strings", "hexdump",
-        "xxd", "objdump", "gdb", "pwndbg", "peda", "gef", "ltrace", "strace",
-        "volatility", "autopsy", "sleuthkit", "guymager", "foremost", "scalpel",
-        "bulk_extractor", "hashdeep", "md5sum", "sha1sum", "sha256sum", "gpg",
-        "openssl", "base64", "wc", "sort", "uniq", "diff", "cmp", "patch",
-        "gzip", "gunzip", "bzip2", "bunzip2", "zip", "unzip", "tar", "rar",
-        "unrar", "7z", "alias", "unalias", "export", "unset", "env", "printenv",
-        "shutdown", "poweroff", "halt", "init", "runlevel", "ulimit", "umask",
-        "bc", "cal", "factor", "yes", "rev", "sleep", "timeout", "watch"
-    ];
-
-    // Auto-fill the rest with a generic "Command not found" or "Installed" message
-    extraCommands.forEach(cmd => {
-        if (!commandDB[cmd]) {
-            commandDB[cmd] = { type: "text", msg: `${cmd}: command installed. Use '${cmd} --help' for usage.` };
+    // Hamburger
+    var hamburgerBtn = document.getElementById("hamburgerBtn");
+    var hamburgerMenu = document.getElementById("hamburgerMenu");
+    hamburgerBtn.addEventListener("click", function () {
+        var isOpen = hamburgerMenu.classList.toggle("open");
+        hamburgerBtn.classList.toggle("active", isOpen);
+        hamburgerBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+    window.addEventListener("click", function (e) {
+        if (!hamburgerMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+            hamburgerMenu.classList.remove("open");
+            hamburgerBtn.classList.remove("active");
         }
     });
 
-    // --- 4. ENGINE LOGIC ---
-    const output = document.getElementById("output");
-    const input = document.getElementById("input");
-    const pathSpan = document.getElementById("path");
+    // Theme toggle
+    var themeToggle = document.getElementById("themeToggle");
+    var body = document.body;
+    function setTheme(theme) {
+        body.classList.remove("dark", "light");
+        body.classList.add(theme);
+        try { localStorage.setItem("ayan-theme", theme); } catch (e) {}
+    }
+    (function () {
+        var saved = null;
+        try { saved = localStorage.getItem("ayan-theme"); } catch (e) {}
+        if (saved === "light" || saved === "dark") {
+            setTheme(saved);
+        } else {
+            setTheme("light");
+        }
+    })();
+    themeToggle.addEventListener("click", function () {
+        var newTheme = body.classList.contains("dark") ? "light" : "dark";
+        setTheme(newTheme);
+    });
 
-    window.onload = () => {
-        printLine("Kali GNU/Linux Rolling [Version 2025.1]");
-        printLine("Type 'help' for a list of available commands.");
-        printLine("");
+    // Slider
+    var slides = document.querySelectorAll(".slide");
+    var dots = document.querySelectorAll(".dot-btn");
+    dots.forEach(function (dot) {
+        dot.addEventListener("click", function () {
+            var index = Number(dot.getAttribute("data-slide"));
+            slides.forEach(function (s, i) {
+                s.classList.toggle("active", i === index);
+            });
+            dots.forEach(function (d, i) {
+                d.classList.toggle("active", i === index);
+            });
+        });
+    });
+
+    // Modal helpers
+    var modalBackdrop = document.getElementById("modalBackdrop");
+    var modalTitle = document.getElementById("modalTitle");
+    var modalBody = document.getElementById("modalBody");
+    var modalFooter = document.getElementById("modalFooter");
+    var modalCloseBtn = document.getElementById("modalCloseBtn");
+
+    function openModal(title, bodyHtml, buttons) {
+        modalTitle.textContent = title;
+        modalBody.innerHTML = bodyHtml;
+        modalFooter.innerHTML = "";
+        buttons.forEach(function (btnConf) {
+            var b = document.createElement("button");
+            b.textContent = btnConf.label;
+            if (btnConf.primary) b.classList.add("primary");
+            b.addEventListener("click", btnConf.onClick || function () {
+                modalBackdrop.classList.remove("show");
+            });
+            modalFooter.appendChild(b);
+        });
+        modalBackdrop.classList.add("show");
+    }
+
+    modalCloseBtn.addEventListener("click", function () {
+        modalBackdrop.classList.remove("show");
+    });
+
+    modalBackdrop.addEventListener("click", function (e) {
+        if (e.target === modalBackdrop) modalBackdrop.classList.remove("show");
+    });
+
+ 
+    // Contact map
+    var contactMap = {
+        twitter: {
+            title: "X / TWITTER",
+            bodyUnlocked: "My X (Twitter) handle is:<br><br>" +
+                "<strong>@PATRIOT_SPIRIT0</strong><br><br>" +
+                "Open profile in a new tab?",
+            url: "https://x.com/PATRIOT_SPIRIT0"
+        },
+        instagram: {
+            title: "INSTAGRAM",
+            bodyUnlocked: "My Instagram username is:<br><br>" +
+                "<strong>@ayanovaic</strong><br><br>" +
+                "Open profile in a new tab?",
+            url: "https://www.instagram.com/ayanovaic?igsh=bHFqNnZ2b3BjdDh6"
+        },
+        facebook: {
+            title: "FACEBOOK",
+            bodyUnlocked: "You can find me on Facebook here:<br><br>" +
+                "<strong>Profile link available</strong><br><br>" +
+                "Open profile in a new tab?",
+            url: "https://www.facebook.com/share/17a1q3Gcvs/"
+        },
+        snapchat: {
+            title: "SNAPCHAT",
+            bodyUnlocked: "My Snapchat username is:<br><br>" +
+                "<strong>ion.ayan</strong><br><br>" +
+                "Open Snapchat add link in a new tab?",
+            url: "https://www.snapchat.com/add/ion.ayan?share_id=kSGHloIg3B0&locale=en-IN"
+        },
+        whatsapp: {
+            title: "WHATSAPP",
+            bodyUnlocked: "You can message me on WhatsApp at:<br><br>" +
+                "<strong>+91 6262591914</strong><br><br>" +
+                "Click <strong>Open chat</strong> to start a chat with a pre‑filled greeting.",
+            // Changed "Ayan" to "Peerzada Ikhlas" in the pre-filled text
+            url: "https://wa.me/916262591914?text=Hi%20Peerzada%20Ikhlas%2C%20I%27m%20reaching%20out%20after%20visiting%20your%20portfolio."
+        },
+        email: {
+            title: "GMAIL",
+            bodyUnlocked: "My primary email address is:<br><br>" +
+                "<strong>imshahayan@gmail.com</strong><br><br>" +
+                "Click <strong>Write email</strong> to open your mail app with details pre‑filled.",
+            // Changed "Hello Ayan" to "Hello Peerzada Ikhlas" in the subject
+            // Changed "Hi Ayan" to "Hi Peerzada Ikhlas" in the body
+            url: "mailto:imshahayan@gmail.com?subject=Hello%20Peerzada%20Ikhlas%20%7C%20From%20your%20portfolio&body=Hi%20Peerzada%20Ikhlas%2C%0D%0A%0D%0AI%20just%20visited%20your%20portfolio%20and%20would%20like%20to%20connect%20with%20you%20about..."
+        }
     };
 
-    input.addEventListener("keydown", async (e) => {
-        if (e.key === "Enter") {
-            const val = input.value.trim();
-            if (val) {
-                history.push(val);
-                historyIdx = history.length;
-                printLine(`<span class='user'>root@kali</span>:<span class='path'>${path.join("/")}</span>$ <span class='cmd'>${val}</span>`);
-                await process(val);
+    // Icon and social card buttons
+    document.querySelectorAll("[data-contact]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+            var key = btn.getAttribute("data-contact");
+            var conf = contactMap[key];
+            if (!conf) return;
+
+            function showUnlocked() {
+                openModal(
+                    conf.title,
+                    conf.bodyUnlocked,
+                    [
+                        { label: "Close", onClick: function () { modalBackdrop.classList.remove("show"); } },
+                        {
+                            label: key === "email" ? "Write email" :
+                                   key === "whatsapp" ? "Open chat" : "Open",
+                            primary: true,
+                            onClick: function () {
+                                window.open(conf.url, "_blank");
+                                modalBackdrop.classList.remove("show");
+                            }
+                        }
+                    ]
+                );
             }
-            input.value = "";
-            window.scrollTo(0, document.body.scrollHeight);
-        } else if (e.key === "ArrowUp") {
-            e.preventDefault();
-            if (historyIdx > 0) input.value = history[--historyIdx];
-        } else if (e.key === "ArrowDown") {
-            e.preventDefault();
-            if (historyIdx < history.length - 1) input.value = history[++historyIdx];
-            else input.value = "";
+
+            if (!contactUnlocked) {
+                askForPassword("Unlock", showUnlocked);
+            } else {
+                showUnlocked();
+            }
+        });
+    });
+
+    // Quick contact button (hero)
+    var contactPopupBtn = document.getElementById("contactPopupBtn");
+    contactPopupBtn.addEventListener("click", function () {
+        openModal(
+            "QUICK CONTACT",
+            "All my contact and social details are hidden inside the icons. " +
+            "Use the password to unlock them and then choose WhatsApp, Gmail, or a social platform to reach me.",
+            [
+                { label: "Close", onClick: function () { modalBackdrop.classList.remove("show"); } }
+            ]
+        );
+    });
+
+    // Locked resume button
+    var lockedResumeBtn = document.getElementById("lockedResumeBtn");
+    lockedResumeBtn.addEventListener("click", function () {
+        function openResume() { window.open("resume.pdf", "_blank"); }
+        if (!contactUnlocked) {
+            askForPassword("Unlock", openResume);
+        } else {
+            openResume();
         }
     });
 
-    async function process(input) {
-        const parts = input.split(" ");
-        const cmd = parts[0];
-        const args = parts.slice(1);
-
-        if (commandDB[cmd]) {
-            const entry = commandDB[cmd];
-            if (entry.type === "func") await entry.fn(args);
-            else if (entry.type === "sim") await simulate(entry.msg);
-            else if (entry.type === "error") printLine(entry.msg, "error");
-            else if (entry.type === "warn") printLine(entry.msg, "warn");
-            else printLine(entry.msg);
+    // Resume in menu (also locked)
+    var downloadResumeBtn = document.getElementById("downloadResumeBtn");
+    downloadResumeBtn.addEventListener("click", function () {
+        function openResume() { window.open("resume.pdf", "_blank"); }
+        if (!contactUnlocked) {
+            askForPassword("Unlock", openResume);
         } else {
-            printLine(`bash: ${cmd}: command not found`, "error");
+            openResume();
         }
-    }
+    });
 
-    // --- 5. FUNCTION IMPLEMENTATIONS ---
-    function print(text, type="") {
-        const div = document.createElement("div");
-        div.className = type;
-        div.innerText = text;
-        output.appendChild(div);
-    }
-    function printLine(html) {
-        const div = document.createElement("div");
-        div.innerHTML = html;
-        output.appendChild(div);
-    }
+    // Let’s talk – connect now (UPDATED with Validation)
+    var connectNowBtn = document.getElementById("connectNowBtn");
+    connectNowBtn.addEventListener("click", function () {
+        var name = (document.getElementById("talkName") || {}).value || "";
+        var contact = (document.getElementById("talkContact") || {}).value || "";
+        var message = (document.getElementById("talkMessage") || {}).value || "";
+
+        name = name.trim();
+        contact = contact.trim();
+        message = message.trim();
+        
+        // --- NEW: Basic Validation ---
+        if (!name || !contact || !message) {
+             openModal(
+                "FORM INCOMPLETE",
+                "Please fill in your **Name**, **Contact**, and **Message** before connecting. Context is important!",
+                [
+                    { label: "Got it", primary: true, onClick: function () { modalBackdrop.classList.remove("show"); } }
+                ]
+            );
+            return; // Stop execution if form is incomplete
+        }
+        // --- END NEW: Basic Validation ---
+
+        var subject = encodeURIComponent("Let’s connect | From your portfolio");
+        var bodyLines = [];
+        bodyLines.push("Hi Peerzada Ikhlas,"); // Updated name
+        bodyLines.push("");
+        bodyLines.push("I visited your portfolio and would like to connect.");
+        bodyLines.push("");
+        if (name) bodyLines.push("Name: " + name);
+        if (contact) bodyLines.push("Contact: " + contact);
+        if (message) {
+            bodyLines.push("");
+            bodyLines.push("Message:");
+            bodyLines.push(message);
+        }
+        bodyLines.push("");
+        bodyLines.push("Sent via your portfolio.");
+
+        var bodyMail = encodeURIComponent(bodyLines.join("\n"));
+        var mailto = "mailto:imshahayan@gmail.com?subject=" + subject + "&body=" + bodyMail;
+        window.location.href = mailto;
+    });
+
+    // Footer year
+    document.getElementById("yearSpan").textContent = new Date().getFullYear();
     
-    // File System Helpers
-    function getCurrentDir() {
-        let current = fs;
-        for (let p of path) {
-            if (p !== "~") current = current[p];
-        }
-        return current;
-    }
+    // --- NEW: Scroll-Based Fade-In Trigger ---
+    document.addEventListener("DOMContentLoaded", function() {
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("animated");
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 }); 
 
-    function listDir() {
-        const dir = getCurrentDir();
-        let out = [];
-        for (let item in dir) {
-            if (typeof dir[item] === "object") out.push(`<span class='dir'>${item}/</span>`);
-            else out.push(`<span class='file'>${item}</span>`);
-        }
-        printLine(out.join("  "));
-    }
-
-    function changeDir(args) {
-        if (!args[0]) { path = ["~"]; updatePath(); return; }
-        if (args[0] === "..") { if (path.length > 1) path.pop(); }
-        else if (getCurrentDir()[args[0]] && typeof getCurrentDir()[args[0]] === "object") {
-            path.push(args[0]);
-        } else {
-            printLine(`cd: ${args[0]}: No such directory`, "error");
-        }
-        updatePath();
-    }
-    function updatePath() { pathSpan.innerText = path.join("/"); }
-
-    function readFile(args) {
-        if (!args[0]) return printLine("cat: missing operand");
-        const content = getCurrentDir()[args[0]];
-        if (typeof content === "string") print(content);
-        else if (content) printLine(`cat: ${args[0]}: Is a directory`, "error");
-        else printLine(`cat: ${args[0]}: No such file`, "error");
-    }
-
-    function makeDir(args) {
-        if (!args[0]) return printLine("mkdir: missing operand");
-        getCurrentDir()[args[0]] = {};
-    }
-    function touchFile(args) {
-        if (!args[0]) return printLine("touch: missing operand");
-        getCurrentDir()[args[0]] = "";
-    }
-    function removeFile(args) {
-        if (!args[0]) return printLine("rm: missing operand");
-        if (getCurrentDir()[args[0]]) delete getCurrentDir()[args[0]];
-        else printLine(`rm: cannot remove '${args[0]}': No such file`, "error");
-    }
-
-    function clearScreen() { output.innerHTML = ""; }
-    
-    function showHelp() {
-        printLine("--- AVAILABLE COMMANDS (PARTIAL LIST) ---", "info");
-        let allCmds = Object.keys(commandDB).sort().join(", ");
-        printLine(allCmds);
-        printLine("\nTotal recognized commands: " + Object.keys(commandDB).length, "success");
-    }
-    
-    function showHistory() {
-        history.forEach((h, i) => print(`${i+1}  ${h}`));
-    }
-
-    async function runPing(args) {
-        if (!args[0]) return printLine("Usage: ping <host>");
-        print(`PING ${args[0]} (${args[0]}) 56(84) bytes of data.`);
-        for (let i = 0; i < 4; i++) {
-            await new Promise(r => setTimeout(r, 800));
-            print(`64 bytes from ${args[0]}: icmp_seq=${i+1} ttl=64 time=${Math.floor(Math.random()*10+10)} ms`);
-        }
-        print(`\n--- ${args[0]} ping statistics ---`);
-        print("4 packets transmitted, 4 received, 0% packet loss");
-    }
-
-    async function simulate(text) {
-        const lines = text.split("\n");
-        for (let line of lines) {
-            print(line);
-            await new Promise(r => setTimeout(r, 100)); // typing speed
-        }
-    }
-
+        document.querySelectorAll(".fade-in-up").forEach(function(element) {
+            observer.observe(element);
+        });
+    });
 </script>
 </body>
 </html>
