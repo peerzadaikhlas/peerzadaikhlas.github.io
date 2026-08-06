@@ -292,10 +292,8 @@
         bodyLines.push("");
         bodyLines.push("Sent via your portfolio.");
 
-        var bodyMail = encodeURIComponent(bodyLines.join("
-"));
+                var bodyMail = encodeURIComponent(bodyLines.join("\n"));
         var mailto = "mailto:imshahayan@gmail.com?subject=" + subject + "&body=" + bodyMail;
-        window.location.href = mailto;
     });
 
     // Footer year
